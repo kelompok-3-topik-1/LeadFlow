@@ -1,0 +1,640 @@
+/*
+  ============================================================
+  PETUNJUK DJANGO:
+  - Simpan file ini di: yourapp/static/css/style.css
+  - Di base template HTML, tambahkan:
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  - Import Google Fonts di <head> HTML template:
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;900&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  - Jalankan: python manage.py collectstatic (untuk production)
+  ============================================================
+*/
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  /* Ganti 'Sofia Pro' dengan font Google Fonts yang tersedia */
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: #263238;
+  background: #FFFCF7;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  padding: 16px 32px;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+nav ul {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: #263238;
+  text-decoration: none;
+}
+
+/* Sign In dorong ke kanan */
+.sign-in-link {
+  margin-left: auto;
+  color: #651FFF;
+}
+
+/* ============================================================
+   Hero Section
+   CATATAN: Untuk background-image, gunakan di HTML template:
+   style="background-image: url('{% static 'images/hero-bg.jpg' %}')"
+   JANGAN tulis URL gambar langsung di CSS jika dari folder static Django
+   ============================================================ */
+.hero-section {
+  padding: 80px 0 60px;
+  background: linear-gradient(180deg, #F8F9FA 0%, #FFFCF7 100%);
+}
+
+.hero-title {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.4;
+  color: #1a1a1a;
+  max-width: 900px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #5a5a5a;
+  max-width: 800px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.hero-image {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.hero-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/*.cta-button {
+  display: block;
+  margin: 0 auto;
+  padding: 16px 48px;
+  background: #651FFF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* Tambahan: penting untuk form Django agar terlihat konsisten 
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+}
+
+.cta-button:hover {
+  background: #5516d9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(101, 31, 255, 0.3);
+  color: white; /* Mencegah warna link berubah saat hover di Django template 
+  text-decoration: none;
+}*/
+
+/* ============================================================
+   Django Form Styling
+   Tambahan khusus Django: styling untuk elemen form bawaan Django
+   ============================================================ */
+.django-form input[type="text"],
+.django-form input[type="email"],
+.django-form input[type="password"],
+.django-form input[type="number"],
+.django-form textarea,
+.django-form select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #E2E4E9;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #263238;
+  background: white;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.django-form input:focus,
+.django-form textarea:focus,
+.django-form select:focus {
+  border-color: #651FFF;
+  box-shadow: 0 0 0 3px rgba(101, 31, 255, 0.1);
+}
+
+/* Error messages dari Django form validation */
+.django-form .errorlist {
+  list-style: none;
+  margin-top: 6px;
+}
+
+.django-form .errorlist li {
+  color: #e53935;
+  font-size: 13px;
+}
+
+/* Django messages framework */
+.messages {
+  list-style: none;
+  margin-bottom: 24px;
+}
+
+.messages li {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.messages li.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #4caf50;
+}
+
+.messages li.error {
+  background: #ffebee;
+  color: #c62828;
+  border-left: 4px solid #e53935;
+}
+
+.messages li.warning {
+  background: #fff8e1;
+  color: #f57f17;
+  border-left: 4px solid #ffc107;
+}
+
+.messages li.info {
+  background: #e3f2fd;
+  color: #1565c0;
+  border-left: 4px solid #2196f3;
+}
+
+/* ============================================================
+   Features Section
+   ============================================================ */
+.features-section {
+  padding: 80px 0;
+  background: white;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.feature-card {
+  padding: 32px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E2E4E9;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: #651FFF;
+  box-shadow: 0 8px 24px rgba(101, 31, 255, 0.1);
+  transform: translateY(-4px);
+}
+
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 20px;
+}
+
+.feature-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.feature-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+.feature-card p {
+  font-size: 15px;
+  color: #5a5a5a;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   Benefits Section
+   ============================================================ */
+.benefits-section {
+  padding: 80px 0;
+  background: #F8F9FA;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 48px;
+  color: #1a1a1a;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.benefit-card {
+  padding: 40px;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.benefit-card.purple {
+  background: linear-gradient(135deg, #651FFF 0%, #8040FF 100%);
+  color: white;
+}
+
+.benefit-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(101, 31, 255, 0.3);
+}
+
+.benefit-icon {
+  font-size: 48px;
+  margin-bottom: 24px;
+}
+
+.benefit-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.benefit-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+/* ============================================================
+   Collaboration Section
+   ============================================================ */
+.collaboration-section {
+  padding: 100px 0;
+  background: white;
+}
+
+.collaboration-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.collaboration-text h2 {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+}
+
+.collaboration-text p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #5a5a5a;
+  margin-bottom: 20px;
+}
+
+.collaboration-image {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================
+   Simple System Banner
+   ============================================================ */
+.simple-system-banner {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #00E5FF 0%, #00B8D4 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-title {
+  font-size: 72px;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 16px;
+  letter-spacing: -2px;
+}
+
+.banner-subtitle {
+  font-size: 20px;
+  color: white;
+  opacity: 0.9;
+}
+
+/* ============================================================
+   How It Works Section
+   ============================================================ */
+.how-it-works {
+  padding: 100px 0;
+  background: white;
+}
+
+.section-description {
+  text-align: center;
+  font-size: 16px;
+  color: #5a5a5a;
+  max-width: 600px;
+  margin: 0 auto 60px;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 48px;
+}
+
+.step-card {
+  text-align: center;
+}
+
+.step-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.step-icon.purple {
+  background: #651FFF;
+}
+
+.step-card:hover .step-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 32px rgba(101, 31, 255, 0.3);
+}
+
+.step-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.step-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+.step-card p {
+  font-size: 15px;
+  color: #5a5a5a;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer {
+  padding: 80px 0 40px;
+  background: linear-gradient(180deg, #1a2332 0%, #263238 100%);
+  color: #E2E4E9;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  margin-bottom: 60px;
+}
+
+.footer-about h3 {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.footer-about p {
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 24px;
+  color: #E2E4E9;
+}
+
+.footer-cta {
+  padding: 12px 32px;
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none; /* Penting untuk tag <a> di Django template */
+}
+
+.footer-cta:hover {
+  background: white;
+  color: #263238;
+  text-decoration: none;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+}
+
+.footer-column h4 {
+  font-size: 16px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.footer-column ul {
+  list-style: none;
+}
+
+.footer-column li {
+  margin-bottom: 12px;
+}
+
+.footer-column a {
+  color: #E2E4E9;
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.footer-column a:hover {
+  color: white;
+}
+
+/* Django URL active link state */
+.footer-column a.active {
+  color: white;
+  font-weight: 600;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(226, 228, 233, 0.2);
+}
+
+.footer-social a {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.footer-social a:hover {
+  background: #651FFF;
+  transform: translateY(-4px);
+}
+
+.footer-social svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================================================
+   Responsive Design
+   ============================================================ */
+@media (max-width: 968px) {
+  .hero-title {
+    font-size: 28px;
+  }
+
+  .collaboration-content {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .banner-title {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .hero-title {
+    font-size: 24px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .features-grid,
+  .benefits-grid,
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-links {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .banner-title {
+    font-size: 36px;
+  }
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-section,
+.features-section,
+.benefits-section,
+.collaboration-section {
+  animation: fadeIn 0.8s ease-out;
+}

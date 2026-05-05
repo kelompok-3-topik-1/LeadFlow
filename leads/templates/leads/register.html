@@ -1,0 +1,156 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'leads/register.css' %}">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register Page</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #EBEFFF;
+    display: flex;
+    height: 100vh;
+}
+
+/* LEFT PANEL (DECORATION) */
+.left-panel {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* SHAPES */
+.shape1 {
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    background: #656ED3;
+    border-radius: 100px;
+    transform: rotate(-90deg);
+    top: -100px;
+    left: 50px;
+}
+
+.shape2 {
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    background: #AFB3FF;
+    border-radius: 100px;
+    transform: rotate(-90deg);
+    top: -50px;
+    left: 100px;
+}
+
+/* RIGHT FORM */
+.container {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-box {
+    width: 400px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* INPUT */
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 50px;
+    border: 1px solid #656ED3;
+    outline: none;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 50px;
+    border: none;
+    background: #656ED3;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.social {
+    margin-top: 10px;
+}
+
+.social span {
+    margin: 0 5px;
+    color: #656ED3;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="left-panel">
+    <div class="shape1"></div>
+    <div class="shape2"></div>
+</div>
+
+<div class="container">
+    <div class="register-box">
+        <h2>Please Fill out form to Register!</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Full Name:</label>
+            <input type="text" name="nama" placeholder="Enter full name">
+
+            <label>Email:</label>
+            <input type="email" name="email" placeholder="Enter email">
+
+            <label>Asal Perusahaan:</label>
+            <input type="text" name="asal_perusahaan" placeholder="Enter asal perusahaan">
+
+            <label>Password:</label>
+            <input type="password" name="password" placeholder="Enter password">
+
+            <label>Confirm Password:</label>
+            <input type="password" name="confirm_password" placeholder="Confirm password">
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div class="footer">
+            <p>Sudah punya akun? 
+                <a href="{% url 'login' %}">Login</a>
+            </p>
+            <div class="social">
+                <span>●</span>
+                <span>●</span>
+                <span>●</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

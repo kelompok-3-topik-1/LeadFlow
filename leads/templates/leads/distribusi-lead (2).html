@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distribusi Lead</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --sidebar-bg: #ffffff;
+    --main-bg: #f0f4f8;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --text-primary: #1a202c;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --green: #10b981;
+    --green-light: #d1fae5;
+    --yellow: #f59e0b;
+    --yellow-light: #fef3c7;
+    --red: #ef4444;
+    --red-light: #fee2e2;
+    --purple: #8b5cf6;
+    --purple-light: #ede9fe;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+    --radius: 10px;
+    --radius-sm: 6px;
+    --radius-lg: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 200px;
+    min-width: 200px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    height: 100vh;
+    z-index: 10;
+  }
+
+  .sidebar-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 18px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    overflow: hidden;
+  }
+
+  .profile-info .name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+
+  .profile-info .role {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+
+  .sidebar-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    padding: 0 18px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .nav-item:hover { background: var(--accent-light); color: var(--accent); }
+  .nav-item.active {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .sidebar-bottom {
+    margin-top: auto;
+    padding: 16px 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--red);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s;
+  }
+  .logout-btn:hover { background: var(--red-light); }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── PAGE ── */
+  .page { display: none; flex: 1; flex-direction: column; }
+  .page.active { display: flex; }
+
+  /* ── PAGE HEADER ── */
+  .page-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 16px 28px 0;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .topbar-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .topbar-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    width: 220px;
+    cursor: text;
+    transition: border-color 0.15s;
+  }
+  .search-box:hover { border-color: var(--accent); }
+
+  .icon-btn {
+    width: 34px; height: 34px;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .icon-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+  /* ── CONTENT AREA ── */
+  .content {
+    padding: 20px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .stat-card.blue::before { background: var(--accent); }
+  .stat-card.yellow::before { background: var(--yellow); }
+  .stat-card.green::before { background: var(--green); }
+  .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+  .stat-icon {
+    width: 42px; height: 42px;
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .stat-icon.blue { background: var(--accent-light); }
+  .stat-icon.yellow { background: var(--yellow-light); }
+  .stat-icon.green { background: var(--green-light); }
+
+  .stat-info .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'DM Mono', monospace;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-info .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── TABLE SECTION ── */
+  .table-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-header-left h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .table-header-left p {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-outline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .tab:hover { background: var(--bg); }
+  .tab.active {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+  }
+  .tab-count {
+    background: rgba(255,255,255,0.25);
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+  .tab:not(.active) .tab-count {
+    background: var(--border);
+    color: var(--text-muted);
+  }
+
+  /* ── DATA TABLE ── */
+  .data-table { overflow-x: auto; flex: 1; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    cursor: pointer;
+  }
+  tbody tr:hover { background: var(--bg); }
+  tbody tr:last-child { border-bottom: none; }
+
+  td { padding: 12px 16px; vertical-align: middle; }
+
+  .lead-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lead-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .lead-name { font-weight: 600; font-size: 13px; color: var(--text-primary); }
+  .lead-phone { font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .badge.new { background: var(--accent-light); color: var(--accent); }
+  .badge.new .badge-dot { background: var(--accent); }
+  .badge.contacted { background: var(--yellow-light); color: #b45309; }
+  .badge.contacted .badge-dot { background: var(--yellow); }
+  .badge.qualified { background: var(--green-light); color: #065f46; }
+  .badge.qualified .badge-dot { background: var(--green); }
+  .badge.proposal { background: var(--purple-light); color: #5b21b6; }
+  .badge.proposal .badge-dot { background: var(--purple); }
+  .badge.lost { background: var(--red-light); color: #991b1b; }
+  .badge.lost .badge-dot { background: var(--red); }
+
+  .source-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .sla-ok { color: var(--green); font-size: 12px; font-weight: 500; }
+  .sla-warn { color: var(--red); font-size: 12px; font-weight: 600; }
+
+  .action-btns { display: flex; gap: 6px; }
+  .action-btn {
+    width: 28px; height: 28px;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.12s;
+    color: var(--text-secondary);
+  }
+  .action-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  /* ── PAGINATION ── */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .pagination-info { font-size: 12px; color: var(--text-muted); }
+
+  .pagination-btns { display: flex; gap: 4px; align-items: center; }
+
+  .page-btn {
+    width: 28px; height: 28px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.12s;
+  }
+  .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .page-btn.active { background: var(--accent); color: white; border-color: var(--accent); font-weight: 700; }
+
+  .page-next {
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── CHECKBOX ── */
+  input[type="checkbox"] {
+    width: 15px; height: 15px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  /* ════════════════════════════════
+     INPUT MANUAL PAGE
+  ════════════════════════════════ */
+  #page-input .topbar {
+    background: #1e293b;
+    border-bottom-color: #334155;
+  }
+  #page-input .topbar-title { color: white; }
+  #page-input .topbar-count { color: #64748b; }
+  #page-input .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #334155;
+    transition: all 0.15s;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+  }
+  #page-input .back-btn:hover { border-color: #94a3b8; color: white; }
+
+  #page-input .active-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--purple);
+    letter-spacing: 0.02em;
+  }
+
+  .form-overlay {
+    flex: 1;
+    background: rgba(15, 23, 42, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .form-card {
+    background: #1e293b;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    width: 100%;
+    max-width: 580px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid #334155;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .form-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #334155;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.04em;
+  }
+  .form-label span { color: var(--red); }
+
+  .form-input, .form-select, .form-textarea {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    font-size: 13px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: #475569; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  }
+  .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+  .form-select option { background: #1e293b; }
+  .form-textarea { resize: vertical; min-height: 90px; }
+
+  .form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #334155;
+  }
+
+  .btn-reset {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid #475569;
+    border-radius: var(--radius-sm);
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-reset:hover { border-color: #94a3b8; color: white; }
+
+  .btn-save {
+    padding: 8px 20px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-save:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+
+  /* ════════════════════════════════
+     ASSIGN MODAL
+  ════════════════════════════════ */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.75);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-overlay.show { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal {
+    background: #1e293b;
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    width: 540px;
+    max-width: 95vw;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid #334155;
+    animation: slideUp 0.25s ease;
+  }
+
+  .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+  }
+
+  .modal-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .sales-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+
+  .sales-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .sales-item:hover { border-color: #60a5fa; background: #0f172a; }
+  .sales-item.selected { border-color: var(--green); background: rgba(16, 185, 129, 0.05); }
+
+  .sales-avatar {
+    width: 34px; height: 34px;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .sales-info .sales-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .sales-info .sales-meta {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 1px;
+  }
+
+  .sales-check {
+    width: 18px; height: 18px;
+    border: 2px solid #334155;
+    border-radius: 4px;
+    margin-left: auto;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .sales-item.selected .sales-check {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .sales-check::after {
+    content: '';
+    display: none;
+    width: 4px; height: 8px;
+    border: 2px solid white;
+    border-top: none; border-left: none;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+  .sales-item.selected .sales-check::after { display: block; }
+
+  .modal-notes-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #334155;
+  }
+
+  .btn-cancel {
+    padding: 8px 18px;
+    background: transparent;
+    border: 1px solid #475569;
+    border-radius: var(--radius-sm);
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-cancel:hover { border-color: #94a3b8; color: white; }
+
+  .btn-assign {
+    padding: 8px 20px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-assign:hover { background: #1d4ed8; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #1e293b;
+    border: 1px solid var(--green);
+    border-left: 4px solid var(--green);
+    border-radius: var(--radius);
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    box-shadow: var(--shadow-lg);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    animation: slideLeft 0.3s ease;
+  }
+  .toast.show { display: flex; }
+
+  @keyframes slideLeft {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* View toggle */
+  .view-toggle { display: flex; gap: 4px; }
+  .view-btn {
+    width: 28px; height: 28px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px; color: var(--text-muted);
+    transition: all 0.12s;
+  }
+  .view-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  /* Date */
+  .date-text { font-size: 12px; color: var(--text-secondary); }
+
+  /* Assigned */
+  .assigned-text { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+  .assigned-empty { font-size: 12px; color: var(--text-muted); font-style: italic; }
+
+  /* dots divider */
+  .dots { color: var(--text-muted); letter-spacing: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-profile">
+    <div class="avatar">👤</div>
+    <div class="profile-info">
+      <div class="name">NAMA</div>
+      <div class="role">ADMIN</div>
+    </div>
+  </div>
+
+  <div class="sidebar-label">Main Menu</div>
+
+  <a class="nav-item active" onclick="showPage('lead-list')" id="nav-lead">
+    <span class="nav-icon">📋</span> Distribusi Lead
+  </a>
+  <a class="nav-item" onclick="showPage('update')">
+    <span class="nav-icon">📅</span> Update dan Segmentasi
+  </a>
+  <a class="nav-item" onclick="showPage('analisis')">
+    <span class="nav-icon">🖥️</span> Analisis Dashboard
+  </a>
+  <a class="nav-item" onclick="showPage('input')" id="nav-input">
+    <span class="nav-icon">📝</span> Input Manual
+  </a>
+
+  <div class="sidebar-bottom">
+    <div class="logout-btn">
+      <span>🚪</span> Logout Account
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
+
+  <!-- ════ PAGE 1: LEAD LIST ════ -->
+  <div class="page active" id="page-lead-list">
+    <div class="page-title">Distribusi Lead</div>
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-title">Lead List</span>
+        <span class="topbar-count">— 148 total leads</span>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <span>🔍</span>
+          <span style="color:var(--text-muted)">Search leads, phone, model...</span>
+        </div>
+        <div class="icon-btn" title="Pengaturan">⚙️</div>
+        <div class="icon-btn" title="Notifikasi">🔔</div>
+        <button class="btn-primary" onclick="openAssignModal()">
+          ＋ Assign Lead
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Stat Cards -->
+      <div class="stat-cards">
+        <div class="stat-card blue">
+          <div class="stat-icon blue">👥</div>
+          <div class="stat-info">
+            <div class="stat-value">148</div>
+            <div class="stat-label">Total Leads</div>
+          </div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-icon yellow">⏳</div>
+          <div class="stat-info">
+            <div class="stat-value">37</div>
+            <div class="stat-label">Pending Contact</div>
+          </div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon green">✅</div>
+          <div class="stat-info">
+            <div class="stat-value">52</div>
+            <div class="stat-label">Qualified</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Section -->
+      <div class="table-section">
+        <div class="table-header">
+          <div class="table-header-left">
+            <h3>All Leads</h3>
+            <p>Sorted by latest activity</p>
+          </div>
+          <div class="table-actions">
+            <button class="btn-outline">≡ Columns</button>
+            <button class="btn-outline">⚙ Filter</button>
+            <button class="btn-outline">↓ Export</button>
+            <div class="view-toggle">
+              <div class="view-btn active" title="Grid">⊞</div>
+              <div class="view-btn" title="List">≡</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <div class="tab active">All <span class="tab-count">148</span></div>
+          <div class="tab">New <span class="tab-count">42</span></div>
+          <div class="tab">Contacted <span class="tab-count">31</span></div>
+          <div class="tab">Qualified <span class="tab-count">52</span></div>
+          <div class="tab">Nurture <span class="tab-count">15</span></div>
+          <div class="tab">Lost <span class="tab-count">8</span></div>
+        </div>
+
+        <!-- Table -->
+        <div class="data-table">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:36px"><input type="checkbox"></th>
+                <th>Nama</th>
+                <th>Status</th>
+                <th>Source</th>
+                <th>Assigned</th>
+                <th>Masuk</th>
+                <th>SLA</th>
+                <th style="text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div class="lead-name-cell">
+                    <div class="lead-avatar" style="background:#2563eb">RK</div>
+                    <div>
+                      <div class="lead-name">Ravi Kumar</div>
+                      <div class="lead-phone">+91 98456 71230</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge new"><span class="badge-dot"></span>New</span></td>
+                <td><div class="source-cell">🟦 Facebook</div></td>
+                <td><span class="assigned-text">Priya S.</span></td>
+                <td><span class="date-text">23 mei</span></td>
+                <td><span class="sla-warn">⚡ 2h left</span></td>
+                <td>
+                  <div class="action-btns" style="justify-content:flex-end">
+                    <div class="action-btn" title="Telepon">📞</div>
+                    <div class="action-btn" title="Edit" onclick="openAssignModal()">✏️</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div class="lead-name-cell">
+                    <div class="lead-avatar" style="background:#7c3aed">PM</div>
+                    <div>
+                      <div class="lead-name">Preethi Murali</div>
+                      <div class="lead-phone">+91 91234 56903</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge contacted"><span class="badge-dot"></span>Contacted</span></td>
+                <td><div class="source-cell">🌐 Website</div></td>
+                <td><span class="assigned-text">Arjun R.</span></td>
+                <td><span class="date-text">2 agustus</span></td>
+                <td><span class="sla-ok">✓ On time</span></td>
+                <td>
+                  <div class="action-btns" style="justify-content:flex-end">
+                    <div class="action-btn">📞</div>
+                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div class="lead-name-cell">
+                    <div class="lead-avatar" style="background:#059669">SN</div>
+                    <div>
+                      <div class="lead-name">Suresh Nair</div>
+                      <div class="lead-phone">+91 94001 23987</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge qualified"><span class="badge-dot"></span>Qualified</span></td>
+                <td><div class="source-cell">🐦 Twitter</div></td>
+                <td><span class="assigned-text">Kiran M.</span></td>
+                <td><span class="date-text">14 april</span></td>
+                <td><span class="sla-ok">✓ On time</span></td>
+                <td>
+                  <div class="action-btns" style="justify-content:flex-end">
+                    <div class="action-btn">📞</div>
+                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div class="lead-name-cell">
+                    <div class="lead-avatar" style="background:#dc2626">DJ</div>
+                    <div>
+                      <div class="lead-name">Divya Joshi</div>
+                      <div class="lead-phone">+91 88356 54012</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge proposal"><span class="badge-dot"></span>Proposal</span></td>
+                <td><div class="source-cell">🔴 Ads</div></td>
+                <td><span class="assigned-text">Priya S.</span></td>
+                <td><span class="date-text">8 januari</span></td>
+                <td><span class="sla-ok">✓ On time</span></td>
+                <td>
+                  <div class="action-btns" style="justify-content:flex-end">
+                    <div class="action-btn">📞</div>
+                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div class="lead-name-cell">
+                    <div class="lead-avatar" style="background:#ea580c">AM</div>
+                    <div>
+                      <div class="lead-name">Amit Mehta</div>
+                      <div class="lead-phone">+91 50123 45678</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge new"><span class="badge-dot"></span>New</span></td>
+                <td><div class="source-cell">📸 Instagram</div></td>
+                <td><span class="assigned-empty">Unassigned</span></td>
+                <td><span class="date-text">17 agustus</span></td>
+                <td><span class="sla-warn">⚡ 5h left</span></td>
+                <td>
+                  <div class="action-btns" style="justify-content:flex-end">
+                    <div class="action-btn">📞</div>
+                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div class="lead-name-cell">
+                    <div class="lead-avatar" style="background:#0284c7">LB</div>
+                    <div>
+                      <div class="lead-name">Lakshmi Bhat</div>
+                      <div class="lead-phone">+91 88265 34210</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge lost"><span class="badge-dot"></span>Lost</span></td>
+                <td><div class="source-cell">📋 Form</div></td>
+                <td><span class="assigned-text">Kiran M.</span></td>
+                <td><span class="date-text">4 desember</span></td>
+                <td><span class="dots">—</span></td>
+                <td>
+                  <div class="action-btns" style="justify-content:flex-end">
+                    <div class="action-btn">📞</div>
+                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <span class="pagination-info">Showing 1–6 of 148</span>
+          <div class="pagination-btns">
+            <div class="page-btn active">1</div>
+            <div class="page-btn">2</div>
+            <div class="page-btn">3</div>
+            <div class="page-btn" style="border:none;background:transparent;color:var(--text-muted)">...</div>
+            <div class="page-btn">25</div>
+            <div class="page-btn page-next">Next →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PAGE 2: INPUT MANUAL ════ -->
+  <div class="page" id="page-input">
+    <div class="page-title" style="color:#94a3b8;padding:16px 28px 0;background:#0f172a">Input lead manual</div>
+    <div class="topbar" style="background:#1e293b;border-bottom-color:#334155">
+      <div class="topbar-left" style="gap:14px">
+        <button class="back-btn" onclick="showPage('lead-list')">← kembali</button>
+        <span class="topbar-title" style="color:white">Lead List</span>
+        <span class="topbar-count">— All total leads</span>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box" style="background:#0f172a;border-color:#334155;color:#64748b">
+          <span>🔍</span>
+          <span>Search leads, phone, model...</span>
+        </div>
+        <div class="icon-btn" style="background:#0f172a;border-color:#334155;color:#94a3b8">⚙️</div>
+        <div class="icon-btn" style="background:#0f172a;border-color:#334155;color:#94a3b8">🔔</div>
+        <button class="btn-primary">＋ Assign Lead</button>
+        <span class="active-label">Input manual</span>
+      </div>
+    </div>
+
+    <div class="form-overlay">
+      <div class="form-card">
+        <div class="form-section-title">Informasi Kontak</div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nama lengkap <span>*</span></label>
+            <input class="form-input" type="text" placeholder="Masukkan nama..">
+          </div>
+          <div class="form-group">
+            <label class="form-label">No. telepon <span>*</span></label>
+            <input class="form-input" type="tel" placeholder="+62..">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email <span>*</span></label>
+            <input class="form-input" type="email" placeholder="Email@domain.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sumber lead <span>*</span></label>
+            <select class="form-select">
+              <option value="" disabled selected>Pilih sumber..</option>
+              <option>Facebook</option>
+              <option>Instagram</option>
+              <option>Website</option>
+              <option>Twitter</option>
+              <option>Ads</option>
+              <option>Form</option>
+              <option>Referral</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section-title">Informasi lead</div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Produk yang diminati <span>*</span></label>
+            <select class="form-select">
+              <option value="" disabled selected>Pilih produk..</option>
+              <option>Produk A</option>
+              <option>Produk B</option>
+              <option>Produk C</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prioritas <span>*</span></label>
+            <select class="form-select">
+              <option>Normal</option>
+              <option>Tinggi</option>
+              <option>Sangat Tinggi</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Catatan awal</label>
+            <textarea class="form-textarea" placeholder="Informasi tambahan tentang lead ini.."></textarea>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <button class="btn-reset" onclick="resetForm()">Reset</button>
+          <button class="btn-save" onclick="saveForm()">Simpan lead</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ OTHER PAGES ════ -->
+  <div class="page" id="page-update">
+    <div class="page-title">Update dan Segmentasi</div>
+    <div class="content" style="align-items:center;justify-content:center;flex:1">
+      <div style="text-align:center;color:var(--text-muted)">
+        <div style="font-size:48px;margin-bottom:16px">📅</div>
+        <div style="font-size:16px;font-weight:600;margin-bottom:8px">Update dan Segmentasi</div>
+        <div style="font-size:13px">Halaman ini dalam pengembangan</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-analisis">
+    <div class="page-title">Analisis Dashboard</div>
+    <div class="content" style="align-items:center;justify-content:center;flex:1">
+      <div style="text-align:center;color:var(--text-muted)">
+        <div style="font-size:48px;margin-bottom:16px">📊</div>
+        <div style="font-size:16px;font-weight:600;margin-bottom:8px">Analisis Dashboard</div>
+        <div style="font-size:13px">Halaman ini dalam pengembangan</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════════ ASSIGN MODAL ═══════════════ -->
+<div class="modal-overlay" id="assignModal" onclick="handleModalClose(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-title">Assign lead ke sales</div>
+
+    <div class="modal-label">Pilih Sales</div>
+    <div class="sales-list">
+      <div class="sales-item selected" onclick="toggleSales(this)">
+        <div class="sales-avatar">RK</div>
+        <div class="sales-info">
+          <div class="sales-name">Priya Sharma</div>
+          <div class="sales-meta">8 lead aktif</div>
+        </div>
+        <div class="sales-check"></div>
+      </div>
+      <div class="sales-item" onclick="toggleSales(this)">
+        <div class="sales-avatar" style="background:#7c3aed">AR</div>
+        <div class="sales-info">
+          <div class="sales-name">Arjun Rajan</div>
+          <div class="sales-meta">5 lead aktif</div>
+        </div>
+        <div class="sales-check"></div>
+      </div>
+      <div class="sales-item" onclick="toggleSales(this)">
+        <div class="sales-avatar" style="background:#059669">KM</div>
+        <div class="sales-info">
+          <div class="sales-name">Kiran Menon</div>
+          <div class="sales-meta">3 lead aktif</div>
+        </div>
+        <div class="sales-check"></div>
+      </div>
+    </div>
+
+    <div class="modal-notes-label">Catatan untuk sales (Opsional)</div>
+    <textarea class="form-textarea" style="width:100%;background:#0f172a;border-color:#334155;color:white" placeholder="Tambahkan catatan.."></textarea>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-assign" onclick="doAssign()">Assign Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ TOAST ═══════════════ -->
+<div class="toast" id="toast">
+  ✅ <span id="toast-msg">Lead berhasil disimpan!</span>
+</div>
+
+<script>
+  // Navigation
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    const pageMap = {
+      'lead-list': 'page-lead-list',
+      'input': 'page-input',
+      'update': 'page-update',
+      'analisis': 'page-analisis',
+    };
+
+    document.getElementById(pageMap[name]).classList.add('active');
+
+    // Highlight sidebar
+    if (name === 'lead-list') document.querySelectorAll('.nav-item')[0].classList.add('active');
+    else if (name === 'update') document.querySelectorAll('.nav-item')[1].classList.add('active');
+    else if (name === 'analisis') document.querySelectorAll('.nav-item')[2].classList.add('active');
+    else if (name === 'input') document.querySelectorAll('.nav-item')[3].classList.add('active');
+  }
+
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // View toggle
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Modal
+  function openAssignModal() {
+    document.getElementById('assignModal').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('assignModal').classList.remove('show');
+  }
+
+  function handleModalClose(e) {
+    if (e.target === document.getElementById('assignModal')) closeModal();
+  }
+
+  function toggleSales(el) {
+    el.classList.toggle('selected');
+  }
+
+  function doAssign() {
+    closeModal();
+    showToast('Lead berhasil di-assign ke sales!');
+  }
+
+  // Form
+  function resetForm() {
+    document.querySelectorAll('#page-input .form-input, #page-input .form-select, #page-input .form-textarea')
+      .forEach(el => {
+        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+        else el.value = '';
+      });
+  }
+
+  function saveForm() {
+    const inputs = document.querySelectorAll('#page-input .form-input, #page-input .form-select');
+    let valid = true;
+    inputs.forEach(el => {
+      if (el.hasAttribute('placeholder') && el.value.trim() === '') {
+        el.style.borderColor = '#ef4444';
+        valid = false;
+        setTimeout(() => el.style.borderColor = '#334155', 2000);
+      }
+    });
+    if (!valid) { showToast('Lengkapi data yang wajib diisi!', true); return; }
+    showPage('lead-list');
+    showToast('Lead berhasil disimpan!');
+  }
+
+  // Toast
+  function showToast(msg, isError = false) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    toast.style.borderLeftColor = isError ? '#ef4444' : '#10b981';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  // Checkbox header
+  document.querySelector('thead input[type=checkbox]')?.addEventListener('change', function() {
+    document.querySelectorAll('tbody input[type=checkbox]').forEach(cb => cb.checked = this.checked);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Berhasil</title>
+  <link rel="stylesheet" href="{% static 'leads/css/login_berhasil.css' %}">
+</head>
+<body>
+  <div class="container">
+ 
+    <!-- Background elements -->
+    <div class="bg-purple-bar"></div>
+    <div class="bg-rotated-oval"></div>
+    <div class="bg-overlay"></div>
+ 
+    <!-- Modal Card -->
+    <div class="modal-card">
+ 
+      <!-- Success Circle with Checkmark -->
+      <div class="success-icon">
+        <svg viewBox="0 0 131 131" fill="none">
+          <circle cx="65.5" cy="65.5" r="65.5" fill="#A1E97A"/>
+          <path d="M 45 65 L 58 78 L 86 50" stroke="white" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+ 
+      <!-- Title -->
+      <h1 class="title">Login Berhasil</h1>
+ 
+      <!-- Button — ganti 'home' dengan nama url di urls.py kamu -->
+      <a href="{% url 'home' %}" class="btn-back">Kembali</a>
+ 
+    </div>
+  </div>
+</body>
+</html>

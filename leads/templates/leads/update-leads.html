@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Leads – LeadFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #edf2f7;
+  --sidebar: #ffffff;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #1a202c;
+  --muted: #64748b;
+  --faint: #94a3b8;
+  --accent: #2563eb;
+  --accent-lt: #eff6ff;
+  --green: #10b981;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --purple: #7c3aed;
+
+  /* Kanban column accent colors */
+  --col-new:      #3b82f6;
+  --col-contact:  #f59e0b;
+  --col-qual:     #10b981;
+  --col-prop:     #8b5cf6;
+  --col-won:      #06b6d4;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 18px rgba(0,0,0,.09);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.15);
+  --r: 10px;
+  --r-sm: 6px;
+  --r-lg: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ══════════════ SIDEBAR ══════════════ */
+.sidebar {
+  width: 190px; min-width: 190px;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 22px 0; height: 100vh; z-index: 10;
+  flex-shrink: 0;
+}
+
+.sb-profile {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 16px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+
+.sb-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #e2e8f0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+.sb-name  { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing:.01em; }
+.sb-role  { font-size: 10px; color: var(--faint); font-weight: 500; text-transform: uppercase; letter-spacing:.07em; }
+
+.sb-label {
+  font-size: 9px; font-weight: 800; letter-spacing: .12em;
+  color: var(--faint); padding: 0 16px; margin-bottom: 6px; text-transform: uppercase;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 16px; font-size: 12.5px; font-weight: 500;
+  color: var(--muted); cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all .13s; user-select: none;
+}
+.nav-item:hover { background: var(--accent-lt); color: var(--accent); }
+.nav-item.active { background: var(--accent-lt); color: var(--accent); border-left-color: var(--accent); font-weight: 700; }
+.nav-icon { font-size: 14px; width: 17px; text-align: center; }
+
+.sb-bottom {
+  margin-top: auto; padding: 14px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.logout-btn {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 600; color: var(--red);
+  cursor: pointer; padding: 7px 9px; border-radius: var(--r-sm);
+  transition: background .13s;
+}
+.logout-btn:hover { background: #fee2e2; }
+
+/* ══════════════ MAIN ══════════════ */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ══ TOPBAR ══ */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  gap: 12px; flex-shrink: 0;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-title { font-size: 15px; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
+
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+
+.search-box {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 7px 12px;
+  font-size: 12px; color: var(--faint); width: 210px;
+  transition: border-color .13s; cursor: text;
+}
+.search-box:hover { border-color: var(--accent); }
+
+.icon-btn {
+  width: 33px; height: 33px; border-radius: var(--r-sm);
+  background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 15px; color: var(--muted);
+  transition: all .13s;
+}
+.icon-btn:hover { background: var(--accent-lt); border-color: var(--accent); color: var(--accent); }
+
+.btn-primary {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--accent); color: white;
+  border: none; border-radius: var(--r-sm);
+  padding: 8px 14px; font-size: 12px; font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer; white-space: nowrap; letter-spacing: .01em;
+  transition: all .14s;
+}
+.btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,.3); }
+
+/* ══════════════ KANBAN BOARD ══════════════ */
+.board-wrap {
+  flex: 1; overflow-x: auto; overflow-y: hidden;
+  padding: 20px 24px 24px;
+}
+
+.board {
+  display: flex; gap: 14px;
+  height: 100%; min-width: max-content;
+}
+
+/* Column */
+.col {
+  width: 260px; min-width: 260px;
+  display: flex; flex-direction: column;
+  background: #dde5f0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  animation: fadeUp .35s ease both;
+}
+.col:nth-child(1) { animation-delay: 0s; }
+.col:nth-child(2) { animation-delay: .06s; }
+.col:nth-child(3) { animation-delay: .12s; }
+.col:nth-child(4) { animation-delay: .18s; }
+.col:nth-child(5) { animation-delay: .24s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.col-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 16px 10px;
+  position: relative;
+}
+
+.col-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+
+.col-title { font-size: 13px; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
+
+.col-count {
+  margin-left: auto;
+  font-size: 10px; font-weight: 700;
+  background: rgba(255,255,255,.7);
+  color: var(--muted);
+  padding: 2px 8px; border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+}
+
+.col-body {
+  flex: 1; overflow-y: auto;
+  padding: 6px 10px 10px;
+  display: flex; flex-direction: column; gap: 8px;
+  scrollbar-width: thin;
+}
+.col-body::-webkit-scrollbar { width: 4px; }
+.col-body::-webkit-scrollbar-thumb { background: rgba(0,0,0,.12); border-radius: 4px; }
+
+/* ══ KANBAN CARD ══ */
+.kcard {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 13px 14px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255,255,255,.8);
+  cursor: pointer;
+  transition: all .17s;
+  position: relative;
+}
+.kcard::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%; border-radius: 10px 0 0 10px;
+}
+.kcard:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: rgba(37,99,235,.15); }
+
+/* priority badge */
+.priority {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 800; letter-spacing: .04em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.p-high   { background: #fee2e2; color: #b91c1c; }
+.p-medium { background: #fef3c7; color: #b45309; }
+.p-low    { background: #dcfce7; color: #166534; }
+
+.kcard-title {
+  font-size: 12.5px; font-weight: 600; color: var(--text);
+  line-height: 1.5; margin-bottom: 9px;
+}
+
+/* tags row */
+.tags-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.ktag {
+  padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; letter-spacing: .03em;
+}
+.t-mobile  { background: #ede9fe; color: #5b21b6; }
+.t-web     { background: #dbeafe; color: #1d4ed8; }
+.t-ads     { background: #fce7f3; color: #9d174d; }
+.t-form    { background: #d1fae5; color: #065f46; }
+.t-ig      { background: #fef3c7; color: #92400e; }
+
+.kcard-footer {
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.kcard-date { font-size: 10.5px; color: var(--faint); font-family: 'DM Mono', monospace; }
+
+.avatars { display: flex; }
+.av {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 800; color: white;
+  margin-left: -6px; flex-shrink: 0;
+}
+.av:first-child { margin-left: 0; }
+
+/* column accent lines */
+.col[data-col="new"]     .kcard::before { background: var(--col-new); }
+.col[data-col="contact"] .kcard::before { background: var(--col-contact); }
+.col[data-col="qual"]    .kcard::before { background: var(--col-qual); }
+.col[data-col="prop"]    .kcard::before { background: var(--col-prop); }
+.col[data-col="won"]     .kcard::before { background: var(--col-won); }
+
+/* column header top bar */
+.col[data-col="new"]     .col-dot { background: var(--col-new); }
+.col[data-col="contact"] .col-dot { background: var(--col-contact); }
+.col[data-col="qual"]    .col-dot { background: var(--col-qual); }
+.col[data-col="prop"]    .col-dot { background: var(--col-prop); }
+.col[data-col="won"]     .col-dot { background: var(--col-won); }
+
+/* ══════════════════════════════════════
+   MODAL – Update Status & Tagging
+══════════════════════════════════════ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10, 18, 38, 0.78);
+  z-index: 1000;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.show { display: flex; animation: fadeIn .2s ease; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal {
+  background: #1e293b;
+  border-radius: 18px;
+  padding: 28px 30px 32px;
+  width: 560px; max-width: 96vw; max-height: 92vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid #2d3f5a;
+  animation: slideUp .28s ease;
+}
+
+.modal-title {
+  font-size: 17px; font-weight: 800; color: white;
+  margin-bottom: 20px; letter-spacing: -.01em;
+}
+
+/* Lead card inside modal */
+.modal-lead-card {
+  background: #273549;
+  border: 1px solid #3a506b;
+  border-radius: 10px;
+  padding: 13px 16px;
+  display: flex; align-items: center; gap: 13px;
+  margin-bottom: 24px;
+  transition: all .15s;
+}
+.modal-lead-card:hover { border-color: #60a5fa; background: #2a3d54; }
+
+.ml-avatar {
+  width: 38px; height: 38px; border-radius: 9px;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: white; flex-shrink: 0;
+}
+
+.ml-name { font-size: 14px; font-weight: 700; color: white; }
+.ml-meta { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+/* Section label */
+.sec-label {
+  font-size: 10.5px; font-weight: 700; color: #64748b;
+  letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* Pipeline steps */
+.pipeline-row {
+  display: flex; align-items: flex-start; gap: 0;
+  margin-bottom: 6px; position: relative;
+}
+
+.pipeline-row::before {
+  content: ''; position: absolute;
+  top: 19px; left: 19px;
+  width: calc(100% - 38px);
+  height: 2px; background: #2d3f5a; z-index: 0;
+}
+
+.pipe-step {
+  display: flex; flex-direction: column; align-items: center;
+  flex: 1; position: relative; z-index: 1; cursor: pointer;
+}
+
+.pipe-circle {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #273549;
+  border: 2px solid #3a506b;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: #64748b;
+  transition: all .2s;
+  margin-bottom: 6px;
+}
+
+.pipe-step:hover .pipe-circle { border-color: #60a5fa; color: #60a5fa; }
+
+.pipe-step.active .pipe-circle {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(37,99,235,.25);
+}
+
+.pipe-step.done .pipe-circle {
+  background: #1e3a5f;
+  border-color: #3b82f6;
+  color: #60a5fa;
+}
+
+.pipe-label {
+  font-size: 10px; font-weight: 600; color: #64748b;
+  text-align: center; white-space: nowrap;
+}
+.pipe-step.active .pipe-label { color: #93c5fd; font-weight: 700; }
+.pipe-step.done   .pipe-label { color: #60a5fa; }
+
+/* Current status text */
+.current-status-row {
+  margin-bottom: 20px;
+  padding: 0 2px;
+}
+.cs-label { font-size: 10.5px; color: #64748b; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.cs-value { font-size: 15px; font-weight: 800; color: white; margin-top: 2px; }
+
+/* Tagging */
+.tag-grid {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  margin-bottom: 20px;
+}
+
+.tag-pill {
+  padding: 5px 14px; border-radius: 20px;
+  font-size: 11.5px; font-weight: 600;
+  border: 1.5px solid #3a506b;
+  color: #94a3b8; background: transparent;
+  cursor: pointer; transition: all .15s;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.tag-pill:hover { border-color: #60a5fa; color: #93c5fd; background: rgba(59,130,246,.08); }
+.tag-pill.selected { border-color: var(--accent); color: white; background: rgba(37,99,235,.2); }
+.tag-pill.add-new {
+  border-style: dashed; color: #475569;
+  display: flex; align-items: center; gap: 5px;
+}
+.tag-pill.add-new:hover { border-color: #60a5fa; color: #60a5fa; }
+
+/* Notes */
+.modal-textarea {
+  width: 100%;
+  background: #273549;
+  border: 1px solid #3a506b;
+  border-radius: 9px;
+  padding: 12px 14px;
+  font-size: 13px; color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none; resize: vertical; min-height: 100px;
+  transition: border-color .15s;
+  margin-bottom: 24px;
+}
+.modal-textarea::placeholder { color: #475569; }
+.modal-textarea:focus { border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,.1); }
+
+/* Modal footer */
+.modal-footer {
+  display: flex; justify-content: flex-end; gap: 10px;
+}
+
+.btn-cancel {
+  padding: 9px 20px; background: transparent;
+  border: 1.5px solid #3a506b; border-radius: var(--r-sm);
+  color: #94a3b8; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: all .14s;
+}
+.btn-cancel:hover { border-color: #94a3b8; color: white; }
+
+.btn-save {
+  padding: 9px 22px; background: var(--accent);
+  border: none; border-radius: var(--r-sm);
+  color: white; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: all .14s;
+}
+.btn-save:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,.35); }
+
+/* ══ TOAST ══ */
+.toast {
+  position: fixed; bottom: 22px; right: 22px;
+  background: #1e293b; border: 1px solid #10b981;
+  border-left: 4px solid #10b981;
+  border-radius: var(--r); padding: 11px 18px;
+  font-size: 12.5px; font-weight: 600; color: white;
+  box-shadow: var(--shadow-lg); z-index: 2000;
+  display: none; align-items: center; gap: 8px;
+}
+.toast.show { display: flex; animation: slideUp .28s ease; }
+
+/* ══ TAG INPUT (inline) ══ */
+.tag-input {
+  background: transparent;
+  border: 1.5px dashed #3a506b;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11.5px; font-weight: 600; color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none; width: 120px;
+  transition: border-color .14s;
+}
+.tag-input:focus { border-color: #60a5fa; }
+.tag-input::placeholder { color: #475569; }
+
+/* divider */
+.modal-divider {
+  height: 1px; background: #2d3f5a;
+  margin: 18px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar">
+  <div class="sb-profile">
+    <div class="sb-avatar">👤</div>
+    <div>
+      <div class="sb-name">NAMA</div>
+      <div class="sb-role">ADMIN</div>
+    </div>
+  </div>
+
+  <div class="sb-label">Main Menu</div>
+  <div class="nav-item" onclick="navClick(this)"><span class="nav-icon">📋</span> Distribusi Lead</div>
+  <div class="nav-item active" onclick="navClick(this)"><span class="nav-icon">📅</span> Update dan Segmentasi</div>
+  <div class="nav-item" onclick="navClick(this)"><span class="nav-icon">🖥️</span> Analisis Dashboard</div>
+  <div class="nav-item" onclick="navClick(this)"><span class="nav-icon">📝</span> Input Manual</div>
+
+  <div class="sb-bottom">
+    <div class="logout-btn">🚪 Logout Account</div>
+  </div>
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-title">Update</span>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">🔍 <span>Search leads, phone, model...</span></div>
+      <div class="icon-btn">⚙️</div>
+      <div class="icon-btn">🔔</div>
+      <button class="btn-primary" onclick="openModal(null)">＋ Update status tagging</button>
+    </div>
+  </div>
+
+  <!-- Kanban Board -->
+  <div class="board-wrap">
+    <div class="board" id="kanban-board">
+
+      <!-- NEW -->
+      <div class="col" data-col="new">
+        <div class="col-header">
+          <div class="col-dot"></div>
+          <span class="col-title">New</span>
+          <span class="col-count">2</span>
+        </div>
+        <div class="col-body" id="col-new">
+
+          <div class="kcard" onclick="openModal({name:'Ravi Kumar',phone:'+91 98456 71230',src:'Facebook · Ads · Sales Kiranit',status:1})">
+            <div class="priority p-low">Low</div>
+            <div class="kcard-title">This is task description that will wrap automatically into a new line</div>
+            <div class="tags-row">
+              <span class="ktag t-mobile">Mobile</span>
+              <span class="ktag t-web">Web</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#2563eb">RK</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kcard" onclick="openModal({name:'Divya Joshi',phone:'+91 88356 54012',src:'Ads · Sales Priya S.',status:1})">
+            <div class="priority p-low">Low</div>
+            <div class="kcard-title">Define more tags in components</div>
+            <div class="tags-row">
+              <span class="ktag t-mobile">Mobile</span>
+              <span class="ktag t-web">Web</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#dc2626">DJ</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CONTACTED -->
+      <div class="col" data-col="contact">
+        <div class="col-header">
+          <div class="col-dot"></div>
+          <span class="col-title">Contacted</span>
+          <span class="col-count">4</span>
+        </div>
+        <div class="col-body" id="col-contact">
+
+          <div class="kcard" onclick="openModal({name:'Preethi Murali',phone:'+91 91234 56903',src:'Website · Sales Arjun R.',status:2})">
+            <div class="priority p-medium">Medium</div>
+            <div class="kcard-title">Add more user avatars</div>
+            <div class="tags-row">
+              <span class="ktag t-mobile">Mobile</span>
+              <span class="ktag t-web">Web</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#7c3aed">PM</div>
+                <div class="av" style="background:#059669">KM</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kcard" onclick="openModal({name:'Amit Mehta',phone:'+91 50123 45678',src:'Instagram · Unassigned',status:2})">
+            <div class="priority p-low">Low</div>
+            <div class="kcard-title">Add 'Pinned' section at top of the board</div>
+            <div class="tags-row">
+              <span class="ktag t-web">Web</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#ea580c">AM</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kcard" onclick="openModal({name:'Suresh Nair',phone:'+91 94001 23987',src:'Twitter · Sales Kiran M.',status:2})">
+            <div class="priority p-medium">Medium</div>
+            <div class="kcard-title">Add archived state for card component</div>
+            <div class="tags-row">
+              <span class="ktag t-mobile">Mobile</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#059669">SN</div>
+                <div class="av" style="background:#2563eb">RK</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kcard" onclick="openModal({name:'Lakshmi Bhat',phone:'+91 88265 34210',src:'Form · Sales Kiran M.',status:2})">
+            <div class="priority p-low">Low</div>
+            <div class="kcard-title">Add How to Use page to help creators in using this template</div>
+            <div class="tags-row">
+              <span class="ktag t-web">Web</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#0284c7">LB</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- QUALIFIED -->
+      <div class="col" data-col="qual">
+        <div class="col-header">
+          <div class="col-dot"></div>
+          <span class="col-title">Qualified</span>
+          <span class="col-count">1</span>
+        </div>
+        <div class="col-body" id="col-qual">
+
+          <div class="kcard" onclick="openModal({name:'Anita Sharma',phone:'+91 99001 12345',src:'Ads · Sales Priya S.',status:3})">
+            <div class="priority p-high">High</div>
+            <div class="kcard-title">Version 1 of Kanban Board Template release</div>
+            <div class="tags-row">
+              <span class="ktag t-mobile">Mobile</span>
+              <span class="ktag t-web">Web</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#e11d48">AS</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PROPOSAL -->
+      <div class="col" data-col="prop">
+        <div class="col-header">
+          <div class="col-dot"></div>
+          <span class="col-title">Proposal</span>
+          <span class="col-count">1</span>
+        </div>
+        <div class="col-body" id="col-prop">
+
+          <div class="kcard" onclick="openModal({name:'Vikram Rao',phone:'+91 88123 99001',src:'Website · Sales Arjun R.',status:4})">
+            <div class="priority p-high">High</div>
+            <div class="kcard-title">Version 1 of Kanban Board Template release</div>
+            <div class="tags-row">
+              <span class="ktag t-mobile">Mobile</span>
+              <span class="ktag t-web">Web</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#9333ea">VR</div>
+                <div class="av" style="background:#059669">KM</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CLOSED WON -->
+      <div class="col" data-col="won">
+        <div class="col-header">
+          <div class="col-dot"></div>
+          <span class="col-title">Closed Won</span>
+          <span class="col-count">1</span>
+        </div>
+        <div class="col-body" id="col-won">
+
+          <div class="kcard" onclick="openModal({name:'Meera Pillai',phone:'+91 77890 55432',src:'Form · Sales Kiran M.',status:5})">
+            <div class="priority p-high">High</div>
+            <div class="kcard-title">Version 1 of Kanban Board Template release</div>
+            <div class="tags-row">
+              <span class="ktag t-mobile">Mobile</span>
+              <span class="ktag t-web">Web</span>
+            </div>
+            <div class="kcard-footer">
+              <span class="kcard-date">Mar 3, 2020</span>
+              <div class="avatars">
+                <div class="av" style="background:#0369a1">MP</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /board -->
+  </div><!-- /board-wrap -->
+</main>
+
+<!-- ══════════════════════════════════
+     MODAL – Update Status & Tagging
+══════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal-box">
+
+    <div class="modal-title">Update status &amp; tagging</div>
+
+    <!-- Lead card -->
+    <div class="modal-lead-card">
+      <div class="ml-avatar" id="m-avatar">RK</div>
+      <div>
+        <div class="ml-name" id="m-name">NAMA</div>
+        <div class="ml-meta" id="m-meta">#62 · Ads · Sales Kiranit</div>
+      </div>
+    </div>
+
+    <!-- Pipeline -->
+    <div class="sec-label">Status pipeline saat ini</div>
+    <div class="pipeline-row">
+      <div class="pipe-step" data-step="1" onclick="selectStep(1)">
+        <div class="pipe-circle">1</div>
+        <div class="pipe-label">New</div>
+      </div>
+      <div class="pipe-step" data-step="2" onclick="selectStep(2)">
+        <div class="pipe-circle">2</div>
+        <div class="pipe-label">Contacted</div>
+      </div>
+      <div class="pipe-step" data-step="3" onclick="selectStep(3)">
+        <div class="pipe-circle">3</div>
+        <div class="pipe-label">Qualified</div>
+      </div>
+      <div class="pipe-step" data-step="4" onclick="selectStep(4)">
+        <div class="pipe-circle">4</div>
+        <div class="pipe-label">Negotiation</div>
+      </div>
+      <div class="pipe-step" data-step="5" onclick="selectStep(5)">
+        <div class="pipe-circle">5</div>
+        <div class="pipe-label">Closed</div>
+      </div>
+    </div>
+
+    <div class="modal-divider"></div>
+
+    <!-- Current status label -->
+    <div class="current-status-row">
+      <div class="cs-label">Pindahkan ke Status</div>
+      <div class="cs-value" id="cs-value">Contacted (saat ini)</div>
+    </div>
+
+    <!-- Tagging -->
+    <div class="sec-label">Tagging lead</div>
+    <div class="tag-grid" id="tag-grid">
+      <div class="tag-pill" onclick="toggleTag(this)">Follow Up</div>
+      <div class="tag-pill" onclick="toggleTag(this)">Premium</div>
+      <div class="tag-pill" onclick="toggleTag(this)">Hangat</div>
+      <div class="tag-pill" onclick="toggleTag(this)">Prioritas</div>
+      <div class="tag-pill" onclick="toggleTag(this)">Enterprise</div>
+      <div class="tag-pill selected" onclick="toggleTag(this)">Starter</div>
+      <div class="tag-pill" onclick="toggleTag(this)">Cold</div>
+      <div class="tag-pill add-new" id="add-tag-btn" onclick="addNewTag()">＋ Tag baru</div>
+    </div>
+
+    <!-- Notes -->
+    <div class="sec-label">Catatan update</div>
+    <textarea class="modal-textarea" id="modal-notes" placeholder="Apa yang terjadi pada lead ini?"></textarea>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveUpdate()">Simpan Update</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ <span id="toast-msg">Status berhasil diperbarui!</span></div>
+
+<script>
+  const STEP_LABELS = ['', 'New', 'Contacted', 'Qualified', 'Negotiation', 'Closed'];
+  let currentStep = 2;
+
+  // ── Sidebar nav ──
+  function navClick(el) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── Open Modal ──
+  function openModal(lead) {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.add('show');
+
+    if (lead) {
+      // Fill lead info
+      const initials = lead.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+      document.getElementById('m-avatar').textContent = initials;
+      document.getElementById('m-name').textContent = lead.name;
+      document.getElementById('m-meta').textContent = lead.phone + ' · ' + lead.src;
+      currentStep = lead.status || 2;
+    } else {
+      document.getElementById('m-avatar').textContent = 'NN';
+      document.getElementById('m-name').textContent = 'NAMA';
+      document.getElementById('m-meta').textContent = '#-- · -- · Sales --';
+      currentStep = 2;
+    }
+
+    renderPipeline();
+    document.getElementById('modal-notes').value = '';
+
+    // Reset tags
+    document.querySelectorAll('.tag-pill:not(.add-new)').forEach(t => t.classList.remove('selected'));
+  }
+
+  // ── Close Modal ──
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('show');
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+
+  // ── Pipeline step ──
+  function selectStep(step) {
+    currentStep = step;
+    renderPipeline();
+  }
+
+  function renderPipeline() {
+    document.querySelectorAll('.pipe-step').forEach(el => {
+      const s = parseInt(el.dataset.step);
+      el.classList.remove('active', 'done');
+      if (s === currentStep) el.classList.add('active');
+      else if (s < currentStep) el.classList.add('done');
+    });
+    document.getElementById('cs-value').textContent = STEP_LABELS[currentStep] + ' (saat ini)';
+  }
+
+  // ── Tag toggle ──
+  function toggleTag(el) {
+    el.classList.toggle('selected');
+  }
+
+  // ── Add new tag ──
+  function addNewTag() {
+    const grid = document.getElementById('tag-grid');
+    const addBtn = document.getElementById('add-tag-btn');
+
+    const inp = document.createElement('input');
+    inp.className = 'tag-input';
+    inp.placeholder = 'Nama tag...';
+    inp.maxLength = 18;
+
+    addBtn.style.display = 'none';
+    grid.insertBefore(inp, addBtn);
+    inp.focus();
+
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && this.value.trim()) {
+        const tag = document.createElement('div');
+        tag.className = 'tag-pill selected';
+        tag.textContent = this.value.trim();
+        tag.onclick = function() { toggleTag(this); };
+        grid.insertBefore(tag, inp);
+        inp.value = '';
+      }
+      if (e.key === 'Escape') {
+        inp.remove();
+        addBtn.style.display = '';
+      }
+    });
+
+    inp.addEventListener('blur', function() {
+      if (this.value.trim()) {
+        const tag = document.createElement('div');
+        tag.className = 'tag-pill selected';
+        tag.textContent = this.value.trim();
+        tag.onclick = function() { toggleTag(this); };
+        grid.insertBefore(tag, this);
+      }
+      this.remove();
+      addBtn.style.display = '';
+    });
+  }
+
+  // ── Save ──
+  function saveUpdate() {
+    const name = document.getElementById('m-name').textContent;
+    const status = STEP_LABELS[currentStep];
+    closeModal();
+    showToast(`✅ ${name} → ${status} berhasil disimpan`);
+  }
+
+  // ── Toast ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Init pipeline on load
+  renderPipeline();
+</script>
+</body>
+</html>
