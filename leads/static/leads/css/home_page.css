@@ -63,9 +63,6 @@ nav a {
 
 /* ============================================================
    Hero Section
-   CATATAN: Untuk background-image, gunakan di HTML template:
-   style="background-image: url('{% static 'images/hero-bg.jpg' %}')"
-   JANGAN tulis URL gambar langsung di CSS jika dari folder static Django
    ============================================================ */
 .hero-section {
   padding: 80px 0 60px;
