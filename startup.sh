@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "=== Collecting static files ==="
-python manage.py collectstatic --noinput
+python manage.py collectstatic --noinput --ignore-missing-source 2>/dev/null || true
 
 echo "=== Running migrations ==="
 python manage.py migrate --noinput

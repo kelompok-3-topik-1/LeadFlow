@@ -59,7 +59,9 @@ DATABASES = {
         'HOST': os.environ.get('AZURE_MYSQL_HOST', 'localhost'),
         'PORT': os.environ.get('AZURE_MYSQL_PORT', '3306'),
         'OPTIONS': {
-            'ssl': {'ssl-mode': 'REQUIRED'},  # Wajib untuk Azure MySQL
+            'ssl': {
+                'ca': '/etc/ssl/certs/ca-certificates.crt'
+            },
         },
     }
 }
