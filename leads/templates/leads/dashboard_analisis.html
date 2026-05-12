@@ -249,11 +249,21 @@ td{padding:11px 16px;vertical-align:middle;}
         <div class="sb-role" id="sb-role-text">ADMIN</div>
       </div>
     </div>
-    <div class="sb-label">Main Menu</div>
-    <div class="nav-item" onclick="goNav('distribusi')"><span class="nav-icon">📋</span>Distribusi Lead</div>
-    <div class="nav-item" onclick="goNav('update')"><span class="nav-icon">📅</span>Update dan Segmentasi</div>
-    <div class="nav-item active" id="nav-analisis" onclick="goNav('analisis')"><span class="nav-icon">🖥️</span>Analisis dashboard</div>
-    <div class="nav-item" id="nav-input" onclick="goNav('input')"><span class="nav-icon">📝</span>Input manual</div>
+    <div class="sidebar-label">Main Menu</div>
+
+    <a class="nav-item active" onclick="showPage('lead-list')" id="nav-lead">
+      <span class="nav-icon">📋</span> Distribusi Lead
+    </a>
+    <a class="nav-item" href="{% url 'update_leads' %}">
+        <span class="nav-icon">📅</span> Update dan Segmentasi
+    </a>
+    <a class="nav-item" href="{% url 'dashboard_analisis' %}">
+        <span class="nav-icon">🖥️</span> Analisis Dashboard
+    </a>
+    <a class="nav-item" onclick="showPage('input')" id="nav-input">
+      <span class="nav-icon">📝</span> Input Manual
+    </a>
+
     <div class="sb-bottom">
       <div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout Account</div>
     </div>
@@ -591,6 +601,16 @@ td{padding:11px 16px;vertical-align:middle;}
       tab.classList.add('active');
     });
   });
+
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.nav-item').forEach(link => {
+    if (link.getAttribute('href') === currentPath) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+  
 </script>
 </body>
 </html>
