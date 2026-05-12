@@ -915,11 +915,11 @@
   <a class="nav-item active" onclick="showPage('lead-list')" id="nav-lead">
     <span class="nav-icon">📋</span> Distribusi Lead
   </a>
-  <a class="nav-item" onclick="showPage('update')">
-    <span class="nav-icon">📅</span> Update dan Segmentasi
+  <a class="nav-item" href="{% url 'update_leads' %}">
+      <span class="nav-icon">📅</span> Update dan Segmentasi
   </a>
-  <a class="nav-item" onclick="showPage('analisis')">
-    <span class="nav-icon">🖥️</span> Analisis Dashboard
+  <a class="nav-item" href="{% url 'dashboard_analisis' %}">
+      <span class="nav-icon">🖥️</span> Analisis Dashboard
   </a>
   <a class="nav-item" onclick="showPage('input')" id="nav-input">
     <span class="nav-icon">📝</span> Input Manual
@@ -1441,6 +1441,16 @@
   document.querySelector('thead input[type=checkbox]')?.addEventListener('change', function() {
     document.querySelectorAll('tbody input[type=checkbox]').forEach(cb => cb.checked = this.checked);
   });
+
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.nav-item').forEach(link => {
+    if (link.getAttribute('href') === currentPath) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+
 </script>
 </body>
 </html>
