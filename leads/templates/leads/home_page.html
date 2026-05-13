@@ -15,12 +15,31 @@
 <div class="homepage">
 
 <nav>
-  <a href="/">LEADFLOW</a>
-  <ul>
-    <li><a href="/distribusi">Menu</a></li>
-    <li><a href="#">Solutions</a></li>
-  </ul>
-  <a href="/login" class="sign-in-link">Sign In</a>
+  <a href="{% url 'home' %}">LEADFLOW</a>
+
+<ul>
+  <li>
+    <a href="{% url 'distribusi' %}">
+      Features
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'dashboard' %}">
+      Dashboard
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'update' %}">
+      Update Leads
+    </a>
+  </li>
+</ul>
+
+<a href="/login" class="sign-in-link">
+  Sign In
+</a>
 </nav>
 
 <!-- HERO -->
