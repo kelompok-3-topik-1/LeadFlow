@@ -16,6 +16,7 @@ from .views import (
     api_distribusi_stats,
     api_distribusi_leads,
     api_sales_list,
+    input_manual_page
 )
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
     path('dashboard/', dashboard_analisis, name='dashboard_analisis'),
     path('distribusi/', distribusi_lead_page, name='distribusi_lead'),
     path('update-leads/', update_leads_page, name='update_leads'),
+    path('input-manual/', input_manual_page, name='input_manual'),
 
     path('api/login/', api_login, name='api_login'),
     path('api/leads/', api_create_lead, name='api_create_lead'),

@@ -1,0 +1,854 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input Manual – LeadFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #0f172a;
+  --sidebar-bg: #ffffff;
+  --border:     #e2e8f0;
+  --text:       #1a202c;
+  --muted:      #64748b;
+  --faint:      #94a3b8;
+  --accent:     #2563eb;
+  --accent-lt:  #eff6ff;
+  --red:        #ef4444;
+  --red-lt:     #fee2e2;
+  --purple:     #8b5cf6;
+  --dark-card:  #1e293b;
+  --dark-input: #0f172a;
+  --dark-border:#334155;
+  --radius:     10px;
+  --radius-sm:  6px;
+  --radius-lg:  16px;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06);
+  --shadow-lg:  0 10px 40px rgba(0,0,0,.25);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ════ SIDEBAR ════ */
+.sidebar {
+  width: 196px; min-width: 196px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 22px 0; height: 100vh;
+  flex-shrink: 0; z-index: 10;
+}
+.sb-profile {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 16px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.sb-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #e2e8f0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.sb-name { font-size: 12px; font-weight: 700; color: var(--accent); }
+.sb-role { font-size: 10px; color: var(--faint); font-weight: 500; text-transform: uppercase; letter-spacing: .07em; }
+.sb-label {
+  font-size: 9px; font-weight: 700; letter-spacing: .12em;
+  color: var(--faint); padding: 0 16px; margin-bottom: 6px; text-transform: uppercase;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 16px; font-size: 13px; font-weight: 500;
+  color: var(--muted); cursor: pointer; text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: all .15s;
+}
+.nav-item:hover  { background: var(--accent-lt); color: var(--accent); }
+.nav-item.active { background: var(--accent-lt); color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; }
+.sb-bottom { margin-top: auto; padding: 14px 16px; border-top: 1px solid var(--border); }
+.logout-btn {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 500; color: var(--red);
+  cursor: pointer; padding: 7px; border-radius: var(--radius-sm);
+  transition: background .15s;
+}
+.logout-btn:hover { background: var(--red-lt); }
+
+/* ════ MAIN ════ */
+.main {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  background: var(--dark-input);
+}
+.page-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--faint);
+  padding: 14px 26px 0;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 26px;
+  background: var(--dark-card);
+  border-bottom: 1px solid var(--dark-border);
+  gap: 14px; flex-shrink: 0;
+}
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.back-btn {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--faint); font-size: 13px; font-weight: 500;
+  cursor: pointer; padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--dark-border);
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s; text-decoration: none;
+}
+.back-btn:hover { border-color: var(--faint); color: white; }
+.topbar-title { font-size: 14px; font-weight: 700; color: white; }
+.topbar-count { font-size: 12px; color: #64748b; font-family: 'DM Mono', monospace; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  background: var(--dark-input); border: 1px solid var(--dark-border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 15px; color: var(--faint); transition: all .15s;
+}
+.icon-btn:hover { border-color: var(--faint); }
+.active-label { font-size: 13px; font-weight: 700; color: var(--purple); }
+
+/* ── FORM OVERLAY ── */
+.form-overlay {
+  flex: 1; overflow-y: auto;
+  background: rgba(15, 23, 42, 0.9);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 32px 24px 40px;
+}
+
+/* ── FORM CARD ── */
+.form-card {
+  background: var(--dark-card);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  width: 100%; max-width: 600px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--dark-border);
+  animation: slideUp .3s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── FORM PROGRESS ── */
+.form-progress { display: flex; align-items: center; gap: 0; margin-bottom: 28px; }
+.fp-step { display: flex; align-items: center; gap: 8px; flex: 1; }
+.fp-circle {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+  border: 2px solid var(--dark-border); color: var(--faint);
+  background: transparent; transition: all .2s;
+}
+.fp-step.active .fp-circle { background: var(--accent); border-color: var(--accent); color: white; }
+.fp-step.done   .fp-circle { background: #10b981; border-color: #10b981; color: white; }
+.fp-label { font-size: 11px; font-weight: 600; color: var(--faint); }
+.fp-step.active .fp-label { color: #93c5fd; }
+.fp-step.done   .fp-label { color: #34d399; }
+.fp-line { flex: 1; height: 2px; background: var(--dark-border); margin: 0 8px; }
+.fp-step.done + .fp-line { background: #10b981; }
+
+/* ── SECTION TITLE ── */
+.form-section-title {
+  font-size: 15px; font-weight: 700; color: white;
+  margin-bottom: 18px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--dark-border);
+  display: flex; align-items: center; gap: 8px;
+}
+.fst-icon { font-size: 17px; }
+
+/* ── FORM GRID ── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label {
+  font-size: 11px; font-weight: 600; color: var(--faint);
+  letter-spacing: .04em; display: flex; align-items: center; gap: 3px;
+}
+.form-label .req { color: var(--red); }
+.form-input, .form-select, .form-textarea {
+  background: var(--dark-input);
+  border: 1px solid var(--dark-border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px; font-size: 13px; color: white;
+  font-family: 'DM Sans', sans-serif; outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  width: 100%;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: #475569; }
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, .12);
+}
+.form-select {
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  padding-right: 30px;
+}
+.form-select option { background: var(--dark-card); }
+.form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+/* field error */
+.field-hint { font-size: 10px; color: var(--red); margin-top: 2px; display: none; }
+.form-group.has-error .field-hint  { display: block; }
+.form-group.has-error .form-input,
+.form-group.has-error .form-select { border-color: var(--red); }
+
+.char-counter { font-size: 10px; color: var(--faint); text-align: right; margin-top: 3px; }
+
+/* ── PRIORITY ── */
+.priority-opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.priority-opt {
+  padding: 8px 10px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--dark-border);
+  cursor: pointer; text-align: center; transition: all .15s;
+}
+.priority-opt:hover { border-color: #60a5fa; }
+.priority-opt.selected { border-color: var(--accent); background: rgba(37,99,235,.15); }
+.priority-opt .po-label { font-size: 12px; font-weight: 600; color: white; margin-top: 3px; }
+.priority-opt .po-dot   { width: 8px; height: 8px; border-radius: 50%; margin: 0 auto 4px; }
+.po-dot.normal { background: #10b981; }
+.po-dot.tinggi { background: #f59e0b; }
+.po-dot.sangat { background: #ef4444; }
+
+/* ── TAG INPUT ── */
+.tag-wrap {
+  background: var(--dark-input); border: 1px solid var(--dark-border);
+  border-radius: var(--radius-sm); padding: 6px 10px;
+  display: flex; flex-wrap: wrap; gap: 6px; cursor: text;
+  min-height: 40px; transition: border-color .15s;
+}
+.tag-wrap:focus-within { border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,.12); }
+.tag-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(37,99,235,.2); border: 1px solid rgba(96,165,250,.3);
+  border-radius: 20px; padding: 2px 10px;
+  font-size: 11px; font-weight: 600; color: #93c5fd;
+}
+.tag-remove { cursor: pointer; opacity: .6; font-size: 13px; line-height: 1; }
+.tag-remove:hover { opacity: 1; color: var(--red); }
+.tag-input-field {
+  background: transparent; border: none; outline: none;
+  font-size: 12px; color: white; font-family: 'DM Sans', sans-serif;
+  flex: 1; min-width: 100px;
+}
+.tag-input-field::placeholder { color: #475569; }
+.tag-suggestions {
+  display: none; position: absolute; left: 0; top: 100%; right: 0;
+  background: var(--dark-card); border: 1px solid var(--dark-border);
+  border-radius: var(--radius-sm); margin-top: 4px; z-index: 50;
+  box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.tag-wrap-outer { position: relative; }
+.tag-suggestions.show { display: block; }
+.tag-sug-item {
+  padding: 8px 12px; font-size: 12px; color: var(--faint);
+  cursor: pointer; transition: background .12s;
+}
+.tag-sug-item:hover { background: rgba(255,255,255,.05); color: white; }
+
+/* ── FORM FOOTER ── */
+.form-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 8px; padding-top: 18px;
+  border-top: 1px solid var(--dark-border);
+}
+.form-footer-left { font-size: 11px; color: #475569; }
+.form-footer-right { display: flex; gap: 10px; }
+.btn-reset {
+  padding: 8px 20px; background: transparent;
+  border: 1px solid #475569; border-radius: var(--radius-sm);
+  color: var(--faint); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s;
+}
+.btn-reset:hover { border-color: var(--faint); color: white; }
+.btn-save {
+  padding: 8px 22px; background: var(--accent); border: none;
+  border-radius: var(--radius-sm); color: white;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: all .15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-save:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,.35); }
+.btn-save:disabled { background: #334155; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── SPINNER dalam tombol ── */
+.btn-spinner {
+  width: 13px; height: 13px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+  display: none;
+}
+.btn-save.loading .btn-spinner { display: inline-block; }
+.btn-save.loading .btn-label   { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 22px; right: 22px;
+  border-radius: var(--radius); padding: 12px 18px;
+  font-size: 13px; font-weight: 600; color: white;
+  box-shadow: var(--shadow-lg); z-index: 2000;
+  display: none; align-items: center; gap: 8px;
+  animation: slideUp .28s ease;
+}
+.toast.show  { display: flex; }
+.toast.green { background: #1e293b; border: 1px solid #10b981; border-left: 4px solid #10b981; }
+.toast.red   { background: #1e293b; border: 1px solid var(--red);  border-left: 4px solid var(--red); }
+
+/* ── SUCCESS OVERLAY ── */
+.success-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,.85); z-index: 2000;
+  align-items: center; justify-content: center;
+}
+.success-overlay.show { display: flex; animation: fadeIn .25s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.success-card {
+  background: var(--dark-card); border: 1px solid #334155;
+  border-radius: var(--radius-lg); padding: 40px;
+  text-align: center; max-width: 380px; width: 90%;
+  animation: slideUp .3s ease;
+}
+.success-icon  { font-size: 52px; margin-bottom: 16px; }
+.success-title { font-size: 20px; font-weight: 800; color: white; margin-bottom: 10px; }
+.success-sub   { font-size: 13px; color: var(--faint); margin-bottom: 24px; line-height: 1.6; }
+.success-id    { font-family: 'DM Mono', monospace; color: #60a5fa; font-size: 12px; margin-bottom: 20px; }
+.success-btns  { display: flex; gap: 10px; justify-content: center; }
+.btn-back-list {
+  padding: 9px 18px; background: var(--accent); border: none;
+  border-radius: var(--radius-sm); color: white; font-size: 13px;
+  font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  text-decoration: none; transition: all .15s;
+}
+.btn-back-list:hover { background: #1d4ed8; }
+.btn-add-more {
+  padding: 9px 18px; background: transparent;
+  border: 1px solid #475569; border-radius: var(--radius-sm);
+  color: var(--faint); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s;
+}
+.btn-add-more:hover { border-color: var(--faint); color: white; }
+
+.section-gap { height: 8px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar">
+  <div class="sb-profile">
+    <div class="sb-avatar">👤</div>
+    <div>
+      <div class="sb-name" id="sb-username">ADMIN</div>
+      <div class="sb-role" id="sb-role">ADMIN</div>
+    </div>
+  </div>
+
+  <a class="nav-item" href="{% url 'distribusi_lead' %}"><span class="nav-icon">📋</span> Distribusi Lead</a>
+  <a class="nav-item" href="{% url 'update_leads' %}"><span class="nav-icon">📅</span> Update dan Segmentasi</a>
+  <a class="nav-item" href="{% url 'dashboard_analisis' %}"><span class="nav-icon">🖥️</span> Analisis Dashboard</a>
+  <a class="nav-item active" href="#"><span class="nav-icon">📝</span> Input Manual</a>
+
+  <div class="sb-bottom">
+    <div class="logout-btn" onclick="doLogout()">🚪 Logout Account</div>
+  </div>
+</aside>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main class="main">
+
+  <div class="page-label">Input Lead Manual</div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <a class="back-btn" href="{% url 'distribusi_lead' %}">← Kembali</a>
+      <span class="topbar-title">Tambah Lead Baru</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn" title="Refresh">🔄</div>
+      <div class="icon-btn">🔔</div>
+      <span class="active-label">✏️ Input Manual</span>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-overlay">
+    <div class="form-card">
+
+      <!-- Progress -->
+      <div class="form-progress">
+        <div class="fp-step active" id="step-1">
+          <div class="fp-circle">1</div>
+          <div class="fp-label">Info Kontak</div>
+        </div>
+        <div class="fp-line" id="line-1"></div>
+        <div class="fp-step" id="step-2">
+          <div class="fp-circle">2</div>
+          <div class="fp-label">Info Lead</div>
+        </div>
+        <div class="fp-line" id="line-2"></div>
+        <div class="fp-step" id="step-3">
+          <div class="fp-circle">3</div>
+          <div class="fp-label">Simpan</div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: Informasi Kontak -->
+      <div class="form-section-title">
+        <span class="fst-icon">👤</span> Informasi Kontak
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group" id="fg-nama">
+          <label class="form-label">Nama lengkap <span class="req">*</span></label>
+          <input class="form-input" id="f-nama" type="text" placeholder="Masukkan nama lengkap..">
+          <span class="field-hint">Nama tidak boleh kosong</span>
+        </div>
+        <div class="form-group" id="fg-telp">
+          <label class="form-label">No. WhatsApp <span class="req">*</span></label>
+          <input class="form-input" id="f-telp" type="tel" placeholder="+62..">
+          <span class="field-hint">Nomor telepon tidak valid (min. 8 digit)</span>
+        </div>
+        <div class="form-group" id="fg-email">
+          <label class="form-label">Email <span class="req">*</span></label>
+          <input class="form-input" id="f-email" type="email" placeholder="email@domain.com">
+          <span class="field-hint">Format email tidak valid</span>
+        </div>
+        <div class="form-group" id="fg-sumber">
+          <label class="form-label">Sumber lead <span class="req">*</span></label>
+          <select class="form-select" id="f-sumber">
+            <option value="" disabled selected>Pilih sumber..</option>
+            <option>Facebook</option>
+            <option>Instagram</option>
+            <option>Website</option>
+            <option>Twitter</option>
+            <option>Ads</option>
+            <option>Form</option>
+            <option>Referral</option>
+            <option>WhatsApp</option>
+            <option>TikTok</option>
+          </select>
+          <span class="field-hint">Pilih sumber lead</span>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- SECTION 2: Informasi Lead -->
+      <div class="form-section-title">
+        <span class="fst-icon">📋</span> Informasi Lead
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group" id="fg-produk">
+          <label class="form-label">Produk yang diminati <span class="req">*</span></label>
+          <select class="form-select" id="f-produk">
+            <option value="" disabled selected>Pilih produk..</option>
+            <option>Produk A</option>
+            <option>Produk B</option>
+            <option>Produk C</option>
+            <option>Paket Starter</option>
+            <option>Paket Premium</option>
+            <option>Paket Enterprise</option>
+          </select>
+          <span class="field-hint">Pilih produk</span>
+        </div>
+
+        <!-- Dropdown assign ke sales — diisi dari API -->
+        <div class="form-group" id="fg-assign">
+          <label class="form-label">Assign ke Sales</label>
+          <select class="form-select" id="f-assign">
+            <option value="">— Belum di-assign —</option>
+            <!-- diisi JS via /api/sales/ -->
+          </select>
+        </div>
+
+        <!-- Priority -->
+        <div class="form-group full">
+          <label class="form-label">Prioritas <span class="req">*</span></label>
+          <div class="priority-opts">
+            <div class="priority-opt selected" data-val="Normal" onclick="selectPriority(this)">
+              <div class="po-dot normal"></div>
+              <div class="po-label">Normal</div>
+            </div>
+            <div class="priority-opt" data-val="Tinggi" onclick="selectPriority(this)">
+              <div class="po-dot tinggi"></div>
+              <div class="po-label">Tinggi</div>
+            </div>
+            <div class="priority-opt" data-val="Sangat Tinggi" onclick="selectPriority(this)">
+              <div class="po-dot sangat"></div>
+              <div class="po-label">Sangat Tinggi</div>
+            </div>
+          </div>
+          <input type="hidden" id="f-prioritas" value="Normal">
+        </div>
+
+        <!-- Tags -->
+        <div class="form-group full">
+          <label class="form-label">Tagging Lead</label>
+          <div class="tag-wrap-outer">
+            <div class="tag-wrap" id="tag-wrap" onclick="document.getElementById('tag-field').focus()">
+              <input class="tag-input-field" id="tag-field" placeholder="Ketik tag lalu tekan Enter..">
+            </div>
+            <div class="tag-suggestions" id="tag-suggestions">
+              <div class="tag-sug-item" onclick="addTag('Follow Up')">Follow Up</div>
+              <div class="tag-sug-item" onclick="addTag('Premium')">Premium</div>
+              <div class="tag-sug-item" onclick="addTag('Hangat')">Hangat</div>
+              <div class="tag-sug-item" onclick="addTag('Cold')">Cold</div>
+              <div class="tag-sug-item" onclick="addTag('Prioritas')">Prioritas</div>
+              <div class="tag-sug-item" onclick="addTag('Enterprise')">Enterprise</div>
+              <div class="tag-sug-item" onclick="addTag('Starter')">Starter</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Catatan -->
+        <div class="form-group full">
+          <label class="form-label">Catatan awal</label>
+          <textarea class="form-textarea" id="f-catatan" placeholder="Informasi tambahan tentang lead ini.." maxlength="500"></textarea>
+          <div class="char-counter"><span id="char-count">0</span>/500</div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="form-footer">
+        <div class="form-footer-left">
+          <span class="req" style="color:var(--red)">*</span> Wajib diisi
+        </div>
+        <div class="form-footer-right">
+          <button class="btn-reset" onclick="resetForm()">Reset</button>
+          <button class="btn-save" id="btn-save" onclick="saveForm()">
+            <span class="btn-spinner"></span>
+            <span class="btn-label">Simpan Lead →</span>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /form-card -->
+  </div><!-- /form-overlay -->
+
+</main>
+
+<!-- ═══════════ SUCCESS OVERLAY ═══════════ -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-card">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Lead Berhasil Disimpan!</div>
+    <div class="success-sub" id="success-sub">Data lead telah ditambahkan ke sistem.</div>
+    <div class="success-id" id="success-id"></div>
+    <div class="success-btns">
+      <a class="btn-back-list" href="{% url 'distribusi_lead' %}">Lihat Lead List</a>
+      <button class="btn-add-more" onclick="addMore()">＋ Tambah Lagi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TOAST ═══════════ -->
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<script>
+// ─────────────────────────────────────────
+//  INIT: cek session & proteksi admin-only
+// ─────────────────────────────────────────
+(function initPage() {
+  const userId   = "{{ request.session.user_id|default:'' }}";
+  const userName = "{{ request.session.user_name|default:'' }}";
+  const userRole = "{{ request.session.user_role|default:'' }}";
+
+  // Belum login → ke halaman login
+  if (!userId) {
+    window.location.href = "{% url 'login' %}";
+    return;
+  }
+
+  // Bukan admin → tolak akses
+  if (userRole && userRole !== 'admin') {
+    window.location.href = "{% url 'dashboard_analisis' %}";
+    return;
+  }
+
+  // Isi profil sidebar
+  document.getElementById('sb-username').textContent = userName || 'Admin';
+  document.getElementById('sb-role').textContent     = (userRole || 'admin').toUpperCase();
+
+  // Muat daftar sales untuk dropdown assign
+  loadSalesList();
+})();
+
+// ─────────────────────────────────────────
+//  LOAD SALES LIST dari /api/sales/
+// ─────────────────────────────────────────
+async function loadSalesList() {
+  try {
+    const res  = await fetch('/api/sales/');
+    const data = await res.json();
+    const sel  = document.getElementById('f-assign');
+
+    (data.sales || []).forEach(s => {
+      const opt = document.createElement('option');
+      opt.value       = s.id_user;
+      opt.textContent = `${s.nama} (${s.lead_aktif} lead aktif)`;
+      sel.appendChild(opt);
+    });
+  } catch (e) {
+    // Gagal muat sales — dropdown tetap tampil "Belum di-assign"
+    console.warn('Gagal memuat daftar sales:', e);
+  }
+}
+
+// ─────────────────────────────────────────
+//  PROGRESS STEPS
+// ─────────────────────────────────────────
+function setProgress(step) {
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById(`step-${i}`);
+    el.classList.remove('active', 'done');
+    if (i < step)      el.classList.add('done');
+    else if (i === step) el.classList.add('active');
+  }
+}
+
+// ─────────────────────────────────────────
+//  PRIORITY
+// ─────────────────────────────────────────
+function selectPriority(el) {
+  document.querySelectorAll('.priority-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('f-prioritas').value = el.dataset.val;
+}
+
+// ─────────────────────────────────────────
+//  TAGS
+// ─────────────────────────────────────────
+const tags = new Set();
+
+function addTag(val) {
+  const v = val.trim();
+  if (!v || tags.has(v)) return;
+  tags.add(v);
+  renderTags();
+  document.getElementById('tag-field').value = '';
+  document.getElementById('tag-suggestions').classList.remove('show');
+}
+
+function removeTag(val) {
+  tags.delete(val);
+  renderTags();
+}
+
+function renderTags() {
+  const wrap  = document.getElementById('tag-wrap');
+  const field = document.getElementById('tag-field');
+  wrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
+  tags.forEach(t => {
+    const chip = document.createElement('div');
+    chip.className = 'tag-chip';
+    chip.innerHTML = `${t}<span class="tag-remove" onclick="removeTag('${t}')">×</span>`;
+    wrap.insertBefore(chip, field);
+  });
+}
+
+document.getElementById('tag-field').addEventListener('keydown', function(e) {
+  if ((e.key === 'Enter' || e.key === ',') && this.value.trim()) {
+    e.preventDefault();
+    addTag(this.value.trim());
+  }
+  if (e.key === 'Backspace' && !this.value && tags.size) {
+    removeTag([...tags].pop());
+  }
+});
+
+document.getElementById('tag-field').addEventListener('focus', () => {
+  document.getElementById('tag-suggestions').classList.add('show');
+});
+document.addEventListener('click', (e) => {
+  if (!document.querySelector('.tag-wrap-outer').contains(e.target)) {
+    document.getElementById('tag-suggestions').classList.remove('show');
+  }
+});
+
+// ─────────────────────────────────────────
+//  CHAR COUNTER
+// ─────────────────────────────────────────
+document.getElementById('f-catatan').addEventListener('input', function() {
+  document.getElementById('char-count').textContent = this.value.length;
+  if (this.value.length > 0) setProgress(2);
+});
+
+// ─────────────────────────────────────────
+//  VALIDASI
+// ─────────────────────────────────────────
+function validate() {
+  let ok = true;
+  const checks = [
+    { id: 'fg-nama',   pass: () => document.getElementById('f-nama').value.trim().length > 0 },
+    { id: 'fg-telp',   pass: () => /^[0-9+\-\s]{8,15}$/.test(document.getElementById('f-telp').value.trim()) },
+    { id: 'fg-email',  pass: () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('f-email').value.trim()) },
+    { id: 'fg-sumber', pass: () => !!document.getElementById('f-sumber').value },
+    { id: 'fg-produk', pass: () => !!document.getElementById('f-produk').value },
+  ];
+  checks.forEach(({ id, pass }) => {
+    const grp = document.getElementById(id);
+    if (!pass()) { grp.classList.add('has-error'); ok = false; }
+    else          grp.classList.remove('has-error');
+  });
+  return ok;
+}
+
+// ─────────────────────────────────────────
+//  SAVE — kirim ke /api/leads/ (api_create_lead)
+// ─────────────────────────────────────────
+async function saveForm() {
+  if (!validate()) {
+    showToast('Mohon lengkapi semua field yang wajib diisi', 'red');
+    return;
+  }
+
+  const btn = document.getElementById('btn-save');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  setProgress(3);
+
+  const payload = {
+    nama:        document.getElementById('f-nama').value.trim(),
+    no_whatsapp: document.getElementById('f-telp').value.trim(),
+    email:       document.getElementById('f-email').value.trim(),
+    source:      document.getElementById('f-sumber').value,
+    produk:      document.getElementById('f-produk').value,
+    prioritas:   document.getElementById('f-prioritas').value,
+    catatan:     document.getElementById('f-catatan').value.trim(),
+    status:      'New',
+    tags:        [...tags],
+  };
+
+  try {
+    // 1. Buat lead
+    const res  = await fetch('/api/leads/', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Gagal menyimpan lead');
+    }
+
+    const idLead = data.id_lead;
+
+    // 2. Assign ke sales jika dipilih
+    const assignId = document.getElementById('f-assign').value;
+    if (assignId) {
+      await fetch('/api/assign/', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ id_lead: idLead, id_user: assignId }),
+      });
+    }
+
+    // 3. Tampilkan success overlay
+    const nama   = payload.nama;
+    const salesEl = document.getElementById('f-assign');
+    const salesNama = salesEl.options[salesEl.selectedIndex]?.text || '';
+
+    document.getElementById('success-sub').textContent =
+      `Lead atas nama "${nama}" telah disimpan${assignId ? ' dan di-assign ke ' + salesNama.split(' (')[0] : ''}. Data siap untuk diproses.`;
+    document.getElementById('success-id').textContent = `ID Lead: ${idLead}`;
+    document.getElementById('success-overlay').classList.add('show');
+
+  } catch (err) {
+    showToast('❌ ' + err.message, 'red');
+    setProgress(2);
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+// ─────────────────────────────────────────
+//  RESET
+// ─────────────────────────────────────────
+function resetForm() {
+  ['f-nama','f-telp','f-email','f-catatan'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  ['f-sumber','f-produk','f-assign'].forEach(id => {
+    document.getElementById(id).selectedIndex = 0;
+  });
+  document.getElementById('char-count').textContent = '0';
+  document.getElementById('f-prioritas').value = 'Normal';
+  document.querySelectorAll('.priority-opt').forEach((o, i) => {
+    o.classList.toggle('selected', i === 0);
+  });
+  tags.clear();
+  renderTags();
+  document.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
+  setProgress(1);
+  showToast('Form berhasil direset', 'green');
+}
+
+function addMore() {
+  document.getElementById('success-overlay').classList.remove('show');
+  resetForm();
+}
+
+// ─────────────────────────────────────────
+//  TOAST
+// ─────────────────────────────────────────
+function showToast(msg, type = 'green') {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─────────────────────────────────────────
+//  LOGOUT
+// ─────────────────────────────────────────
+function doLogout() {
+  window.location.href = "{% url 'login' %}";
+}
+
+// ─────────────────────────────────────────
+//  LIVE ERROR CLEAR
+// ─────────────────────────────────────────
+['f-nama','f-telp','f-email'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    document.getElementById('fg-' + id.replace('f-',''))?.classList.remove('has-error');
+  });
+});
+['f-sumber','f-produk'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    document.getElementById('fg-' + id.replace('f-',''))?.classList.remove('has-error');
+  });
+});
+</script>
+</body>
+</html>
