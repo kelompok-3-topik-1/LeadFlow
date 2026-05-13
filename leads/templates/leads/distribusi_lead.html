@@ -41,7 +41,7 @@
     color: var(--text-primary);
     display: flex;
     height: 100vh;
-    overflow: hidden; /* sidebar tetap fixed */
+    overflow: hidden;
   }
 
   /* ── SIDEBAR ── */
@@ -54,8 +54,11 @@
     flex-direction: column;
     padding: 24px 0;
     height: 100vh;
+    overflow-y: auto;
     z-index: 10;
+    flex-shrink: 0;
   }
+
 
   .sidebar-profile {
     display: flex;
@@ -149,11 +152,12 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    min-height: 0; /* penting agar flex child bisa scroll */
+    min-height: 0;
+    height: 100vh;
   }
 
   /* ── PAGE ── */
-  .page { display: none; flex-direction: column; min-height: 100%; }
+  .page { display: none; flex-direction: column; }
   .page.active { display: flex; }
 
   /* ── PAGE HEADER ── */
@@ -932,6 +936,7 @@
 </aside>
 
 <!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
 
   <!-- ════ PAGE 1: LEAD LIST ════ -->
   <div class="page active" id="page-lead-list">
