@@ -12,6 +12,10 @@ from .views import (
     api_assign_lead,
     api_update_lead_status,
     api_dashboard,
+    # TAMBAHAN BARU:
+    api_distribusi_stats,
+    api_distribusi_leads,
+    api_sales_list,
 )
 
 urlpatterns = [
@@ -29,4 +33,8 @@ urlpatterns = [
     path('api/assign/', api_assign_lead, name='api_assign_lead'),
     path('api/leads/update-status/', api_update_lead_status, name='api_update_lead_status'),
     path('api/dashboard/', api_dashboard, name='api_dashboard'),
+
+    path('api/distribusi/stats/', api_distribusi_stats, name='api_distribusi_stats'),
+    path('api/distribusi/leads/', api_distribusi_leads, name='api_distribusi_leads'),
+    path('api/sales/', api_sales_list, name='api_sales_list'),
 ]

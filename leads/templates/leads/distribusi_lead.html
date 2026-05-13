@@ -933,7 +933,6 @@
 </aside>
 
 <!-- ═══════════════ MAIN ═══════════════ -->
-<main class="main">
 
   <!-- ════ PAGE 1: LEAD LIST ════ -->
   <div class="page active" id="page-lead-list">
@@ -941,12 +940,18 @@
     <div class="topbar">
       <div class="topbar-left">
         <span class="topbar-title">Lead List</span>
-        <span class="topbar-count">— 148 total leads</span>
+        <span class="topbar-count" id="topbar-count">— memuat...</span>
       </div>
       <div class="topbar-right">
-        <div class="search-box">
+        <div class="search-box" id="search-box" style="cursor:default">
           <span>🔍</span>
-          <span style="color:var(--text-muted)">Search leads, phone, model...</span>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Cari nama, WA, email..."
+            style="border:none;outline:none;background:transparent;font-size:12px;color:var(--text-secondary);width:170px;font-family:'DM Sans',sans-serif"
+            oninput="onSearch(this.value)"
+          >
         </div>
         <div class="icon-btn" title="Pengaturan">⚙️</div>
         <div class="icon-btn" title="Notifikasi">🔔</div>
@@ -962,21 +967,21 @@
         <div class="stat-card blue">
           <div class="stat-icon blue">👥</div>
           <div class="stat-info">
-            <div class="stat-value">148</div>
+            <div class="stat-value" id="stat-total">—</div>
             <div class="stat-label">Total Leads</div>
           </div>
         </div>
         <div class="stat-card yellow">
           <div class="stat-icon yellow">⏳</div>
           <div class="stat-info">
-            <div class="stat-value">37</div>
-            <div class="stat-label">Pending Contact</div>
+            <div class="stat-value" id="stat-pending">—</div>
+            <div class="stat-label">Pending (New)</div>
           </div>
         </div>
         <div class="stat-card green">
           <div class="stat-icon green">✅</div>
           <div class="stat-info">
-            <div class="stat-value">52</div>
+            <div class="stat-value" id="stat-qualified">—</div>
             <div class="stat-label">Qualified</div>
           </div>
         </div>
@@ -990,9 +995,7 @@
             <p>Sorted by latest activity</p>
           </div>
           <div class="table-actions">
-            <button class="btn-outline">≡ Columns</button>
-            <button class="btn-outline">⚙ Filter</button>
-            <button class="btn-outline">↓ Export</button>
+            <button class="btn-outline" onclick="exportCSV()">↓ Export</button>
             <div class="view-toggle">
               <div class="view-btn active" title="Grid">⊞</div>
               <div class="view-btn" title="List">≡</div>
@@ -1000,14 +1003,29 @@
           </div>
         </div>
 
-        <!-- Tabs -->
-        <div class="tabs">
-          <div class="tab active">All <span class="tab-count">148</span></div>
-          <div class="tab">New <span class="tab-count">42</span></div>
-          <div class="tab">Contacted <span class="tab-count">31</span></div>
-          <div class="tab">Qualified <span class="tab-count">52</span></div>
-          <div class="tab">Nurture <span class="tab-count">15</span></div>
-          <div class="tab">Lost <span class="tab-count">8</span></div>
+        <!-- Tabs — diisi dinamis dari API -->
+        <div class="tabs" id="tabs-container">
+          <div class="tab active" data-status="all" onclick="switchTab(this, 'all')">
+            All <span class="tab-count" id="tab-count-all">—</span>
+          </div>
+          <div class="tab" data-status="New" onclick="switchTab(this, 'New')">
+            New <span class="tab-count" id="tab-count-New">—</span>
+          </div>
+          <div class="tab" data-status="Contacted" onclick="switchTab(this, 'Contacted')">
+            Contacted <span class="tab-count" id="tab-count-Contacted">—</span>
+          </div>
+          <div class="tab" data-status="Qualified" onclick="switchTab(this, 'Qualified')">
+            Qualified <span class="tab-count" id="tab-count-Qualified">—</span>
+          </div>
+          <div class="tab" data-status="Proposal" onclick="switchTab(this, 'Proposal')">
+            Proposal <span class="tab-count" id="tab-count-Proposal">—</span>
+          </div>
+          <div class="tab" data-status="Closed Won" onclick="switchTab(this, 'Closed Won')">
+            Closed Won <span class="tab-count" id="tab-count-Closed Won">—</span>
+          </div>
+          <div class="tab" data-status="Closed Lost" onclick="switchTab(this, 'Closed Lost')">
+            Lost <span class="tab-count" id="tab-count-Closed Lost">—</span>
+          </div>
         </div>
 
         <!-- Table -->
@@ -1015,153 +1033,18 @@
           <table>
             <thead>
               <tr>
-                <th style="width:36px"><input type="checkbox"></th>
+                <th style="width:36px"><input type="checkbox" id="check-all" onchange="toggleAllCheck(this)"></th>
                 <th>Nama</th>
                 <th>Status</th>
                 <th>Source</th>
                 <th>Assigned</th>
-                <th>Masuk</th>
-                <th>SLA</th>
                 <th style="text-align:right">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="leads-tbody">
               <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                  <div class="lead-name-cell">
-                    <div class="lead-avatar" style="background:#2563eb">RK</div>
-                    <div>
-                      <div class="lead-name">Ravi Kumar</div>
-                      <div class="lead-phone">+91 98456 71230</div>
-                    </div>
-                  </div>
-                </td>
-                <td><span class="badge new"><span class="badge-dot"></span>New</span></td>
-                <td><div class="source-cell">🟦 Facebook</div></td>
-                <td><span class="assigned-text">Priya S.</span></td>
-                <td><span class="date-text">23 mei</span></td>
-                <td><span class="sla-warn">⚡ 2h left</span></td>
-                <td>
-                  <div class="action-btns" style="justify-content:flex-end">
-                    <div class="action-btn" title="Telepon">📞</div>
-                    <div class="action-btn" title="Edit" onclick="openAssignModal()">✏️</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                  <div class="lead-name-cell">
-                    <div class="lead-avatar" style="background:#7c3aed">PM</div>
-                    <div>
-                      <div class="lead-name">Preethi Murali</div>
-                      <div class="lead-phone">+91 91234 56903</div>
-                    </div>
-                  </div>
-                </td>
-                <td><span class="badge contacted"><span class="badge-dot"></span>Contacted</span></td>
-                <td><div class="source-cell">🌐 Website</div></td>
-                <td><span class="assigned-text">Arjun R.</span></td>
-                <td><span class="date-text">2 agustus</span></td>
-                <td><span class="sla-ok">✓ On time</span></td>
-                <td>
-                  <div class="action-btns" style="justify-content:flex-end">
-                    <div class="action-btn">📞</div>
-                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                  <div class="lead-name-cell">
-                    <div class="lead-avatar" style="background:#059669">SN</div>
-                    <div>
-                      <div class="lead-name">Suresh Nair</div>
-                      <div class="lead-phone">+91 94001 23987</div>
-                    </div>
-                  </div>
-                </td>
-                <td><span class="badge qualified"><span class="badge-dot"></span>Qualified</span></td>
-                <td><div class="source-cell">🐦 Twitter</div></td>
-                <td><span class="assigned-text">Kiran M.</span></td>
-                <td><span class="date-text">14 april</span></td>
-                <td><span class="sla-ok">✓ On time</span></td>
-                <td>
-                  <div class="action-btns" style="justify-content:flex-end">
-                    <div class="action-btn">📞</div>
-                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                  <div class="lead-name-cell">
-                    <div class="lead-avatar" style="background:#dc2626">DJ</div>
-                    <div>
-                      <div class="lead-name">Divya Joshi</div>
-                      <div class="lead-phone">+91 88356 54012</div>
-                    </div>
-                  </div>
-                </td>
-                <td><span class="badge proposal"><span class="badge-dot"></span>Proposal</span></td>
-                <td><div class="source-cell">🔴 Ads</div></td>
-                <td><span class="assigned-text">Priya S.</span></td>
-                <td><span class="date-text">8 januari</span></td>
-                <td><span class="sla-ok">✓ On time</span></td>
-                <td>
-                  <div class="action-btns" style="justify-content:flex-end">
-                    <div class="action-btn">📞</div>
-                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                  <div class="lead-name-cell">
-                    <div class="lead-avatar" style="background:#ea580c">AM</div>
-                    <div>
-                      <div class="lead-name">Amit Mehta</div>
-                      <div class="lead-phone">+91 50123 45678</div>
-                    </div>
-                  </div>
-                </td>
-                <td><span class="badge new"><span class="badge-dot"></span>New</span></td>
-                <td><div class="source-cell">📸 Instagram</div></td>
-                <td><span class="assigned-empty">Unassigned</span></td>
-                <td><span class="date-text">17 agustus</span></td>
-                <td><span class="sla-warn">⚡ 5h left</span></td>
-                <td>
-                  <div class="action-btns" style="justify-content:flex-end">
-                    <div class="action-btn">📞</div>
-                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                  <div class="lead-name-cell">
-                    <div class="lead-avatar" style="background:#0284c7">LB</div>
-                    <div>
-                      <div class="lead-name">Lakshmi Bhat</div>
-                      <div class="lead-phone">+91 88265 34210</div>
-                    </div>
-                  </div>
-                </td>
-                <td><span class="badge lost"><span class="badge-dot"></span>Lost</span></td>
-                <td><div class="source-cell">📋 Form</div></td>
-                <td><span class="assigned-text">Kiran M.</span></td>
-                <td><span class="date-text">4 desember</span></td>
-                <td><span class="dots">—</span></td>
-                <td>
-                  <div class="action-btns" style="justify-content:flex-end">
-                    <div class="action-btn">📞</div>
-                    <div class="action-btn" onclick="openAssignModal()">✏️</div>
-                  </div>
+                <td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)">
+                  <span style="font-size:24px">⏳</span><br>Memuat data...
                 </td>
               </tr>
             </tbody>
@@ -1170,19 +1053,13 @@
 
         <!-- Pagination -->
         <div class="pagination">
-          <span class="pagination-info">Showing 1–6 of 148</span>
-          <div class="pagination-btns">
-            <div class="page-btn active">1</div>
-            <div class="page-btn">2</div>
-            <div class="page-btn">3</div>
-            <div class="page-btn" style="border:none;background:transparent;color:var(--text-muted)">...</div>
-            <div class="page-btn">25</div>
-            <div class="page-btn page-next">Next →</div>
-          </div>
+          <span class="pagination-info" id="pagination-info">—</span>
+          <div class="pagination-btns" id="pagination-btns"></div>
         </div>
       </div>
     </div>
   </div>
+
 
   <!-- ════ PAGE 2: INPUT MANUAL ════ -->
   <div class="page" id="page-input">
@@ -1302,31 +1179,8 @@
     <div class="modal-title">Assign lead ke sales</div>
 
     <div class="modal-label">Pilih Sales</div>
-    <div class="sales-list">
-      <div class="sales-item selected" onclick="toggleSales(this)">
-        <div class="sales-avatar">RK</div>
-        <div class="sales-info">
-          <div class="sales-name">Priya Sharma</div>
-          <div class="sales-meta">8 lead aktif</div>
-        </div>
-        <div class="sales-check"></div>
-      </div>
-      <div class="sales-item" onclick="toggleSales(this)">
-        <div class="sales-avatar" style="background:#7c3aed">AR</div>
-        <div class="sales-info">
-          <div class="sales-name">Arjun Rajan</div>
-          <div class="sales-meta">5 lead aktif</div>
-        </div>
-        <div class="sales-check"></div>
-      </div>
-      <div class="sales-item" onclick="toggleSales(this)">
-        <div class="sales-avatar" style="background:#059669">KM</div>
-        <div class="sales-info">
-          <div class="sales-name">Kiran Menon</div>
-          <div class="sales-meta">3 lead aktif</div>
-        </div>
-        <div class="sales-check"></div>
-      </div>
+    <div class="sales-list" id="modal-sales-list">
+      <div style="text-align:center;padding:20px;color:#64748b;font-size:13px">Memuat daftar sales...</div>
     </div>
 
     <div class="modal-notes-label">Catatan untuk sales (Opsional)</div>
@@ -1345,34 +1199,41 @@
 </div>
 
 <script>
-  // Navigation
+  // ═══════════════════════════════════════════════
+  //  STATE
+  // ═══════════════════════════════════════════════
+  let state = {
+    currentStatus: 'all',
+    currentPage: 1,
+    perPage: 10,
+    searchQuery: '',
+    selectedLeadId: null,
+    selectedSalesId: null,
+    searchTimer: null,
+  };
+
+  // ═══════════════════════════════════════════════
+  //  NAVIGASI HALAMAN
+  // ═══════════════════════════════════════════════
   function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
     const pageMap = {
       'lead-list': 'page-lead-list',
-      'input': 'page-input',
-      'update': 'page-update',
-      'analisis': 'page-analisis',
+      'input':     'page-input',
+      'update':    'page-update',
+      'analisis':  'page-analisis',
     };
 
-    document.getElementById(pageMap[name]).classList.add('active');
+    document.getElementById(pageMap[name])?.classList.add('active');
 
-    // Highlight sidebar
-    if (name === 'lead-list') document.querySelectorAll('.nav-item')[0].classList.add('active');
-    else if (name === 'update') document.querySelectorAll('.nav-item')[1].classList.add('active');
-    else if (name === 'analisis') document.querySelectorAll('.nav-item')[2].classList.add('active');
-    else if (name === 'input') document.querySelectorAll('.nav-item')[3].classList.add('active');
+    const navItems = document.querySelectorAll('.nav-item');
+    if      (name === 'lead-list') navItems[0]?.classList.add('active');
+    else if (name === 'update')    navItems[1]?.classList.add('active');
+    else if (name === 'analisis')  navItems[2]?.classList.add('active');
+    else if (name === 'input')     navItems[3]?.classList.add('active');
   }
-
-  // Tab switching
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-  });
 
   // View toggle
   document.querySelectorAll('.view-btn').forEach(btn => {
@@ -1382,29 +1243,289 @@
     });
   });
 
-  // Modal
-  function openAssignModal() {
+  // ═══════════════════════════════════════════════
+  //  HELPERS
+  // ═══════════════════════════════════════════════
+  function getInitials(name) {
+    return (name || '??').split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+  }
+
+  const AVATAR_COLORS = ['#2563eb','#7c3aed','#059669','#dc2626','#ea580c','#0284c7','#b45309','#0f766e'];
+  function avatarColor(str) {
+    let hash = 0;
+    for (let c of (str || '')) hash = c.charCodeAt(0) + ((hash << 5) - hash);
+    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+  }
+
+  const SOURCE_ICONS = {
+    instagram: '📸', facebook: '🟦', tiktok: '🎵', website: '🌐',
+    twitter: '🐦', ads: '🔴', form: '📋', referral: '🤝',
+    whatsapp: '💬', linkedin: '💼', google: '🔍', email: '📧',
+  };
+  function sourceIcon(src) {
+    if (!src) return '📌';
+    const key = src.toLowerCase();
+    for (const [k, v] of Object.entries(SOURCE_ICONS)) {
+      if (key.includes(k)) return v;
+    }
+    return '📌';
+  }
+
+  const STATUS_MAP = {
+    'new':         { cls: 'new',       label: 'New' },
+    'contacted':   { cls: 'contacted', label: 'Contacted' },
+    'qualified':   { cls: 'qualified', label: 'Qualified' },
+    'proposal':    { cls: 'proposal',  label: 'Proposal' },
+    'closed won':  { cls: 'qualified', label: 'Closed Won' },
+    'closed lost': { cls: 'lost',      label: 'Closed Lost' },
+    'nurture':     { cls: 'contacted', label: 'Nurture' },
+  };
+  function statusBadge(status) {
+    const key = (status || 'new').toLowerCase();
+    const s = STATUS_MAP[key] || { cls: 'new', label: status || 'New' };
+    return `<span class="badge ${s.cls}"><span class="badge-dot"></span>${s.label}</span>`;
+  }
+
+  // ═══════════════════════════════════════════════
+  //  FETCH STATS
+  // ═══════════════════════════════════════════════
+  async function loadStats() {
+    try {
+      const res  = await fetch('/api/distribusi/stats/');
+      const data = await res.json();
+
+      document.getElementById('stat-total').textContent     = data.total_leads ?? 0;
+      document.getElementById('stat-pending').textContent   = data.pending     ?? 0;
+      document.getElementById('stat-qualified').textContent = data.qualified   ?? 0;
+
+      // Update tab counts
+      const counts = data.status_counts || {};
+      let total = data.total_leads || 0;
+      document.getElementById('tab-count-all').textContent = total;
+
+      for (const [status, count] of Object.entries(counts)) {
+        const el = document.getElementById('tab-count-' + status);
+        if (el) el.textContent = count;
+      }
+
+    } catch (err) {
+      console.error('Gagal memuat stats:', err);
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  FETCH LEADS → RENDER TABLE
+  // ═══════════════════════════════════════════════
+  async function loadLeads() {
+    const tbody = document.getElementById('leads-tbody');
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)"><span style="font-size:24px">⏳</span><br>Memuat data...</td></tr>`;
+
+    const params = new URLSearchParams({
+      status:   state.currentStatus === 'all' ? '' : state.currentStatus,
+      search:   state.searchQuery,
+      page:     state.currentPage,
+      per_page: state.perPage,
+    });
+
+    try {
+      const res  = await fetch('/api/distribusi/leads/?' + params);
+      const data = await res.json();
+
+      renderTable(data.leads || []);
+      renderPagination(data.total, data.pages, data.page);
+
+      const total = data.total || 0;
+      document.getElementById('topbar-count').textContent =
+        `— ${total} lead${total !== 1 ? 's' : ''}`;
+
+    } catch (err) {
+      console.error('Gagal memuat leads:', err);
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--red)">⚠️ Gagal memuat data. Periksa koneksi API.</td></tr>`;
+    }
+  }
+
+  function renderTable(leads) {
+    const tbody = document.getElementById('leads-tbody');
+
+    if (!leads.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)"><span style="font-size:32px">🔍</span><br><br>Tidak ada lead ditemukan</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = leads.map(lead => {
+      const initials   = getInitials(lead.nama);
+      const color      = avatarColor(lead.id_lead);
+      const badge      = statusBadge(lead.status);
+      const srcIcon    = sourceIcon(lead.source);
+      const srcLabel   = lead.source || '—';
+      const assignedEl = lead.assigned_to
+        ? `<span class="assigned-text">${lead.assigned_to}</span>`
+        : `<span class="assigned-empty">Belum di-assign</span>`;
+
+      return `
+        <tr>
+          <td><input type="checkbox" data-id="${lead.id_lead}"></td>
+          <td>
+            <div class="lead-name-cell">
+              <div class="lead-avatar" style="background:${color}">${initials}</div>
+              <div>
+                <div class="lead-name">${lead.nama}</div>
+                <div class="lead-phone">${lead.no_whatsapp || lead.email || '—'}</div>
+              </div>
+            </div>
+          </td>
+          <td>${badge}</td>
+          <td><div class="source-cell">${srcIcon} ${srcLabel}</div></td>
+          <td>${assignedEl}</td>
+          <td>
+            <div class="action-btns" style="justify-content:flex-end">
+              <div class="action-btn" title="Hubungi via WA" onclick="openWA('${lead.no_whatsapp || ''}')">📞</div>
+              <div class="action-btn" title="Assign ke Sales" onclick="openAssignModal('${lead.id_lead}')">✏️</div>
+            </div>
+          </td>
+        </tr>`;
+    }).join('');
+  }
+
+  function renderPagination(total, pages, currentPage) {
+    const info = document.getElementById('pagination-info');
+    const btns = document.getElementById('pagination-btns');
+
+    const start = (currentPage - 1) * state.perPage + 1;
+    const end   = Math.min(currentPage * state.perPage, total);
+    info.textContent = `Menampilkan ${start}–${end} dari ${total}`;
+
+    if (pages <= 1) { btns.innerHTML = ''; return; }
+
+    let html = '';
+    for (let i = 1; i <= Math.min(pages, 5); i++) {
+      html += `<div class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</div>`;
+    }
+    if (pages > 5) {
+      html += `<div class="page-btn" style="border:none;background:transparent;color:var(--text-muted)">...</div>`;
+      html += `<div class="page-btn ${pages === currentPage ? 'active' : ''}" onclick="goPage(${pages})">${pages}</div>`;
+    }
+    if (currentPage < pages) {
+      html += `<div class="page-btn page-next" onclick="goPage(${currentPage + 1})">Next →</div>`;
+    }
+    btns.innerHTML = html;
+  }
+
+  function goPage(page) {
+    state.currentPage = page;
+    loadLeads();
+  }
+
+  // ═══════════════════════════════════════════════
+  //  TAB FILTER
+  // ═══════════════════════════════════════════════
+  function switchTab(el, status) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    state.currentStatus = status;
+    state.currentPage   = 1;
+    loadLeads();
+  }
+
+  // ═══════════════════════════════════════════════
+  //  SEARCH
+  // ═══════════════════════════════════════════════
+  function onSearch(val) {
+    clearTimeout(state.searchTimer);
+    state.searchTimer = setTimeout(() => {
+      state.searchQuery  = val.trim();
+      state.currentPage  = 1;
+      loadLeads();
+    }, 400);
+  }
+
+  // ═══════════════════════════════════════════════
+  //  MODAL ASSIGN — dengan data sales dari API
+  // ═══════════════════════════════════════════════
+  async function openAssignModal(leadId) {
+    state.selectedLeadId  = leadId || null;
+    state.selectedSalesId = null;
     document.getElementById('assignModal').classList.add('show');
+
+    const list = document.getElementById('modal-sales-list');
+    list.innerHTML = `<div style="text-align:center;padding:20px;color:#64748b;font-size:13px">Memuat daftar sales...</div>`;
+
+    try {
+      const res  = await fetch('/api/sales/');
+      const data = await res.json();
+      const sales = data.sales || [];
+
+      if (!sales.length) {
+        list.innerHTML = `<div style="text-align:center;padding:20px;color:#64748b;font-size:13px">Tidak ada sales tersedia</div>`;
+        return;
+      }
+
+      const salesColors = ['#2563eb','#7c3aed','#059669','#dc2626','#ea580c'];
+      list.innerHTML = sales.map((s, i) => `
+        <div class="sales-item" data-id="${s.id_user}" onclick="toggleSales(this, '${s.id_user}')">
+          <div class="sales-avatar" style="background:${salesColors[i % salesColors.length]}">${getInitials(s.nama)}</div>
+          <div class="sales-info">
+            <div class="sales-name">${s.nama}</div>
+            <div class="sales-meta">${s.lead_aktif} lead aktif</div>
+          </div>
+          <div class="sales-check"></div>
+        </div>`
+      ).join('');
+
+    } catch (err) {
+      list.innerHTML = `<div style="text-align:center;padding:20px;color:#ef4444;font-size:13px">⚠️ Gagal memuat data sales</div>`;
+    }
   }
 
   function closeModal() {
     document.getElementById('assignModal').classList.remove('show');
+    state.selectedLeadId  = null;
+    state.selectedSalesId = null;
   }
 
   function handleModalClose(e) {
     if (e.target === document.getElementById('assignModal')) closeModal();
   }
 
-  function toggleSales(el) {
-    el.classList.toggle('selected');
+  function toggleSales(el, salesId) {
+    // Unselect semua, lalu select yang diklik
+    document.querySelectorAll('.sales-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    state.selectedSalesId = salesId;
   }
 
-  function doAssign() {
-    closeModal();
-    showToast('Lead berhasil di-assign ke sales!');
+  async function doAssign() {
+    if (!state.selectedLeadId) {
+      showToast('Pilih lead terlebih dahulu!', true); return;
+    }
+    if (!state.selectedSalesId) {
+      showToast('Pilih sales terlebih dahulu!', true); return;
+    }
+
+    try {
+      const res = await fetch('/api/assign/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ id_lead: state.selectedLeadId, id_user: state.selectedSalesId }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        closeModal();
+        showToast(`✅ ${data.lead} berhasil di-assign ke ${data.sales}`);
+        loadLeads();
+        loadStats();
+      } else {
+        showToast(data.error || 'Gagal assign lead', true);
+      }
+    } catch (err) {
+      showToast('Error koneksi ke server', true);
+    }
   }
 
-  // Form
+  // ═══════════════════════════════════════════════
+  //  FORM INPUT MANUAL — kirim ke API
+  // ═══════════════════════════════════════════════
   function resetForm() {
     document.querySelectorAll('#page-input .form-input, #page-input .form-select, #page-input .form-textarea')
       .forEach(el => {
@@ -1413,19 +1534,83 @@
       });
   }
 
-  function saveForm() {
-    const inputs = document.querySelectorAll('#page-input .form-input, #page-input .form-select');
-    let valid = true;
-    inputs.forEach(el => {
-      if (el.hasAttribute('placeholder') && el.value.trim() === '') {
-        el.style.borderColor = '#ef4444';
-        valid = false;
-        setTimeout(() => el.style.borderColor = '#334155', 2000);
+  async function saveForm() {
+    const nama     = document.querySelector('#page-input input[placeholder="Masukkan nama.."]').value.trim();
+    const noWA     = document.querySelector('#page-input input[type="tel"]').value.trim();
+    const email    = document.querySelector('#page-input input[type="email"]').value.trim();
+    const source   = document.querySelector('#page-input select:nth-of-type(1)').value;
+    const produk   = document.querySelector('#page-input select:nth-of-type(2)').value;
+    const prioritas = document.querySelector('#page-input select:nth-of-type(3)').value;
+    const catatan  = document.querySelector('#page-input textarea').value.trim();
+
+    if (!nama || !noWA || !email || !source) {
+      showToast('Lengkapi data yang wajib diisi!', true); return;
+    }
+
+    try {
+      const res = await fetch('/api/leads/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ nama, no_whatsapp: noWA, email, source, produk, prioritas, catatan }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        showPage('lead-list');
+        showToast('Lead berhasil disimpan!');
+        resetForm();
+        loadLeads();
+        loadStats();
+      } else {
+        showToast(data.error || 'Gagal menyimpan lead', true);
       }
-    });
-    if (!valid) { showToast('Lengkapi data yang wajib diisi!', true); return; }
-    showPage('lead-list');
-    showToast('Lead berhasil disimpan!');
+    } catch (err) {
+      showToast('Error koneksi ke server', true);
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  EXPORT CSV
+  // ═══════════════════════════════════════════════
+  async function exportCSV() {
+    try {
+      const res  = await fetch('/api/distribusi/leads/?per_page=10000');
+      const data = await res.json();
+      const leads = data.leads || [];
+
+      const rows = [
+        ['ID Lead','Nama','Email','No WA','Status','Source','Assigned To'],
+        ...leads.map(l => [l.id_lead, l.nama, l.email||'', l.no_whatsapp||'', l.status||'', l.source||'', l.assigned_to||''])
+      ];
+
+      const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'leads_export.csv'; a.click();
+      URL.revokeObjectURL(url);
+      showToast('Export berhasil!');
+    } catch (err) {
+      showToast('Gagal export data', true);
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  UTILITIES
+  // ═══════════════════════════════════════════════
+  function openWA(phone) {
+    if (!phone) { showToast('No WA tidak tersedia', true); return; }
+    const clean = phone.replace(/\D/g, '').replace(/^0/, '62');
+    window.open(`https://wa.me/${clean}`, '_blank');
+  }
+
+  function toggleAllCheck(master) {
+    document.querySelectorAll('#leads-tbody input[type=checkbox]').forEach(cb => cb.checked = master.checked);
+  }
+
+  function getCookie(name) {
+    const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return m ? m.pop() : '';
   }
 
   // Toast
@@ -1433,22 +1618,17 @@
     const toast = document.getElementById('toast');
     document.getElementById('toast-msg').textContent = msg;
     toast.style.borderLeftColor = isError ? '#ef4444' : '#10b981';
+    toast.querySelector('span')?.previousSibling && (toast.firstChild.textContent = isError ? '⚠️ ' : '✅ ');
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 3000);
   }
 
-  // Checkbox header
-  document.querySelector('thead input[type=checkbox]')?.addEventListener('change', function() {
-    document.querySelectorAll('tbody input[type=checkbox]').forEach(cb => cb.checked = this.checked);
-  });
-
-  const currentPath = window.location.pathname;
-  document.querySelectorAll('.nav-item').forEach(link => {
-    if (link.getAttribute('href') === currentPath) {
-      link.classList.add('active');
-    } else {
-      link.classList.remove('active');
-    }
+  // ═══════════════════════════════════════════════
+  //  INIT
+  // ═══════════════════════════════════════════════
+  document.addEventListener('DOMContentLoaded', () => {
+    loadStats();
+    loadLeads();
   });
 
 </script>

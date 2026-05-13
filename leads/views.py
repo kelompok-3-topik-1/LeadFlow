@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils import timezone
 import re
 
@@ -53,7 +53,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 def register_view(request):
-    role = request.GET.get("role", "admin") 
+    role = request.GET.get("role", "admin")
 
     if request.method == 'POST':
         nama = request.POST['nama']
@@ -72,7 +72,6 @@ def register_view(request):
                     password=password,
                     role=role,
                     asal_perusahaan=asal_perusahaan
-                    
                 )
                 user.save()
 
@@ -177,17 +176,17 @@ def api_create_lead(request):
     data = json.loads(request.body)
 
     lead = Leads.objects.create(
-    id_lead=generate_id(Leads, "id_lead", "LED"),
-    nama=data.get("nama"),
-    email=data.get("email"),
-    no_whatsapp=data.get("no_whatsapp")
+        id_lead=generate_id(Leads, "id_lead", "LED"),
+        nama=data.get("nama"),
+        email=data.get("email"),
+        no_whatsapp=data.get("no_whatsapp")
     )
 
     CampaignLeads.objects.create(
-    id=generate_id(CampaignLeads, "id", "PIP"),
-    id_lead=lead,
-    funnel_position=data.get("status", "New"),
-    source=data.get("source")
+        id=generate_id(CampaignLeads, "id", "PIP"),
+        id_lead=lead,
+        funnel_position=data.get("status", "New"),
+        source=data.get("source")
     )
 
     if data.get("produk"):
@@ -335,7 +334,114 @@ def api_dashboard(request):
     })
 
 
-# Create your views here.
+# ─────────────────────────────────────────────────────────────
+#  API BARU untuk halaman Distribusi Lead
+# ─────────────────────────────────────────────────────────────
 
-#contoh dashboard
+def api_distribusi_stats(request):
+    """
+    Endpoint: GET /api/distribusi/stats/
+    Mengembalikan stat cards: total leads, pending (New), qualified.
+    """
+    total_leads = Leads.objects.count()
 
+    # Hitung berdasarkan funnel_position di campaign_leads
+    pending_count = CampaignLeads.objects.filter(
+        funnel_position__in=["New"]
+    ).count()
+
+    qualified_count = CampaignLeads.objects.filter(
+        funnel_position="Qualified"
+    ).count()
+
+    # Jumlah per status untuk tab
+    status_counts = {}
+    for row in CampaignLeads.objects.values("funnel_position").annotate(total=Count("id")):
+        status_counts[row["funnel_position"]] = row["total"]
+
+    return JsonResponse({
+        "total_leads": total_leads,
+        "pending": pending_count,
+        "qualified": qualified_count,
+        "status_counts": status_counts,
+    })
+
+
+def api_distribusi_leads(request):
+    """
+    Endpoint: GET /api/distribusi/leads/?status=&search=&page=&per_page=
+    Mengembalikan daftar leads dengan filter status dan pencarian nama/WA.
+    """
+    status_filter = request.GET.get("status", "")     # e.g. "New", "Contacted", …
+    search_query  = request.GET.get("search", "").strip()
+    page          = int(request.GET.get("page", 1))
+    per_page      = int(request.GET.get("per_page", 10))
+
+    # Base queryset: ambil semua leads
+    leads_qs = Leads.objects.all()
+
+    # Filter pencarian (nama atau no_whatsapp)
+    if search_query:
+        leads_qs = leads_qs.filter(
+            Q(nama__icontains=search_query) |
+            Q(no_whatsapp__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+
+    # Filter berdasarkan status funnel
+    if status_filter and status_filter.lower() != "all":
+        # Ambil id_lead yang sesuai status dari campaign_leads
+        lead_ids = CampaignLeads.objects.filter(
+            funnel_position=status_filter
+        ).values_list("id_lead_id", flat=True)
+        leads_qs = leads_qs.filter(id_lead__in=lead_ids)
+
+    total = leads_qs.count()
+    start = (page - 1) * per_page
+    end   = start + per_page
+    leads_page = leads_qs[start:end]
+
+    data = []
+    for lead in leads_page:
+        campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
+        # Ambil assignment terbaru
+        assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
+
+        data.append({
+            "id_lead":     lead.id_lead,
+            "nama":        lead.nama,
+            "email":       lead.email,
+            "no_whatsapp": lead.no_whatsapp,
+            "source":      campaign_lead.source          if campaign_lead else None,
+            "status":      campaign_lead.funnel_position if campaign_lead else "New",
+            "assigned_to": assignment.id_user.nama       if assignment and assignment.id_user else None,
+            "assigned_id": assignment.id_user.id_user    if assignment and assignment.id_user else None,
+        })
+
+    return JsonResponse({
+        "leads":    data,
+        "total":    total,
+        "page":     page,
+        "per_page": per_page,
+        "pages":    (total + per_page - 1) // per_page,
+    })
+
+
+def api_sales_list(request):
+    """
+    Endpoint: GET /api/sales/
+    Mengembalikan daftar user role=sales beserta jumlah lead aktif masing-masing.
+    """
+    sales_users = Users.objects.filter(role="sales")
+
+    data = []
+    for user in sales_users:
+        lead_count = Assignment.objects.filter(id_user=user).count()
+        data.append({
+            "id_user":   user.id_user,
+            "nama":      user.nama,
+            "email":     user.email,
+            "lead_aktif": lead_count,
+        })
+
+    return JsonResponse({"sales": data})
