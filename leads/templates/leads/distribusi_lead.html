@@ -41,7 +41,7 @@
     color: var(--text-primary);
     display: flex;
     height: 100vh;
-    overflow: hidden;
+    overflow: hidden; /* sidebar tetap fixed */
   }
 
   /* ── SIDEBAR ── */
@@ -149,10 +149,11 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    min-height: 0; /* penting agar flex child bisa scroll */
   }
 
   /* ── PAGE ── */
-  .page { display: none; flex: 1; flex-direction: column; }
+  .page { display: none; flex-direction: column; min-height: 100%; }
   .page.active { display: flex; }
 
   /* ── PAGE HEADER ── */
@@ -320,10 +321,8 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
-    flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 
   .table-header {
@@ -1205,7 +1204,7 @@
   let state = {
     currentStatus: 'all',
     currentPage: 1,
-    perPage: 10,
+    perPage: 15,
     searchQuery: '',
     selectedLeadId: null,
     selectedSalesId: null,
