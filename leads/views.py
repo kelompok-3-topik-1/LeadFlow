@@ -28,6 +28,7 @@ def login_view(request):
             if password == user.password:
                 request.session['user_id'] = user.id_user
                 request.session['user_name'] = user.nama
+                request.session['user_role'] = user.role  
 
                 log = LoginLogs(
                     id_user=user,
