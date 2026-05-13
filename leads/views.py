@@ -21,32 +21,19 @@ def login_view(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
-
         try:
             user = Users.objects.get(email=email)
-
             if password == user.password:
-                request.session['user_id'] = user.id_user
+                request.session['user_id']   = user.id_user
                 request.session['user_name'] = user.nama
-                request.session['user_role'] = user.role  
-
-                log = LoginLogs(
-                    id_user=user,
-                    login_time=timezone.now()
-                )
+                request.session['user_role'] = user.role   # ← TAMBAHAN BARU
+                log = LoginLogs(id_user=user, login_time=timezone.now())
                 log.save()
-
                 return redirect('login_berhasil')
-
             else:
-                return render(request, "leads/login.html", {
-                    "error": "Wrong password"
-                })
-
+                return render(request, "leads/login.html", {"error": "Wrong password"})
         except Users.DoesNotExist:
-            return render(request, "leads/login.html", {
-                "error": "User not found"
-            })
+            return render(request, "leads/login.html", {"error": "User not found"})
     return render(request, 'leads/login.html')
 
 
@@ -97,6 +84,20 @@ def distribusi_lead_page(request):
 def update_leads_page(request):
     return render(request, "leads/update_leads.html")
 
+def input_manual_page(request):
+    """
+    Halaman Input Manual — hanya bisa diakses oleh admin.
+    Sales yang mencoba akses langsung akan diredirect ke dashboard.
+    """
+    # Cek login
+    if not request.session.get('user_id'):
+        return redirect('login')
+ 
+    # Cek role admin
+    if request.session.get('user_role') != 'admin':
+        return redirect('dashboard_analisis')
+ 
+    return render(request, "leads/input_manual.html")
 
 def generate_id(model, field_name, prefix):
     values = model.objects.filter(
