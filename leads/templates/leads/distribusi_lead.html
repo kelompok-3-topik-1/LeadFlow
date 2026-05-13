@@ -41,7 +41,7 @@
     color: var(--text-primary);
     display: flex;
     height: 100vh;
-    overflow: hidden;
+    overflow: hidden; /* body tidak scroll, yang scroll adalah .main */
   }
 
   /* ── SIDEBAR ── */
@@ -149,11 +149,10 @@
   /* ── MAIN CONTENT ── */
   .main {
     flex: 1;
-    overflow-y: auto;
+    overflow-y: scroll; /* paksa scroll selalu aktif */
     display: flex;
     flex-direction: column;
     min-height: 0;
-    height: 100vh;
   }
 
   /* ── PAGE ── */
@@ -255,10 +254,10 @@
   /* ── CONTENT AREA ── */
   .content {
     padding: 20px 28px;
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding-bottom: 40px;
   }
 
   /* ── STAT CARDS ── */
@@ -721,6 +720,8 @@
     padding: 28px;
     width: 540px;
     max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
     box-shadow: var(--shadow-lg);
     border: 1px solid #334155;
     animation: slideUp 0.25s ease;
@@ -742,7 +743,7 @@
     text-transform: uppercase;
   }
 
-  .sales-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .sales-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-height: 280px; overflow-y: auto; }
 
   .sales-item {
     display: flex;
