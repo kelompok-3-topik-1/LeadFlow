@@ -20,7 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'leads',
+    'rest_framework',
+    'leads'
 ]
 
 MIDDLEWARE = [
@@ -53,18 +54,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lead_system.wsgi.application'
 
+MYSQL_HOST = os.environ.get('AZURE_MYSQL_HOST', 'localhost')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('AZURE_MYSQL_NAME', 'leadflow_db'),
         'USER': os.environ.get('AZURE_MYSQL_USER', 'root'),
         'PASSWORD': os.environ.get('AZURE_MYSQL_PASSWORD', ''),
-        'HOST': os.environ.get('AZURE_MYSQL_HOST', 'localhost'),
+        'HOST': MYSQL_HOST,
         'PORT': os.environ.get('AZURE_MYSQL_PORT', '3306'),
         'OPTIONS': {
-            'ssl': {
-                'ca': '/etc/ssl/certs/ca-certificates.crt'
-            },
+            'ssl': {'ca': '/etc/ssl/certs/ca-certificates.crt'}
+        } if MYSQL_HOST != 'localhost' else {
+            'ssl_disabled': True  
         },
     }
 }
