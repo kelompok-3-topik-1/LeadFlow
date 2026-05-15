@@ -1642,36 +1642,30 @@
 //  INIT: deteksi role dari session Django
 // ────────────────────────────────────────────
 function initApp() {
-  // Ambil dari session yang dirender oleh Django template
-  const userId   = "{{ request.session.user_id|default:'' }}";
-  const userName = "{{ request.session.user_name|default:'' }}";
-  const userRole = "{{ request.session.user_role|default:'' }}";
+  // Nilai ini langsung dirender oleh Django — jangan bandingkan dengan string literal
+  const userName = "{{ request.session.user_name|default:'User' }}";
+  const userRole = "{{ request.session.user_role|default:'sales' }}";
+  // Default role sengaja 'sales' (bukan 'admin') agar
+  // jika session tidak tersedia, akses dibatasi secara aman.
 
-  // Cek apakah Django sudah merender template tags atau belum
-  const djangoRendered = userId !== "{{ request.session.user_id|default:'' }}" && userId !== '';
+  // Set currentRole dari session Django
+  currentRole = userRole;
 
-  if (djangoRendered) {
-    currentRole = userRole || 'admin';
-    document.getElementById('sb-username').textContent = userName || 'User';
-    document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
-  } else {
-    // Fallback: Django belum merender — pakai nilai dari screenshot (nama & role sudah muncul via Django)
-    currentRole = userRole !== "{{ request.session.user_role|default:'' }}" ? userRole : 'admin';
-    document.getElementById('sb-username').textContent = userName !== "{{ request.session.user_name|default:'' }}" ? userName : 'User';
-    document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
-  }
+  // Update sidebar profile
+  document.getElementById('sb-username').textContent = userName;
+  document.getElementById('sb-role-text').textContent = userRole.toUpperCase();
 
-  // Tampilkan menu Input Manual untuk admin (gunakan optional chaining agar tidak error jika elemen tidak ada)
+  // Tampilkan / sembunyikan menu Input Manual — hanya admin
   const navInputManual = document.getElementById('nav-input-manual');
   if (navInputManual) {
-    navInputManual.style.display = currentRole === 'admin' ? 'flex' : 'none';
+    navInputManual.style.display = (currentRole === 'admin') ? 'flex' : 'none';
   }
 
-  // Tampilkan dashboard admin/user jika elemen ada (opsional, tidak wajib ada)
+  // Tampilkan dashboard admin/user jika elemen ada
   const dashAdmin = document.getElementById('dash-admin');
   const dashUser  = document.getElementById('dash-user');
-  if (dashAdmin) dashAdmin.style.display = currentRole === 'admin' ? 'flex' : 'none';
-  if (dashUser)  dashUser.style.display  = currentRole === 'admin' ? 'none' : 'flex';
+  if (dashAdmin) dashAdmin.style.display = (currentRole === 'admin') ? 'flex' : 'none';
+  if (dashUser)  dashUser.style.display  = (currentRole === 'admin') ? 'none' : 'flex';
 
   loadStats();
   loadLeads();
