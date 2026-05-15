@@ -10,8 +10,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key-tidak-aman-ganti-di-productio
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 CSRF_TRUSTED_ORIGINS = [
-    'https://leadflow-impal.azurewebsites.net',
-    'https://leadflow.azurewebsites.net',
+    'https://leadflow-impal.azurewebsites.net'
 ]
 
 INSTALLED_APPS = [
