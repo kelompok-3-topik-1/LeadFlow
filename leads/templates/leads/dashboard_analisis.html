@@ -207,6 +207,11 @@ td{padding:11px 16px;vertical-align:middle;}
       <span class="nav-icon">🖥️</span> Analisis Dashboard
     </a>
 
+    <!-- Input Manual — hanya tampil untuk admin, dikontrol JS -->
+    <a class="nav-item" id="nav-input-manual" href="{% url 'input_manual' %}" style="display:none;">
+      <span class="nav-icon">📝</span> Input Manual
+    </a>
+
     <div class="sb-bottom">
       <div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout</div>
     </div>
@@ -745,9 +750,13 @@ function initApp() {
   if (currentRole === 'admin') {
     document.getElementById('dash-admin').style.display = 'flex';
     document.getElementById('dash-user').style.display  = 'none';
+    // Tampilkan menu Input Manual hanya untuk admin
+    document.getElementById('nav-input-manual').style.display = 'flex';
   } else {
     document.getElementById('dash-admin').style.display = 'none';
     document.getElementById('dash-user').style.display  = 'flex';
+    // Sembunyikan menu Input Manual untuk non-admin
+    document.getElementById('nav-input-manual').style.display = 'none';
   }
 
   loadAll();
