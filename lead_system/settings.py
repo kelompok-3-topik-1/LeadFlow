@@ -11,6 +11,7 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 CSRF_TRUSTED_ORIGINS = [
     'https://leadflow-impal.azurewebsites.net',
+    'https://leadflow.azurewebsites.net',
 ]
 
 INSTALLED_APPS = [
