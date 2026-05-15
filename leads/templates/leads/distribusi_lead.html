@@ -1633,8 +1633,7 @@
   //  INIT
   // ═══════════════════════════════════════════════
   document.addEventListener('DOMContentLoaded', () => {
-    loadStats();
-    loadLeads();
+    initApp();
   });
 
 // ────────────────────────────────────────────
@@ -1653,7 +1652,8 @@ function initApp() {
   }
 
   currentRole = userRole || 'admin'; // fallback admin jika role belum disimpan di session
-
+  let currentRole = 'admin'; // default role, ganti sesuai kebutuhan
+  
   // Update sidebar profile
   document.getElementById('sb-username').textContent = userName || 'User';
   document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
@@ -1671,7 +1671,8 @@ function initApp() {
     document.getElementById('nav-input-manual').style.display = 'none';
   }
 
-  loadAll();
+  loadStats();
+  loadLeads();
 }
 
 function doLogout() {
