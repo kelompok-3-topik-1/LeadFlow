@@ -907,13 +907,13 @@
 <!-- ═══════════════ SIDEBAR ═══════════════ -->
   <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sb-profile">
-    <div class="sb-avatar">👤</div>
-      <div>
-        <div class="sb-name" id="sb-username">LOADING...</div>
-        <div class="sb-role" id="sb-role-text">—</div>
-      </div>
+  <div class="sidebar-profile">
+    <div class="avatar">👤</div>
+    <div class="profile-info">
+      <div class="name" id="sb-username">LOADING...</div>
+      <div class="role" id="sb-role-text">—</div>
     </div>
+  </div>
 
     <a class="nav-item active" href="{% url 'distribusi_lead' %}">
       <span class="nav-icon">📋</span> Distribusi Lead
@@ -1645,30 +1645,29 @@ function initApp() {
   // Ambil dari session yang dirender oleh Django template
   const userId   = "{{ request.session.user_id|default:'' }}";
   const userName = "{{ request.session.user_name|default:'' }}";
-  const userRole = "{{ request.session.user_role|default:'' }}";  // tambahkan ini di views.py jika belum
+  const userRole = "{{ request.session.user_role|default:'' }}";
 
-  if (!userId) {
-    // Belum login → redirect ke halaman login
-    window.location.href = "{% url 'login' %}";
-    return;
+  // Jika Django template tidak merender userId (misal literal string kosong),
+  // tetap lanjutkan load data tanpa redirect
+  if (!userId || userId === "{{ request.session.user_id|default:'' }}") {
+    // Template belum dirender oleh Django — skip redirect, langsung load
+    currentRole = 'admin';
+    document.getElementById('sb-username').textContent = 'User';
+    document.getElementById('sb-role-text').textContent = 'ADMIN';
+  } else {
+    currentRole = userRole || 'admin';
+    document.getElementById('sb-username').textContent = userName || 'User';
+    document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
   }
-
-  currentRole = userRole || 'admin'; // fallback admin jika role belum disimpan di session
-
-  // Update sidebar profile
-  document.getElementById('sb-username').textContent = userName || 'User';
-  document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
 
   // Tampilkan dashboard sesuai role
   if (currentRole === 'admin') {
     document.getElementById('dash-admin').style.display = 'flex';
     document.getElementById('dash-user').style.display  = 'none';
-    // Tampilkan menu Input Manual hanya untuk admin
     document.getElementById('nav-input-manual').style.display = 'flex';
   } else {
     document.getElementById('dash-admin').style.display = 'none';
     document.getElementById('dash-user').style.display  = 'flex';
-    // Sembunyikan menu Input Manual untuk non-admin
     document.getElementById('nav-input-manual').style.display = 'none';
   }
 
