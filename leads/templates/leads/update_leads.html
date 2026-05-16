@@ -21,488 +21,183 @@
   --yellow: #f59e0b;
   --purple: #7c3aed;
 
-  /* Kanban column accent colors */
   --col-new:      #3b82f6;
   --col-contact:  #f59e0b;
   --col-qual:     #10b981;
   --col-prop:     #8b5cf6;
   --col-won:      #06b6d4;
+  --col-lost:     #ef4444;
 
   --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
   --shadow-md: 0 4px 18px rgba(0,0,0,.09);
   --shadow-lg: 0 12px 40px rgba(0,0,0,.15);
-  --r: 10px;
-  --r-sm: 6px;
-  --r-lg: 16px;
+  --r: 10px; --r-sm: 6px; --r-lg: 16px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* ══════════════ SIDEBAR ══════════════ */
-.sidebar {
-  width: 190px; min-width: 190px;
-  background: var(--sidebar);
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  padding: 22px 0; height: 100vh; z-index: 10;
-  flex-shrink: 0;
-}
-
-.sb-profile {
-  display: flex; align-items: center; gap: 10px;
-  padding: 0 16px 20px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 18px;
-}
-
-.sb-avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: #e2e8f0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; flex-shrink: 0;
-}
-
-.sb-name  { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing:.01em; }
-.sb-role  { font-size: 10px; color: var(--faint); font-weight: 500; text-transform: uppercase; letter-spacing:.07em; }
-
-.sb-label {
-  font-size: 9px; font-weight: 800; letter-spacing: .12em;
-  color: var(--faint); padding: 0 16px; margin-bottom: 6px; text-transform: uppercase;
-}
-
-.nav-item {
-  display: flex; align-items: center; gap: 9px;
-  padding: 9px 16px; font-size: 12.5px; font-weight: 500;
-  color: var(--muted); cursor: pointer;
-  border-left: 3px solid transparent;
-  transition: all .13s; user-select: none;
-}
+/* SIDEBAR */
+.sidebar { width: 190px; min-width: 190px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 22px 0; height: 100vh; z-index: 10; flex-shrink: 0; }
+.sb-profile { display: flex; align-items: center; gap: 10px; padding: 0 16px 20px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+.sb-avatar { width: 36px; height: 36px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.sb-name { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing:.01em; }
+.sb-role { font-size: 10px; color: var(--faint); font-weight: 500; text-transform: uppercase; letter-spacing:.07em; }
+.sb-label { font-size: 9px; font-weight: 800; letter-spacing: .12em; color: var(--faint); padding: 0 16px; margin-bottom: 6px; text-transform: uppercase; }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 16px; font-size: 12.5px; font-weight: 500; color: var(--muted); cursor: pointer; border-left: 3px solid transparent; transition: all .13s; text-decoration: none; }
 .nav-item:hover { background: var(--accent-lt); color: var(--accent); }
 .nav-item.active { background: var(--accent-lt); color: var(--accent); border-left-color: var(--accent); font-weight: 700; }
 .nav-icon { font-size: 14px; width: 17px; text-align: center; }
-
-.sb-bottom {
-  margin-top: auto; padding: 14px 16px;
-  border-top: 1px solid var(--border);
-}
-
-.logout-btn {
-  display: flex; align-items: center; gap: 7px;
-  font-size: 12px; font-weight: 600; color: var(--red);
-  cursor: pointer; padding: 7px 9px; border-radius: var(--r-sm);
-  transition: background .13s;
-}
+.sb-bottom { margin-top: auto; padding: 14px 16px; border-top: 1px solid var(--border); }
+.logout-btn { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: var(--red); cursor: pointer; padding: 7px 9px; border-radius: var(--r-sm); transition: background .13s; text-decoration: none; }
 .logout-btn:hover { background: #fee2e2; }
 
-/* ══════════════ MAIN ══════════════ */
+/* MAIN */
 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
-/* ══ TOPBAR ══ */
-.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 24px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  gap: 12px; flex-shrink: 0;
-}
-
+/* TOPBAR */
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: var(--card); border-bottom: 1px solid var(--border); gap: 12px; flex-shrink: 0; }
 .topbar-left { display: flex; align-items: center; gap: 10px; }
 .topbar-title { font-size: 15px; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
-
 .topbar-right { display: flex; align-items: center; gap: 8px; }
-
-.search-box {
-  display: flex; align-items: center; gap: 7px;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--r-sm); padding: 7px 12px;
-  font-size: 12px; color: var(--faint); width: 210px;
-  transition: border-color .13s; cursor: text;
-}
-.search-box:hover { border-color: var(--accent); }
-
-.icon-btn {
-  width: 33px; height: 33px; border-radius: var(--r-sm);
-  background: var(--bg); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 15px; color: var(--muted);
-  transition: all .13s;
-}
+.search-wrap { position: relative; }
+.search-box { display: flex; align-items: center; gap: 7px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 7px 12px; font-size: 12px; color: var(--faint); width: 220px; transition: border-color .13s; }
+.search-box input { border: none; outline: none; background: transparent; font-size: 12px; color: var(--text); width: 100%; font-family: inherit; }
+.search-box:focus-within { border-color: var(--accent); }
+.icon-btn { width: 33px; height: 33px; border-radius: var(--r-sm); background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; color: var(--muted); transition: all .13s; }
 .icon-btn:hover { background: var(--accent-lt); border-color: var(--accent); color: var(--accent); }
-
-.btn-primary {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--accent); color: white;
-  border: none; border-radius: var(--r-sm);
-  padding: 8px 14px; font-size: 12px; font-weight: 700;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  cursor: pointer; white-space: nowrap; letter-spacing: .01em;
-  transition: all .14s;
-}
+.btn-primary { display: flex; align-items: center; gap: 6px; background: var(--accent); color: white; border: none; border-radius: var(--r-sm); padding: 8px 14px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; white-space: nowrap; letter-spacing: .01em; transition: all .14s; }
 .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,.3); }
 
-/* ══════════════ KANBAN BOARD ══════════════ */
-.board-wrap {
-  flex: 1; overflow-x: auto; overflow-y: hidden;
-  padding: 20px 24px 24px;
-}
+/* KANBAN */
+.board-wrap { flex: 1; overflow-x: auto; overflow-y: hidden; padding: 20px 24px 24px; }
+.board { display: flex; gap: 14px; height: 100%; min-width: max-content; }
 
-.board {
-  display: flex; gap: 14px;
-  height: 100%; min-width: max-content;
-}
+.col { width: 260px; min-width: 260px; display: flex; flex-direction: column; background: #dde5f0; border-radius: var(--r-lg); overflow: hidden; animation: fadeUp .35s ease both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Column */
-.col {
-  width: 260px; min-width: 260px;
-  display: flex; flex-direction: column;
-  background: #dde5f0;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  animation: fadeUp .35s ease both;
-}
-.col:nth-child(1) { animation-delay: 0s; }
-.col:nth-child(2) { animation-delay: .06s; }
-.col:nth-child(3) { animation-delay: .12s; }
-.col:nth-child(4) { animation-delay: .18s; }
-.col:nth-child(5) { animation-delay: .24s; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.col-header {
-  display: flex; align-items: center; gap: 8px;
-  padding: 14px 16px 10px;
-  position: relative;
-}
-
-.col-dot {
-  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
-}
-
+.col-header { display: flex; align-items: center; gap: 8px; padding: 14px 16px 10px; position: relative; }
+.col-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .col-title { font-size: 13px; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
+.col-count { margin-left: auto; font-size: 10px; font-weight: 700; background: rgba(255,255,255,.7); color: var(--muted); padding: 2px 8px; border-radius: 20px; font-family: 'DM Mono', monospace; }
 
-.col-count {
-  margin-left: auto;
-  font-size: 10px; font-weight: 700;
-  background: rgba(255,255,255,.7);
-  color: var(--muted);
-  padding: 2px 8px; border-radius: 20px;
-  font-family: 'DM Mono', monospace;
-}
-
-.col-body {
-  flex: 1; overflow-y: auto;
-  padding: 6px 10px 10px;
-  display: flex; flex-direction: column; gap: 8px;
-  scrollbar-width: thin;
-}
+.col-body { flex: 1; overflow-y: auto; padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 8px; scrollbar-width: thin; }
 .col-body::-webkit-scrollbar { width: 4px; }
 .col-body::-webkit-scrollbar-thumb { background: rgba(0,0,0,.12); border-radius: 4px; }
 
-/* ══ KANBAN CARD ══ */
-.kcard {
-  background: var(--card);
-  border-radius: var(--r);
-  padding: 13px 14px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(255,255,255,.8);
-  cursor: pointer;
-  transition: all .17s;
-  position: relative;
-}
-.kcard::before {
-  content: ''; position: absolute; top: 0; left: 0;
-  width: 3px; height: 100%; border-radius: 10px 0 0 10px;
-}
+/* KANBAN CARD */
+.kcard { background: var(--card); border-radius: var(--r); padding: 13px 14px; box-shadow: var(--shadow-sm); border: 1px solid rgba(255,255,255,.8); cursor: pointer; transition: all .17s; position: relative; }
+.kcard::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; border-radius: 10px 0 0 10px; }
 .kcard:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: rgba(37,99,235,.15); }
 
-/* priority badge */
-.priority {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 8px; border-radius: 4px;
-  font-size: 10px; font-weight: 800; letter-spacing: .04em;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
+.priority { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; letter-spacing: .04em; margin-bottom: 8px; text-transform: uppercase; }
 .p-high   { background: #fee2e2; color: #b91c1c; }
 .p-medium { background: #fef3c7; color: #b45309; }
 .p-low    { background: #dcfce7; color: #166534; }
+.p-none   { background: #f1f5f9; color: #64748b; }
 
-.kcard-title {
-  font-size: 12.5px; font-weight: 600; color: var(--text);
-  line-height: 1.5; margin-bottom: 9px;
-}
+.kcard-title { font-size: 12.5px; font-weight: 600; color: var(--text); line-height: 1.5; margin-bottom: 9px; }
+.kcard-sub { font-size: 11px; color: var(--muted); margin-bottom: 9px; }
 
-/* tags row */
 .tags-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
-.ktag {
-  padding: 2px 8px; border-radius: 4px;
-  font-size: 10px; font-weight: 700; letter-spacing: .03em;
-}
-.t-mobile  { background: #ede9fe; color: #5b21b6; }
-.t-web     { background: #dbeafe; color: #1d4ed8; }
-.t-ads     { background: #fce7f3; color: #9d174d; }
-.t-form    { background: #d1fae5; color: #065f46; }
-.t-ig      { background: #fef3c7; color: #92400e; }
+.ktag { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .03em; background: #ede9fe; color: #5b21b6; }
 
-.kcard-footer {
-  display: flex; align-items: center; justify-content: space-between;
-}
-
+.kcard-footer { display: flex; align-items: center; justify-content: space-between; }
 .kcard-date { font-size: 10.5px; color: var(--faint); font-family: 'DM Mono', monospace; }
-
 .avatars { display: flex; }
-.av {
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 2px solid white;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 8px; font-weight: 800; color: white;
-  margin-left: -6px; flex-shrink: 0;
-}
+.av { width: 22px; height: 22px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; color: white; margin-left: -6px; flex-shrink: 0; }
 .av:first-child { margin-left: 0; }
 
-/* column accent lines */
-.col[data-col="new"]     .kcard::before { background: var(--col-new); }
-.col[data-col="contact"] .kcard::before { background: var(--col-contact); }
-.col[data-col="qual"]    .kcard::before { background: var(--col-qual); }
-.col[data-col="prop"]    .kcard::before { background: var(--col-prop); }
-.col[data-col="won"]     .kcard::before { background: var(--col-won); }
+/* column accent colors */
+.col[data-col="New"]        .kcard::before { background: var(--col-new); }
+.col[data-col="Contacted"]  .kcard::before { background: var(--col-contact); }
+.col[data-col="Qualified"]  .kcard::before { background: var(--col-qual); }
+.col[data-col="Proposal"]   .kcard::before { background: var(--col-prop); }
+.col[data-col="Closed Won"] .kcard::before { background: var(--col-won); }
+.col[data-col="Closed Lost"].kcard::before { background: var(--col-lost); }
 
-/* column header top bar */
-.col[data-col="new"]     .col-dot { background: var(--col-new); }
-.col[data-col="contact"] .col-dot { background: var(--col-contact); }
-.col[data-col="qual"]    .col-dot { background: var(--col-qual); }
-.col[data-col="prop"]    .col-dot { background: var(--col-prop); }
-.col[data-col="won"]     .col-dot { background: var(--col-won); }
+.col[data-col="New"]        .col-dot { background: var(--col-new); }
+.col[data-col="Contacted"]  .col-dot { background: var(--col-contact); }
+.col[data-col="Qualified"]  .col-dot { background: var(--col-qual); }
+.col[data-col="Proposal"]   .col-dot { background: var(--col-prop); }
+.col[data-col="Closed Won"] .col-dot { background: var(--col-won); }
+.col[data-col="Closed Lost"].col-dot { background: var(--col-lost); }
 
-/* ══════════════════════════════════════
-   MODAL – Update Status & Tagging
-══════════════════════════════════════ */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(10, 18, 38, 0.78);
-  z-index: 1000;
-  align-items: center; justify-content: center;
-  backdrop-filter: blur(4px);
-}
+/* empty state */
+.col-empty { text-align: center; padding: 24px 12px; color: var(--faint); font-size: 11.5px; }
+.col-empty-icon { font-size: 26px; margin-bottom: 6px; }
+
+/* skeleton loader */
+.skeleton { background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: var(--r); height: 90px; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10, 18, 38, 0.78); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
 .modal-overlay.show { display: flex; animation: fadeIn .2s ease; }
-
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes slideUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
 
-.modal {
-  background: #1e293b;
-  border-radius: 18px;
-  padding: 28px 30px 32px;
-  width: 560px; max-width: 96vw; max-height: 92vh; overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid #2d3f5a;
-  animation: slideUp .28s ease;
-}
+.modal { background: #1e293b; border-radius: 18px; padding: 28px 30px 32px; width: 560px; max-width: 96vw; max-height: 92vh; overflow-y: auto; box-shadow: var(--shadow-lg); border: 1px solid #2d3f5a; animation: slideUp .28s ease; }
+.modal-title { font-size: 17px; font-weight: 800; color: white; margin-bottom: 20px; letter-spacing: -.01em; }
 
-.modal-title {
-  font-size: 17px; font-weight: 800; color: white;
-  margin-bottom: 20px; letter-spacing: -.01em;
-}
-
-/* Lead card inside modal */
-.modal-lead-card {
-  background: #273549;
-  border: 1px solid #3a506b;
-  border-radius: 10px;
-  padding: 13px 16px;
-  display: flex; align-items: center; gap: 13px;
-  margin-bottom: 24px;
-  transition: all .15s;
-}
-.modal-lead-card:hover { border-color: #60a5fa; background: #2a3d54; }
-
-.ml-avatar {
-  width: 38px; height: 38px; border-radius: 9px;
-  background: var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: white; flex-shrink: 0;
-}
-
+.modal-lead-card { background: #273549; border: 1px solid #3a506b; border-radius: 10px; padding: 13px 16px; display: flex; align-items: center; gap: 13px; margin-bottom: 24px; }
+.ml-avatar { width: 38px; height: 38px; border-radius: 9px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white; flex-shrink: 0; }
 .ml-name { font-size: 14px; font-weight: 700; color: white; }
 .ml-meta { font-size: 11px; color: #64748b; margin-top: 2px; }
 
-/* Section label */
-.sec-label {
-  font-size: 10.5px; font-weight: 700; color: #64748b;
-  letter-spacing: .08em; text-transform: uppercase;
-  margin-bottom: 12px;
-}
+.sec-label { font-size: 10.5px; font-weight: 700; color: #64748b; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
 
-/* Pipeline steps */
-.pipeline-row {
-  display: flex; align-items: flex-start; gap: 0;
-  margin-bottom: 6px; position: relative;
-}
-
-.pipeline-row::before {
-  content: ''; position: absolute;
-  top: 19px; left: 19px;
-  width: calc(100% - 38px);
-  height: 2px; background: #2d3f5a; z-index: 0;
-}
-
-.pipe-step {
-  display: flex; flex-direction: column; align-items: center;
-  flex: 1; position: relative; z-index: 1; cursor: pointer;
-}
-
-.pipe-circle {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: #273549;
-  border: 2px solid #3a506b;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: #64748b;
-  transition: all .2s;
-  margin-bottom: 6px;
-}
-
+/* Pipeline */
+.pipeline-row { display: flex; align-items: flex-start; gap: 0; margin-bottom: 6px; position: relative; }
+.pipeline-row::before { content: ''; position: absolute; top: 19px; left: 19px; width: calc(100% - 38px); height: 2px; background: #2d3f5a; z-index: 0; }
+.pipe-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; z-index: 1; cursor: pointer; }
+.pipe-circle { width: 38px; height: 38px; border-radius: 50%; background: #273549; border: 2px solid #3a506b; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #64748b; transition: all .2s; margin-bottom: 6px; }
 .pipe-step:hover .pipe-circle { border-color: #60a5fa; color: #60a5fa; }
-
-.pipe-step.active .pipe-circle {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-  box-shadow: 0 0 0 4px rgba(37,99,235,.25);
-}
-
-.pipe-step.done .pipe-circle {
-  background: #1e3a5f;
-  border-color: #3b82f6;
-  color: #60a5fa;
-}
-
-.pipe-label {
-  font-size: 10px; font-weight: 600; color: #64748b;
-  text-align: center; white-space: nowrap;
-}
+.pipe-step.active .pipe-circle { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 0 0 4px rgba(37,99,235,.25); }
+.pipe-step.done .pipe-circle { background: #1e3a5f; border-color: #3b82f6; color: #60a5fa; }
+.pipe-label { font-size: 10px; font-weight: 600; color: #64748b; text-align: center; white-space: nowrap; }
 .pipe-step.active .pipe-label { color: #93c5fd; font-weight: 700; }
-.pipe-step.done   .pipe-label { color: #60a5fa; }
+.pipe-step.done .pipe-label { color: #60a5fa; }
 
-/* Current status text */
-.current-status-row {
-  margin-bottom: 20px;
-  padding: 0 2px;
-}
+.current-status-row { margin-bottom: 20px; padding: 0 2px; }
 .cs-label { font-size: 10.5px; color: #64748b; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 .cs-value { font-size: 15px; font-weight: 800; color: white; margin-top: 2px; }
 
-/* Tagging */
-.tag-grid {
-  display: flex; flex-wrap: wrap; gap: 7px;
-  margin-bottom: 20px;
-}
-
-.tag-pill {
-  padding: 5px 14px; border-radius: 20px;
-  font-size: 11.5px; font-weight: 600;
-  border: 1.5px solid #3a506b;
-  color: #94a3b8; background: transparent;
-  cursor: pointer; transition: all .15s;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
+/* Tags */
+.tag-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+.tag-pill { padding: 5px 14px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1.5px solid #3a506b; color: #94a3b8; background: transparent; cursor: pointer; transition: all .15s; font-family: inherit; }
 .tag-pill:hover { border-color: #60a5fa; color: #93c5fd; background: rgba(59,130,246,.08); }
 .tag-pill.selected { border-color: var(--accent); color: white; background: rgba(37,99,235,.2); }
-.tag-pill.add-new {
-  border-style: dashed; color: #475569;
-  display: flex; align-items: center; gap: 5px;
-}
+.tag-pill.add-new { border-style: dashed; color: #475569; display: flex; align-items: center; gap: 5px; }
 .tag-pill.add-new:hover { border-color: #60a5fa; color: #60a5fa; }
 
-/* Notes */
-.modal-textarea {
-  width: 100%;
-  background: #273549;
-  border: 1px solid #3a506b;
-  border-radius: 9px;
-  padding: 12px 14px;
-  font-size: 13px; color: white;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  outline: none; resize: vertical; min-height: 100px;
-  transition: border-color .15s;
-  margin-bottom: 24px;
-}
-.modal-textarea::placeholder { color: #475569; }
-.modal-textarea:focus { border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,.1); }
-
-/* Modal footer */
-.modal-footer {
-  display: flex; justify-content: flex-end; gap: 10px;
-}
-
-.btn-cancel {
-  padding: 9px 20px; background: transparent;
-  border: 1.5px solid #3a506b; border-radius: var(--r-sm);
-  color: #94a3b8; font-size: 13px; font-weight: 600;
-  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
-  transition: all .14s;
-}
-.btn-cancel:hover { border-color: #94a3b8; color: white; }
-
-.btn-save {
-  padding: 9px 22px; background: var(--accent);
-  border: none; border-radius: var(--r-sm);
-  color: white; font-size: 13px; font-weight: 700;
-  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
-  transition: all .14s;
-}
-.btn-save:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,.35); }
-
-/* ══ TOAST ══ */
-.toast {
-  position: fixed; bottom: 22px; right: 22px;
-  background: #1e293b; border: 1px solid #10b981;
-  border-left: 4px solid #10b981;
-  border-radius: var(--r); padding: 11px 18px;
-  font-size: 12.5px; font-weight: 600; color: white;
-  box-shadow: var(--shadow-lg); z-index: 2000;
-  display: none; align-items: center; gap: 8px;
-}
-.toast.show { display: flex; animation: slideUp .28s ease; }
-
-/* ══ TAG INPUT (inline) ══ */
-.tag-input {
-  background: transparent;
-  border: 1.5px dashed #3a506b;
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 11.5px; font-weight: 600; color: white;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  outline: none; width: 120px;
-  transition: border-color .14s;
-}
+.tag-input { background: transparent; border: 1.5px dashed #3a506b; border-radius: 20px; padding: 5px 12px; font-size: 11.5px; font-weight: 600; color: white; font-family: inherit; outline: none; width: 120px; transition: border-color .14s; }
 .tag-input:focus { border-color: #60a5fa; }
 .tag-input::placeholder { color: #475569; }
 
-/* divider */
-.modal-divider {
-  height: 1px; background: #2d3f5a;
-  margin: 18px 0;
-}
+/* Notes */
+.modal-textarea { width: 100%; background: #273549; border: 1px solid #3a506b; border-radius: 9px; padding: 12px 14px; font-size: 13px; color: white; font-family: inherit; outline: none; resize: vertical; min-height: 100px; transition: border-color .15s; margin-bottom: 24px; }
+.modal-textarea::placeholder { color: #475569; }
+.modal-textarea:focus { border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,.1); }
+
+.modal-divider { height: 1px; background: #2d3f5a; margin: 18px 0; }
+
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; }
+.btn-cancel { padding: 9px 20px; background: transparent; border: 1.5px solid #3a506b; border-radius: var(--r-sm); color: #94a3b8; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .14s; }
+.btn-cancel:hover { border-color: #94a3b8; color: white; }
+.btn-save { padding: 9px 22px; background: var(--accent); border: none; border-radius: var(--r-sm); color: white; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .14s; }
+.btn-save:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,.35); }
+.btn-save:disabled { background: #334155; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Toast */
+.toast { position: fixed; bottom: 22px; right: 22px; background: #1e293b; border: 1px solid #10b981; border-left: 4px solid #10b981; border-radius: var(--r); padding: 11px 18px; font-size: 12.5px; font-weight: 600; color: white; box-shadow: var(--shadow-lg); z-index: 2000; display: none; align-items: center; gap: 8px; }
+.toast.show { display: flex; animation: slideUp .28s ease; }
+.toast.error { border-color: var(--red); }
 </style>
 </head>
 <body>
 
-<!-- ══════════ SIDEBAR ══════════ -->
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sb-profile">
     <div class="sb-avatar">👤</div>
@@ -523,7 +218,6 @@ body {
   <a class="nav-item active" href="{% url 'update_leads' %}">
     <span class="nav-icon">📅</span> Update dan Segmentasi
   </a>
-
   <a class="nav-item" id="nav-input-manual" href="{% url 'input_manual' %}" style="display:none;">
     <span class="nav-icon">📝</span> Input Manual
   </a>
@@ -533,242 +227,42 @@ body {
   </div>
 </aside>
 
-<!-- ══════════ MAIN ══════════ -->
+<!-- MAIN -->
 <main class="main">
-  <!-- Topbar -->
   <div class="topbar">
     <div class="topbar-left">
-      <span class="topbar-title">Update</span>
+      <span class="topbar-title">Update &amp; Segmentasi</span>
     </div>
     <div class="topbar-right">
-      <div class="search-box">🔍 <span>Search leads, phone, model...</span></div>
-      <div class="icon-btn">⚙️</div>
-      <div class="icon-btn">🔔</div>
-      <button class="btn-primary" onclick="openModal(null)">＋ Update status tagging</button>
+      <div class="search-wrap">
+        <div class="search-box">
+          🔍 <input id="search-input" placeholder="Cari nama, WA, email..." oninput="debounceSearch()">
+        </div>
+      </div>
+      <div class="icon-btn" onclick="loadKanban()" title="Refresh">🔄</div>
     </div>
   </div>
 
-  <!-- Kanban Board -->
   <div class="board-wrap">
     <div class="board" id="kanban-board">
-
-      <!-- NEW -->
-      <div class="col" data-col="new">
-        <div class="col-header">
-          <div class="col-dot"></div>
-          <span class="col-title">New</span>
-          <span class="col-count">2</span>
-        </div>
-        <div class="col-body" id="col-new">
-
-          <div class="kcard" onclick="openModal({name:'Ravi Kumar',phone:'+91 98456 71230',src:'Facebook · Ads · Sales Kiranit',status:1})">
-            <div class="priority p-low">Low</div>
-            <div class="kcard-title">This is task description that will wrap automatically into a new line</div>
-            <div class="tags-row">
-              <span class="ktag t-mobile">Mobile</span>
-              <span class="ktag t-web">Web</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#2563eb">RK</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="kcard" onclick="openModal({name:'Divya Joshi',phone:'+91 88356 54012',src:'Ads · Sales Priya S.',status:1})">
-            <div class="priority p-low">Low</div>
-            <div class="kcard-title">Define more tags in components</div>
-            <div class="tags-row">
-              <span class="ktag t-mobile">Mobile</span>
-              <span class="ktag t-web">Web</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#dc2626">DJ</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- CONTACTED -->
-      <div class="col" data-col="contact">
-        <div class="col-header">
-          <div class="col-dot"></div>
-          <span class="col-title">Contacted</span>
-          <span class="col-count">4</span>
-        </div>
-        <div class="col-body" id="col-contact">
-
-          <div class="kcard" onclick="openModal({name:'Preethi Murali',phone:'+91 91234 56903',src:'Website · Sales Arjun R.',status:2})">
-            <div class="priority p-medium">Medium</div>
-            <div class="kcard-title">Add more user avatars</div>
-            <div class="tags-row">
-              <span class="ktag t-mobile">Mobile</span>
-              <span class="ktag t-web">Web</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#7c3aed">PM</div>
-                <div class="av" style="background:#059669">KM</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="kcard" onclick="openModal({name:'Amit Mehta',phone:'+91 50123 45678',src:'Instagram · Unassigned',status:2})">
-            <div class="priority p-low">Low</div>
-            <div class="kcard-title">Add 'Pinned' section at top of the board</div>
-            <div class="tags-row">
-              <span class="ktag t-web">Web</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#ea580c">AM</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="kcard" onclick="openModal({name:'Suresh Nair',phone:'+91 94001 23987',src:'Twitter · Sales Kiran M.',status:2})">
-            <div class="priority p-medium">Medium</div>
-            <div class="kcard-title">Add archived state for card component</div>
-            <div class="tags-row">
-              <span class="ktag t-mobile">Mobile</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#059669">SN</div>
-                <div class="av" style="background:#2563eb">RK</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="kcard" onclick="openModal({name:'Lakshmi Bhat',phone:'+91 88265 34210',src:'Form · Sales Kiran M.',status:2})">
-            <div class="priority p-low">Low</div>
-            <div class="kcard-title">Add How to Use page to help creators in using this template</div>
-            <div class="tags-row">
-              <span class="ktag t-web">Web</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#0284c7">LB</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- QUALIFIED -->
-      <div class="col" data-col="qual">
-        <div class="col-header">
-          <div class="col-dot"></div>
-          <span class="col-title">Qualified</span>
-          <span class="col-count">1</span>
-        </div>
-        <div class="col-body" id="col-qual">
-
-          <div class="kcard" onclick="openModal({name:'Anita Sharma',phone:'+91 99001 12345',src:'Ads · Sales Priya S.',status:3})">
-            <div class="priority p-high">High</div>
-            <div class="kcard-title">Version 1 of Kanban Board Template release</div>
-            <div class="tags-row">
-              <span class="ktag t-mobile">Mobile</span>
-              <span class="ktag t-web">Web</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#e11d48">AS</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- PROPOSAL -->
-      <div class="col" data-col="prop">
-        <div class="col-header">
-          <div class="col-dot"></div>
-          <span class="col-title">Proposal</span>
-          <span class="col-count">1</span>
-        </div>
-        <div class="col-body" id="col-prop">
-
-          <div class="kcard" onclick="openModal({name:'Vikram Rao',phone:'+91 88123 99001',src:'Website · Sales Arjun R.',status:4})">
-            <div class="priority p-high">High</div>
-            <div class="kcard-title">Version 1 of Kanban Board Template release</div>
-            <div class="tags-row">
-              <span class="ktag t-mobile">Mobile</span>
-              <span class="ktag t-web">Web</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#9333ea">VR</div>
-                <div class="av" style="background:#059669">KM</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- CLOSED WON -->
-      <div class="col" data-col="won">
-        <div class="col-header">
-          <div class="col-dot"></div>
-          <span class="col-title">Closed Won</span>
-          <span class="col-count">1</span>
-        </div>
-        <div class="col-body" id="col-won">
-
-          <div class="kcard" onclick="openModal({name:'Meera Pillai',phone:'+91 77890 55432',src:'Form · Sales Kiran M.',status:5})">
-            <div class="priority p-high">High</div>
-            <div class="kcard-title">Version 1 of Kanban Board Template release</div>
-            <div class="tags-row">
-              <span class="ktag t-mobile">Mobile</span>
-              <span class="ktag t-web">Web</span>
-            </div>
-            <div class="kcard-footer">
-              <span class="kcard-date">Mar 3, 2020</span>
-              <div class="avatars">
-                <div class="av" style="background:#0369a1">MP</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </div><!-- /board -->
-  </div><!-- /board-wrap -->
+      <!-- Diisi oleh JavaScript -->
+    </div>
+  </div>
 </main>
 
-<!-- ══════════════════════════════════
-     MODAL – Update Status & Tagging
-══════════════════════════════════ -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
   <div class="modal" id="modal-box">
-
     <div class="modal-title">Update status &amp; tagging</div>
 
-    <!-- Lead card -->
     <div class="modal-lead-card">
-      <div class="ml-avatar" id="m-avatar">RK</div>
+      <div class="ml-avatar" id="m-avatar">--</div>
       <div>
-        <div class="ml-name" id="m-name">NAMA</div>
-        <div class="ml-meta" id="m-meta">#62 · Ads · Sales Kiranit</div>
+        <div class="ml-name" id="m-name">—</div>
+        <div class="ml-meta" id="m-meta">—</div>
       </div>
     </div>
 
-    <!-- Pipeline -->
     <div class="sec-label">Status pipeline saat ini</div>
     <div class="pipeline-row">
       <div class="pipe-step" data-step="1" onclick="selectStep(1)">
@@ -785,201 +279,389 @@ body {
       </div>
       <div class="pipe-step" data-step="4" onclick="selectStep(4)">
         <div class="pipe-circle">4</div>
-        <div class="pipe-label">Negotiation</div>
+        <div class="pipe-label">Proposal</div>
       </div>
       <div class="pipe-step" data-step="5" onclick="selectStep(5)">
         <div class="pipe-circle">5</div>
-        <div class="pipe-label">Closed</div>
+        <div class="pipe-label">Closed Won</div>
       </div>
     </div>
 
     <div class="modal-divider"></div>
 
-    <!-- Current status label -->
     <div class="current-status-row">
       <div class="cs-label">Pindahkan ke Status</div>
-      <div class="cs-value" id="cs-value">Contacted (saat ini)</div>
+      <div class="cs-value" id="cs-value">—</div>
     </div>
 
-    <!-- Tagging -->
     <div class="sec-label">Tagging lead</div>
     <div class="tag-grid" id="tag-grid">
-      <div class="tag-pill" onclick="toggleTag(this)">Follow Up</div>
-      <div class="tag-pill" onclick="toggleTag(this)">Premium</div>
-      <div class="tag-pill" onclick="toggleTag(this)">Hangat</div>
-      <div class="tag-pill" onclick="toggleTag(this)">Prioritas</div>
-      <div class="tag-pill" onclick="toggleTag(this)">Enterprise</div>
-      <div class="tag-pill selected" onclick="toggleTag(this)">Starter</div>
-      <div class="tag-pill" onclick="toggleTag(this)">Cold</div>
+      <!-- Diisi dari API /api/tags/ -->
       <div class="tag-pill add-new" id="add-tag-btn" onclick="addNewTag()">＋ Tag baru</div>
     </div>
 
-    <!-- Notes -->
     <div class="sec-label">Catatan update</div>
     <textarea class="modal-textarea" id="modal-notes" placeholder="Apa yang terjadi pada lead ini?"></textarea>
 
-    <!-- Footer -->
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal()">Batal</button>
-      <button class="btn-save" onclick="saveUpdate()">Simpan Update</button>
+      <button class="btn-save" id="btn-save" onclick="saveUpdate()">Simpan Update</button>
     </div>
-
   </div>
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast">✅ <span id="toast-msg">Status berhasil diperbarui!</span></div>
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
-  const STEP_LABELS = ['', 'New', 'Contacted', 'Qualified', 'Negotiation', 'Closed'];
-  let currentStep = 2;
+// ─────────────────────────────────────────────
+//  Konstanta & state global
+// ─────────────────────────────────────────────
+const STEP_LABELS  = ['', 'New', 'Contacted', 'Qualified', 'Proposal', 'Closed Won'];
+const COL_CONFIG   = {
+  'New':        { dot: '#3b82f6', delay: '0s' },
+  'Contacted':  { dot: '#f59e0b', delay: '.06s' },
+  'Qualified':  { dot: '#10b981', delay: '.12s' },
+  'Proposal':   { dot: '#8b5cf6', delay: '.18s' },
+  'Closed Won': { dot: '#06b6d4', delay: '.24s' },
+  'Closed Lost':{ dot: '#ef4444', delay: '.30s' },
+};
 
-  // ── Sidebar nav ──
-  function navClick(el) {
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
+// Avatar colors pool
+const AV_COLORS = ['#2563eb','#dc2626','#7c3aed','#059669','#ea580c','#0284c7','#9333ea','#e11d48','#0369a1'];
+function avColor(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) & 0xffffffff;
+  return AV_COLORS[Math.abs(h) % AV_COLORS.length];
+}
+function initials(nama) {
+  return (nama || '--').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+let currentStep  = 1;
+let currentLead  = null;   // objek lead yang sedang dibuka di modal
+let allTags      = [];     // cache tag dari DB
+let searchTimer  = null;
+
+// ─────────────────────────────────────────────
+//  Init
+// ─────────────────────────────────────────────
+function initApp() {
+  const userName = "{{ request.session.user_name|default:'User' }}";
+  const userRole = "{{ request.session.user_role|default:'sales' }}";
+
+  document.getElementById('sb-username').textContent = userName;
+  document.getElementById('sb-role-text').textContent = userRole.toUpperCase();
+
+  const navInput = document.getElementById('nav-input-manual');
+  if (navInput) navInput.style.display = (userRole === 'admin') ? 'flex' : 'none';
+
+  loadTags();
+  loadKanban();
+}
+
+// ─────────────────────────────────────────────
+//  Fetch tag dari DB → simpan ke cache
+// ─────────────────────────────────────────────
+async function loadTags() {
+  try {
+    const res  = await fetch('/api/tags/');
+    const data = await res.json();
+    allTags = data.tags || [];
+  } catch (e) {
+    console.error('Gagal memuat tags:', e);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  Kanban board
+// ─────────────────────────────────────────────
+async function loadKanban() {
+  const board = document.getElementById('kanban-board');
+  const search = document.getElementById('search-input').value.trim();
+
+  // Tampilkan skeleton
+  board.innerHTML = Object.keys(COL_CONFIG).map(col => `
+    <div class="col" data-col="${col}" style="animation-delay:${COL_CONFIG[col].delay}">
+      <div class="col-header">
+        <div class="col-dot" style="background:${COL_CONFIG[col].dot}"></div>
+        <span class="col-title">${col}</span>
+        <span class="col-count">...</span>
+      </div>
+      <div class="col-body">
+        <div class="skeleton"></div>
+        <div class="skeleton" style="height:70px;margin-top:4px"></div>
+      </div>
+    </div>
+  `).join('');
+
+  try {
+    const url = '/api/kanban/leads/' + (search ? `?search=${encodeURIComponent(search)}` : '');
+    const res  = await fetch(url);
+    const data = await res.json();
+
+    renderBoard(data.columns);
+  } catch (e) {
+    board.innerHTML = `<div style="padding:24px;color:var(--red);font-size:13px">❌ Gagal memuat data: ${e.message}</div>`;
+  }
+}
+
+function renderBoard(columns) {
+  const board = document.getElementById('kanban-board');
+  board.innerHTML = '';
+
+  columns.forEach(({ column, leads }) => {
+    const cfg   = COL_CONFIG[column] || { dot: '#94a3b8', delay: '0s' };
+    const colEl = document.createElement('div');
+    colEl.className = 'col';
+    colEl.dataset.col = column;
+    colEl.style.animationDelay = cfg.delay;
+
+    colEl.innerHTML = `
+      <div class="col-header">
+        <div class="col-dot" style="background:${cfg.dot}"></div>
+        <span class="col-title">${column}</span>
+        <span class="col-count">${leads.length}</span>
+      </div>
+      <div class="col-body" id="col-${column.replace(/\s+/g,'_')}">
+        ${leads.length === 0 ? `
+          <div class="col-empty">
+            <div class="col-empty-icon">📭</div>
+            Tidak ada lead
+          </div>
+        ` : leads.map(lead => renderCard(lead)).join('')}
+      </div>
+    `;
+
+    board.appendChild(colEl);
+  });
+}
+
+function renderCard(lead) {
+  const ini    = initials(lead.nama);
+  const color  = avColor(lead.nama);
+  const tags   = (lead.tags || []).map(t =>
+    `<span class="ktag">${t}</span>`
+  ).join('');
+
+  // Prioritas → badge
+  const priMap  = { 'Tinggi': 'p-high', 'Sedang': 'p-medium', 'Rendah': 'p-low' };
+  const priClass = priMap[lead.prioritas] || 'p-none';
+  const priLabel = lead.prioritas || '—';
+
+  const assignedAv = lead.assigned_to
+    ? `<div class="av" style="background:${avColor(lead.assigned_to)}" title="${lead.assigned_to}">${initials(lead.assigned_to)}</div>`
+    : `<div class="av" style="background:#94a3b8" title="Unassigned">?</div>`;
+
+  // Encode lead ke onclick (hindari quote di dalam string)
+  const leadJson = encodeURIComponent(JSON.stringify(lead));
+
+  return `
+    <div class="kcard" onclick="openModal(JSON.parse(decodeURIComponent('${leadJson}')))">
+      <div class="priority ${priClass}">${priLabel}</div>
+      <div class="kcard-title">${lead.nama}</div>
+      <div class="kcard-sub">${lead.no_whatsapp || lead.email || '—'}</div>
+      ${tags ? `<div class="tags-row">${tags}</div>` : ''}
+      <div class="kcard-footer">
+        <span class="kcard-date">${lead.source || '—'}</span>
+        <div class="avatars">${assignedAv}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ─────────────────────────────────────────────
+//  Debounce search
+// ─────────────────────────────────────────────
+function debounceSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => loadKanban(), 400);
+}
+
+// ─────────────────────────────────────────────
+//  Modal
+// ─────────────────────────────────────────────
+function openModal(lead) {
+  currentLead = lead;
+
+  // Isi info lead
+  const ini = initials(lead.nama);
+  document.getElementById('m-avatar').textContent = ini;
+  document.getElementById('m-avatar').style.background = avColor(lead.nama);
+  document.getElementById('m-name').textContent = lead.nama;
+  document.getElementById('m-meta').textContent =
+    (lead.id_lead || '') +
+    (lead.no_whatsapp ? ' · ' + lead.no_whatsapp : '') +
+    (lead.source ? ' · ' + lead.source : '') +
+    (lead.assigned_to ? ' · ' + lead.assigned_to : ' · Unassigned');
+
+  // Set step sesuai status saat ini
+  currentStep = STEP_LABELS.indexOf(lead.status);
+  if (currentStep < 1) currentStep = 1;
+
+  renderPipeline();
+
+  // Isi tag grid dari DB, tandai yang sudah dimiliki lead ini
+  renderTagGrid(lead.tags || []);
+
+  document.getElementById('modal-notes').value = '';
+  document.getElementById('btn-save').disabled = false;
+
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('show');
+  currentLead = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ─────────────────────────────────────────────
+//  Pipeline
+// ─────────────────────────────────────────────
+function selectStep(step) {
+  currentStep = step;
+  renderPipeline();
+}
+
+function renderPipeline() {
+  document.querySelectorAll('.pipe-step').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.remove('active', 'done');
+    if (s === currentStep) el.classList.add('active');
+    else if (s < currentStep) el.classList.add('done');
+  });
+  document.getElementById('cs-value').textContent =
+    (STEP_LABELS[currentStep] || '—') + ' (dipilih)';
+}
+
+// ─────────────────────────────────────────────
+//  Tag grid — dari DB + tandai existing
+// ─────────────────────────────────────────────
+function renderTagGrid(existingTags) {
+  const grid   = document.getElementById('tag-grid');
+  const addBtn = document.getElementById('add-tag-btn');
+
+  // Hapus semua pill lama (kecuali tombol add)
+  grid.querySelectorAll('.tag-pill:not(.add-new)').forEach(el => el.remove());
+
+  // Render tag dari DB
+  allTags.forEach(tag => {
+    const pill = document.createElement('div');
+    pill.className = 'tag-pill';
+    pill.textContent = tag.label_tag;
+    if (existingTags.includes(tag.label_tag)) pill.classList.add('selected');
+    pill.onclick = function() { toggleTag(this); };
+    grid.insertBefore(pill, addBtn);
+  });
+}
+
+function toggleTag(el) {
+  el.classList.toggle('selected');
+}
+
+function addNewTag() {
+  const grid   = document.getElementById('tag-grid');
+  const addBtn = document.getElementById('add-tag-btn');
+
+  const inp = document.createElement('input');
+  inp.className   = 'tag-input';
+  inp.placeholder = 'Nama tag...';
+  inp.maxLength   = 30;
+
+  addBtn.style.display = 'none';
+  grid.insertBefore(inp, addBtn);
+  inp.focus();
+
+  function commitTag() {
+    const val = inp.value.trim();
+    if (val) {
+      const pill = document.createElement('div');
+      pill.className = 'tag-pill selected';
+      pill.textContent = val;
+      pill.onclick = function() { toggleTag(this); };
+      grid.insertBefore(pill, inp);
+    }
+    inp.remove();
+    addBtn.style.display = '';
   }
 
-  // ── Open Modal ──
-  function openModal(lead) {
-    const overlay = document.getElementById('modal-overlay');
-    overlay.classList.add('show');
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); commitTag(); }
+    if (e.key === 'Escape') { inp.remove(); addBtn.style.display = ''; }
+  });
+  inp.addEventListener('blur', commitTag);
+}
 
-    if (lead) {
-      // Fill lead info
-      const initials = lead.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-      document.getElementById('m-avatar').textContent = initials;
-      document.getElementById('m-name').textContent = lead.name;
-      document.getElementById('m-meta').textContent = lead.phone + ' · ' + lead.src;
-      currentStep = lead.status || 2;
-    } else {
-      document.getElementById('m-avatar').textContent = 'NN';
-      document.getElementById('m-name').textContent = 'NAMA';
-      document.getElementById('m-meta').textContent = '#-- · -- · Sales --';
-      currentStep = 2;
+// ─────────────────────────────────────────────
+//  Simpan ke database
+// ─────────────────────────────────────────────
+async function saveUpdate() {
+  if (!currentLead) return;
+
+  const status = STEP_LABELS[currentStep];
+  const notes  = document.getElementById('modal-notes').value.trim();
+  const tags   = [];
+  document.querySelectorAll('#tag-grid .tag-pill.selected').forEach(el => {
+    tags.push(el.textContent.trim());
+  });
+
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan...';
+
+  try {
+    const res = await fetch('/api/leads/update-status/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      body: JSON.stringify({
+        id_lead: currentLead.id_lead,
+        status:  status,
+        tags:    tags,
+        notes:   notes || null,
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Gagal menyimpan');
     }
 
-    renderPipeline();
-    document.getElementById('modal-notes').value = '';
-
-    // Reset tags
-    document.querySelectorAll('.tag-pill:not(.add-new)').forEach(t => t.classList.remove('selected'));
-  }
-
-  // ── Close Modal ──
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('show');
-  }
-
-  function handleOverlayClick(e) {
-    if (e.target === document.getElementById('modal-overlay')) closeModal();
-  }
-
-  // ── Pipeline step ──
-  function selectStep(step) {
-    currentStep = step;
-    renderPipeline();
-  }
-
-  function renderPipeline() {
-    document.querySelectorAll('.pipe-step').forEach(el => {
-      const s = parseInt(el.dataset.step);
-      el.classList.remove('active', 'done');
-      if (s === currentStep) el.classList.add('active');
-      else if (s < currentStep) el.classList.add('done');
-    });
-    document.getElementById('cs-value').textContent = STEP_LABELS[currentStep] + ' (saat ini)';
-  }
-
-  // ── Tag toggle ──
-  function toggleTag(el) {
-    el.classList.toggle('selected');
-  }
-
-  // ── Add new tag ──
-  function addNewTag() {
-    const grid = document.getElementById('tag-grid');
-    const addBtn = document.getElementById('add-tag-btn');
-
-    const inp = document.createElement('input');
-    inp.className = 'tag-input';
-    inp.placeholder = 'Nama tag...';
-    inp.maxLength = 18;
-
-    addBtn.style.display = 'none';
-    grid.insertBefore(inp, addBtn);
-    inp.focus();
-
-    inp.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && this.value.trim()) {
-        const tag = document.createElement('div');
-        tag.className = 'tag-pill selected';
-        tag.textContent = this.value.trim();
-        tag.onclick = function() { toggleTag(this); };
-        grid.insertBefore(tag, inp);
-        inp.value = '';
-      }
-      if (e.key === 'Escape') {
-        inp.remove();
-        addBtn.style.display = '';
-      }
-    });
-
-    inp.addEventListener('blur', function() {
-      if (this.value.trim()) {
-        const tag = document.createElement('div');
-        tag.className = 'tag-pill selected';
-        tag.textContent = this.value.trim();
-        tag.onclick = function() { toggleTag(this); };
-        grid.insertBefore(tag, this);
-      }
-      this.remove();
-      addBtn.style.display = '';
-    });
-  }
-
-  // ── Save ──
-  function saveUpdate() {
-    const name = document.getElementById('m-name').textContent;
-    const status = STEP_LABELS[currentStep];
     closeModal();
-    showToast(`✅ ${name} → ${status} berhasil disimpan`);
+    showToast(`✅ ${currentLead.nama} → ${status} berhasil disimpan`);
+    loadKanban(); // refresh board
+
+  } catch (e) {
+    showToast(`❌ ${e.message}`, true);
+    btn.disabled = false;
+    btn.textContent = 'Simpan Update';
   }
+}
 
-  // ── Toast ──
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    document.getElementById('toast-msg').textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
+// ─────────────────────────────────────────────
+//  Helpers
+// ─────────────────────────────────────────────
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.toggle('error', isError);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
 
-  // ── Init App ──
-  let currentRole = 'sales'; // default aman
+function getCookie(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? v.pop() : '';
+}
 
-  function initApp() {
-    const userName = "{{ request.session.user_name|default:'User' }}";
-    const userRole = "{{ request.session.user_role|default:'sales' }}";
-    // Default 'sales' agar jika session tidak ada, akses dibatasi secara aman
-
-    currentRole = userRole;
-
-    // Update sidebar profile
-    document.getElementById('sb-username').textContent = userName;
-    document.getElementById('sb-role-text').textContent = userRole.toUpperCase();
-
-    // Tampilkan / sembunyikan menu Input Manual — hanya admin
-    const navInputManual = document.getElementById('nav-input-manual');
-    if (navInputManual) {
-      navInputManual.style.display = (currentRole === 'admin') ? 'flex' : 'none';
-    }
-
-    // Init pipeline
-    renderPipeline();
-  }
-
-  initApp();
-
+// ─────────────────────────────────────────────
+//  Start
+// ─────────────────────────────────────────────
+initApp();
 </script>
 </body>
 </html>

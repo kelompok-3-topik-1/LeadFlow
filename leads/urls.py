@@ -1,5 +1,7 @@
+from django import views
 from django.urls import path
 from .views import (
+    api_tags_list,
     login_view,
     register_view,
     home,
@@ -16,6 +18,7 @@ from .views import (
     api_distribusi_stats,
     api_distribusi_leads,
     api_sales_list,
+    api_kanban_leads,
     input_manual_page
 )
 
@@ -35,6 +38,8 @@ urlpatterns = [
     path('api/assign/', api_assign_lead, name='api_assign_lead'),
     path('api/leads/update-status/', api_update_lead_status, name='api_update_lead_status'),
     path('api/dashboard/', api_dashboard, name='api_dashboard'),
+    path('api/kanban/leads/', api_kanban_leads, name='api_kanban_leads'),
+    path('api/tags/', api_tags_list, name='api_tags_list'),
 
     path('api/distribusi/stats/', api_distribusi_stats, name='api_distribusi_stats'),
     path('api/distribusi/leads/', api_distribusi_leads, name='api_distribusi_leads'),

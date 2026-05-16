@@ -26,7 +26,7 @@ def login_view(request):
             if password == user.password:
                 request.session['user_id']   = user.id_user
                 request.session['user_name'] = user.nama
-                request.session['user_role'] = user.role   # ← TAMBAHAN BARU
+                request.session['user_role'] = user.role
                 log = LoginLogs(id_user=user, login_time=timezone.now())
                 log.save()
                 return redirect('login_berhasil')
@@ -62,7 +62,6 @@ def register_view(request):
                     asal_perusahaan=asal_perusahaan
                 )
                 user.save()
-
                 return redirect('login')
         else:
             return render(request, 'leads/register.html', {'error': 'Password tidak sama'})
@@ -85,18 +84,10 @@ def update_leads_page(request):
     return render(request, "leads/update_leads.html")
 
 def input_manual_page(request):
-    """
-    Halaman Input Manual — hanya bisa diakses oleh admin.
-    Sales yang mencoba akses langsung akan diredirect ke dashboard.
-    """
-    # Cek login
     if not request.session.get('user_id'):
         return redirect('login')
- 
-    # Cek role admin
     if request.session.get('user_role') != 'admin':
         return redirect('dashboard_analisis')
- 
     return render(request, "leads/input_manual.html")
 
 def generate_id(model, field_name, prefix):
@@ -105,7 +96,6 @@ def generate_id(model, field_name, prefix):
     ).values_list(field_name, flat=True)
 
     max_number = 0
-
     for value in values:
         match = re.search(r'(\d+)$', str(value))
         if match:
@@ -122,7 +112,6 @@ def api_login(request):
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
     data = json.loads(request.body)
-
     email = data.get("email")
     password = data.get("password")
 
@@ -134,10 +123,7 @@ def api_login(request):
     if user.password != password:
         return JsonResponse({"error": "Wrong password"}, status=401)
 
-    LoginLogs.objects.create(
-        id_user=user,
-        login_time=timezone.now()
-    )
+    LoginLogs.objects.create(id_user=user, login_time=timezone.now())
 
     return JsonResponse({
         "message": "Login berhasil",
@@ -154,12 +140,10 @@ def api_login(request):
 def api_create_lead(request):
     if request.method == "GET":
         leads = Leads.objects.all()
-
         data = []
         for lead in leads:
             campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
             assignment = Assignment.objects.filter(id_lead=lead).first()
-
             data.append({
                 "id_lead": lead.id_lead,
                 "nama": lead.nama,
@@ -169,7 +153,6 @@ def api_create_lead(request):
                 "status": campaign_lead.funnel_position if campaign_lead else "New",
                 "assigned_to": assignment.id_user.nama if assignment and assignment.id_user else None,
             })
-
         return JsonResponse({"leads": data})
 
     if request.method != "POST":
@@ -191,29 +174,14 @@ def api_create_lead(request):
         source=data.get("source")
     )
 
-    if data.get("produk"):
-        CustomFields.objects.create(
-            id=generate_id(CustomFields, "id", "CFD"),
-            id_lead=lead,
-            field_name="produk",
-            value=data.get("produk")
-        )
-
-    if data.get("prioritas"):
-        CustomFields.objects.create(
-            id=generate_id(CustomFields, "id", "CFD"),
-            id_lead=lead,
-            field_name="prioritas",
-            value=data.get("prioritas")
-        )
-
-    if data.get("catatan"):
-        CustomFields.objects.create(
-            id=generate_id(CustomFields, "id", "CFD"),
-            id_lead=lead,
-            field_name="catatan",
-            value=data.get("catatan")
-        )
+    for field in ["produk", "prioritas", "catatan"]:
+        if data.get(field):
+            CustomFields.objects.create(
+                id=generate_id(CustomFields, "id", "CFD"),
+                id_lead=lead,
+                field_name=field,
+                value=data.get(field)
+            )
 
     return JsonResponse({
         "message": "Lead berhasil dibuat",
@@ -226,7 +194,6 @@ def api_assign_lead(request):
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
     data = json.loads(request.body)
-
     id_lead = data.get("id_lead")
     id_user = data.get("id_user")
 
@@ -270,7 +237,6 @@ def api_update_lead_status(request):
         return JsonResponse({"error": "Lead tidak ditemukan"}, status=404)
 
     campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
-
     if campaign_lead:
         campaign_lead.funnel_position = status
         campaign_lead.save()
@@ -286,9 +252,7 @@ def api_update_lead_status(request):
             label_tag=label,
             defaults={"id_tag": generate_id(Tag, "id_tag", "TAG")}
         )
-
-        exists = LeadsTag.objects.filter(id_leads=lead, id_tag=tag).exists()
-        if not exists:
+        if not LeadsTag.objects.filter(id_leads=lead, id_tag=tag).exists():
             LeadsTag.objects.create(
                 id=generate_id(LeadsTag, "id", "LDT"),
                 id_leads=lead,
@@ -337,26 +301,13 @@ def api_dashboard(request):
 
 
 # ─────────────────────────────────────────────────────────────
-#  API BARU untuk halaman Distribusi Lead
+#  API untuk halaman Distribusi Lead
 # ─────────────────────────────────────────────────────────────
 
 def api_distribusi_stats(request):
-    """
-    Endpoint: GET /api/distribusi/stats/
-    Mengembalikan stat cards: total leads, pending (New), qualified.
-    """
     total_leads = Leads.objects.count()
-
-    # Hitung berdasarkan funnel_position di campaign_leads
-    pending_count = CampaignLeads.objects.filter(
-        funnel_position__in=["New"]
-    ).count()
-
-    qualified_count = CampaignLeads.objects.filter(
-        funnel_position="Qualified"
-    ).count()
-
-    # Jumlah per status untuk tab
+    pending_count = CampaignLeads.objects.filter(funnel_position__in=["New"]).count()
+    qualified_count = CampaignLeads.objects.filter(funnel_position="Qualified").count()
     status_counts = {}
     for row in CampaignLeads.objects.values("funnel_position").annotate(total=Count("id")):
         status_counts[row["funnel_position"]] = row["total"]
@@ -370,19 +321,13 @@ def api_distribusi_stats(request):
 
 
 def api_distribusi_leads(request):
-    """
-    Endpoint: GET /api/distribusi/leads/?status=&search=&page=&per_page=
-    Mengembalikan daftar leads dengan filter status dan pencarian nama/WA.
-    """
-    status_filter = request.GET.get("status", "")     # e.g. "New", "Contacted", …
+    status_filter = request.GET.get("status", "")
     search_query  = request.GET.get("search", "").strip()
     page          = int(request.GET.get("page", 1))
     per_page      = int(request.GET.get("per_page", 10))
 
-    # Base queryset: ambil semua leads
     leads_qs = Leads.objects.all()
 
-    # Filter pencarian (nama atau no_whatsapp)
     if search_query:
         leads_qs = leads_qs.filter(
             Q(nama__icontains=search_query) |
@@ -390,9 +335,7 @@ def api_distribusi_leads(request):
             Q(email__icontains=search_query)
         )
 
-    # Filter berdasarkan status funnel
     if status_filter and status_filter.lower() != "all":
-        # Ambil id_lead yang sesuai status dari campaign_leads
         lead_ids = CampaignLeads.objects.filter(
             funnel_position=status_filter
         ).values_list("id_lead_id", flat=True)
@@ -406,9 +349,7 @@ def api_distribusi_leads(request):
     data = []
     for lead in leads_page:
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
-        # Ambil assignment terbaru
         assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
-
         data.append({
             "id_lead":     lead.id_lead,
             "nama":        lead.nama,
@@ -430,20 +371,92 @@ def api_distribusi_leads(request):
 
 
 def api_sales_list(request):
-    """
-    Endpoint: GET /api/sales/
-    Mengembalikan daftar user role=sales beserta jumlah lead aktif masing-masing.
-    """
     sales_users = Users.objects.filter(role="sales")
-
     data = []
     for user in sales_users:
         lead_count = Assignment.objects.filter(id_user=user).count()
         data.append({
-            "id_user":   user.id_user,
-            "nama":      user.nama,
-            "email":     user.email,
+            "id_user":    user.id_user,
+            "nama":       user.nama,
+            "email":      user.email,
             "lead_aktif": lead_count,
         })
-
     return JsonResponse({"sales": data})
+
+
+# ─────────────────────────────────────────────────────────────
+#  API BARU – Update & Segmentasi (Kanban)
+# ─────────────────────────────────────────────────────────────
+
+# Urutan kolom kanban yang diakui sistem
+FUNNEL_ORDER = ["New", "Contacted", "Qualified", "Proposal", "Closed Won", "Closed Lost"]
+
+def api_kanban_leads(request):
+    """
+    GET /api/kanban/leads/?search=
+    Mengembalikan semua leads dikelompokkan per funnel_position,
+    lengkap dengan tags yang sudah diberikan ke setiap lead.
+    """
+    search_query = request.GET.get("search", "").strip()
+
+    leads_qs = Leads.objects.all()
+    if search_query:
+        leads_qs = leads_qs.filter(
+            Q(nama__icontains=search_query) |
+            Q(no_whatsapp__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+
+    # Kelompokkan per kolom
+    columns = {col: [] for col in FUNNEL_ORDER}
+
+    for lead in leads_qs:
+        campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
+        assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
+
+        # Ambil prioritas dari custom_fields
+        prioritas_cf  = CustomFields.objects.filter(id_lead=lead, field_name="prioritas").first()
+        prioritas     = prioritas_cf.value if prioritas_cf else None
+
+        # Ambil semua tag lead ini
+        lead_tags = list(
+            LeadsTag.objects.filter(id_leads=lead)
+            .select_related("id_tag")
+            .values_list("id_tag__label_tag", flat=True)
+        )
+
+        funnel = campaign_lead.funnel_position if campaign_lead else "New"
+        # Pastikan funnel dikenal; kalau tidak, masukkan ke "New"
+        if funnel not in columns:
+            funnel = "New"
+
+        columns[funnel].append({
+            "id_lead":     lead.id_lead,
+            "nama":        lead.nama,
+            "email":       lead.email,
+            "no_whatsapp": lead.no_whatsapp,
+            "source":      campaign_lead.source if campaign_lead else None,
+            "status":      funnel,
+            "prioritas":   prioritas,
+            "tags":        lead_tags,
+            "assigned_to": assignment.id_user.nama    if assignment and assignment.id_user else None,
+            "assigned_id": assignment.id_user.id_user if assignment and assignment.id_user else None,
+        })
+
+    # Format respons sebagai list kolom (urutan tetap)
+    result = [
+        {"column": col, "leads": columns[col]}
+        for col in FUNNEL_ORDER
+    ]
+
+    return JsonResponse({"columns": result})
+
+
+def api_tags_list(request):
+    """
+    GET /api/tags/
+    Mengembalikan semua tag yang tersimpan di tabel tag.
+    Digunakan untuk mengisi pill tag di modal update.
+    """
+    tags = Tag.objects.all().values("id_tag", "label_tag")
+    return JsonResponse({"tags": list(tags)})
