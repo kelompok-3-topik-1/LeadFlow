@@ -915,15 +915,16 @@
     </div>
   </div>
 
+    <a class="nav-item" href="{% url 'dashboard_analisis' %}">
+      <span class="nav-icon">🖥️</span> Analisis Dashboard
+    </a>
     <a class="nav-item active" href="{% url 'distribusi_lead' %}">
       <span class="nav-icon">📋</span> Distribusi Lead
     </a>
     <a class="nav-item" href="{% url 'update_leads' %}">
       <span class="nav-icon">📅</span> Update dan Segmentasi
     </a>
-    <a class="nav-item" href="{% url 'dashboard_analisis' %}">
-      <span class="nav-icon">🖥️</span> Analisis Dashboard
-    </a>
+    
 
     <!-- Input Manual — hanya tampil untuk admin, dikontrol JS -->
     <a class="nav-item" id="nav-input-manual" href="{% url 'input_manual' %}" style="display:none;">
