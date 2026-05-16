@@ -507,28 +507,28 @@ body {
   <div class="sb-profile">
     <div class="sb-avatar">👤</div>
     <div>
-      <div class="sb-name">NAMA</div>
-      <div class="sb-role">ADMIN</div>
+      <div class="sb-name" id="sb-username">LOADING...</div>
+      <div class="sb-role" id="sb-role-text">—</div>
     </div>
   </div>
 
   <div class="sb-label">Main Menu</div>
- 
+
   <a class="nav-item" href="{% url 'distribusi_lead' %}">
-      <span class="nav-icon">📋</span> Distribusi Lead
+    <span class="nav-icon">📋</span> Distribusi Lead
   </a>
-  <a class="nav-item" href="{% url 'update_leads' %}">
+  <a class="nav-item active" href="{% url 'update_leads' %}">
     <span class="nav-icon">📅</span> Update dan Segmentasi
   </a>
   <a class="nav-item" href="{% url 'dashboard_analisis' %}">
     <span class="nav-icon">🖥️</span> Analisis Dashboard
   </a>
-  <a class="nav-item" onclick="showPage('input')" id="nav-input">
+  <a class="nav-item" id="nav-input-manual" href="{% url 'input_manual' %}" style="display:none;">
     <span class="nav-icon">📝</span> Input Manual
   </a>
 
   <div class="sb-bottom">
-    <div class="logout-btn">🚪 Logout Account</div>
+    <a class="logout-btn" href="{% url 'login' %}">🚪 Logout Account</a>
   </div>
 </aside>
 
@@ -953,17 +953,31 @@ body {
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // Init pipeline on load
-  renderPipeline();
+  // ── Init App ──
+  let currentRole = 'sales'; // default aman
 
-  const currentPath = window.location.pathname;
-  document.querySelectorAll('.nav-item').forEach(link => {
-    if (link.getAttribute('href') === currentPath) {
-      link.classList.add('active');
-    } else {
-      link.classList.remove('active');
+  function initApp() {
+    const userName = "{{ request.session.user_name|default:'User' }}";
+    const userRole = "{{ request.session.user_role|default:'sales' }}";
+    // Default 'sales' agar jika session tidak ada, akses dibatasi secara aman
+
+    currentRole = userRole;
+
+    // Update sidebar profile
+    document.getElementById('sb-username').textContent = userName;
+    document.getElementById('sb-role-text').textContent = userRole.toUpperCase();
+
+    // Tampilkan / sembunyikan menu Input Manual — hanya admin
+    const navInputManual = document.getElementById('nav-input-manual');
+    if (navInputManual) {
+      navInputManual.style.display = (currentRole === 'admin') ? 'flex' : 'none';
     }
-  });
+
+    // Init pipeline
+    renderPipeline();
+  }
+
+  initApp();
 
 </script>
 </body>
