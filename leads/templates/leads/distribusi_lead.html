@@ -1317,9 +1317,10 @@
     'rendah':        { cls: 'pri-low',      label: '🟢 Rendah' },
   };
   function priorityBadge(prioritas) {
-    if (!prioritas) return `<span class="pri-badge pri-normal">⚪ Normal</span>`;
+    if (!prioritas) return `<span style="font-size:12px;color:var(--text-muted)">—</span>`;
     const key = prioritas.toLowerCase();
-    const p = PRI_MAP[key] || { cls: 'pri-normal', label: prioritas };
+    const p = PRI_MAP[key];
+    if (!p) return `<span style="font-size:12px;color:var(--text-muted)">—</span>`;
     return `<span class="pri-badge ${p.cls}">${p.label}</span>`;
   }
 
