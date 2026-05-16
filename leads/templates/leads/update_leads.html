@@ -189,6 +189,28 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 .btn-save:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,.35); }
 .btn-save:disabled { background: #334155; cursor: not-allowed; transform: none; box-shadow: none; }
 
+/* priority selector in modal */
+.priority-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.pri-opt {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 6px; font-size: 11.5px; font-weight: 700;
+  border: 2px solid transparent; cursor: pointer; font-family: inherit;
+  transition: all .15s; letter-spacing: .02em;
+  background: #273549; color: #94a3b8; border-color: #3a506b;
+}
+.pri-opt:hover { border-color: #60a5fa; color: #93c5fd; }
+.pri-opt.selected { border-color: currentColor; }
+.pri-opt.opt-veryhigh { color: #f87171; }
+.pri-opt.opt-veryhigh.selected { background: rgba(239,68,68,.15); border-color: #f87171; }
+.pri-opt.opt-high { color: #fb923c; }
+.pri-opt.opt-high.selected { background: rgba(251,146,60,.15); border-color: #fb923c; }
+.pri-opt.opt-medium { color: #fbbf24; }
+.pri-opt.opt-medium.selected { background: rgba(251,191,36,.15); border-color: #fbbf24; }
+.pri-opt.opt-normal { color: #94a3b8; }
+.pri-opt.opt-normal.selected { background: rgba(148,163,184,.12); border-color: #94a3b8; }
+.pri-opt.opt-low { color: #4ade80; }
+.pri-opt.opt-low.selected { background: rgba(74,222,128,.1); border-color: #4ade80; }
+
 /* Toast */
 .toast { position: fixed; bottom: 22px; right: 22px; background: #1e293b; border: 1px solid #10b981; border-left: 4px solid #10b981; border-radius: var(--r); padding: 11px 18px; font-size: 12.5px; font-weight: 600; color: white; box-shadow: var(--shadow-lg); z-index: 2000; display: none; align-items: center; gap: 8px; }
 .toast.show { display: flex; animation: slideUp .28s ease; }
@@ -293,6 +315,17 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
       <div class="cs-label">Pindahkan ke Status</div>
       <div class="cs-value" id="cs-value">—</div>
     </div>
+
+    <div class="sec-label">Prioritas lead</div>
+    <div class="priority-selector" id="priority-selector">
+      <button class="pri-opt opt-veryhigh" data-pri="Sangat Tinggi" onclick="selectPriority(this)">🔴 Sangat Tinggi</button>
+      <button class="pri-opt opt-high"     data-pri="Tinggi"        onclick="selectPriority(this)">🟠 Tinggi</button>
+      <button class="pri-opt opt-medium"   data-pri="Sedang"        onclick="selectPriority(this)">🟡 Sedang</button>
+      <button class="pri-opt opt-normal"   data-pri="Normal"        onclick="selectPriority(this)">⚪ Normal</button>
+      <button class="pri-opt opt-low"      data-pri="Rendah"        onclick="selectPriority(this)">🟢 Rendah</button>
+    </div>
+
+    <div class="modal-divider"></div>
 
     <div class="sec-label">Tagging lead</div>
     <div class="tag-grid" id="tag-grid">
@@ -501,6 +534,9 @@ function openModal(lead) {
 
   renderPipeline();
 
+  // Set prioritas dari data lead
+  setPriorityUI(lead.prioritas);
+
   // Isi tag grid dari DB, tandai yang sudah dimiliki lead ini
   renderTagGrid(lead.tags || []);
 
@@ -517,6 +553,33 @@ function closeModal() {
 
 function handleOverlayClick(e) {
   if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ─────────────────────────────────────────────
+//  Priority selector
+// ─────────────────────────────────────────────
+function selectPriority(el) {
+  document.querySelectorAll('.pri-opt').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function setPriorityUI(prioritas) {
+  document.querySelectorAll('.pri-opt').forEach(b => b.classList.remove('selected'));
+  const normalized = (prioritas || 'Normal').toLowerCase();
+  const btn = Array.from(document.querySelectorAll('.pri-opt')).find(b =>
+    b.dataset.pri.toLowerCase() === normalized
+  );
+  // default ke Normal jika tidak ditemukan
+  if (btn) btn.classList.add('selected');
+  else {
+    const def = document.querySelector('.pri-opt.opt-normal');
+    if (def) def.classList.add('selected');
+  }
+}
+
+function getSelectedPriority() {
+  const sel = document.querySelector('.pri-opt.selected');
+  return sel ? sel.dataset.pri : 'Normal';
 }
 
 // ─────────────────────────────────────────────
@@ -602,9 +665,10 @@ function addNewTag() {
 async function saveUpdate() {
   if (!currentLead) return;
 
-  const status = STEP_LABELS[currentStep];
-  const notes  = document.getElementById('modal-notes').value.trim();
-  const tags   = [];
+  const status    = STEP_LABELS[currentStep];
+  const prioritas = getSelectedPriority();
+  const notes     = document.getElementById('modal-notes').value.trim();
+  const tags      = [];
   document.querySelectorAll('#tag-grid .tag-pill.selected').forEach(el => {
     tags.push(el.textContent.trim());
   });
@@ -618,10 +682,11 @@ async function saveUpdate() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
       body: JSON.stringify({
-        id_lead: currentLead.id_lead,
-        status:  status,
-        tags:    tags,
-        notes:   notes || null,
+        id_lead:   currentLead.id_lead,
+        status:    status,
+        prioritas: prioritas,
+        tags:      tags,
+        notes:     notes || null,
       })
     });
 
@@ -632,7 +697,7 @@ async function saveUpdate() {
     }
 
     closeModal();
-    showToast(`✅ ${currentLead.nama} → ${status} berhasil disimpan`);
+    showToast(`✅ ${currentLead.nama} → ${status} (${prioritas}) berhasil disimpan`);
     loadKanban(); // refresh board
 
   } catch (e) {

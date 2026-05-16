@@ -227,9 +227,10 @@ def api_update_lead_status(request):
     data = json.loads(request.body)
 
     id_lead = data.get("id_lead")
-    status = data.get("status")
-    tags = data.get("tags", [])
-    notes = data.get("notes")
+    status  = data.get("status")
+    tags    = data.get("tags", [])
+    notes   = data.get("notes")
+    prioritas = data.get("prioritas")
 
     try:
         lead = Leads.objects.get(id_lead=id_lead)
@@ -246,6 +247,20 @@ def api_update_lead_status(request):
             id_lead=lead,
             funnel_position=status
         )
+
+    # Update atau buat custom field prioritas
+    if prioritas:
+        cf_prioritas = CustomFields.objects.filter(id_lead=lead, field_name="prioritas").first()
+        if cf_prioritas:
+            cf_prioritas.value = prioritas
+            cf_prioritas.save()
+        else:
+            CustomFields.objects.create(
+                id=generate_id(CustomFields, "id", "CFD"),
+                id_lead=lead,
+                field_name="prioritas",
+                value=prioritas
+            )
 
     for label in tags:
         tag, created = Tag.objects.get_or_create(
@@ -268,10 +283,11 @@ def api_update_lead_status(request):
         )
 
     return JsonResponse({
-        "message": "Status dan tag berhasil diperbarui",
-        "id_lead": lead.id_lead,
-        "status": status,
-        "tags": tags
+        "message":   "Status, prioritas, dan tag berhasil diperbarui",
+        "id_lead":   lead.id_lead,
+        "status":    status,
+        "prioritas": prioritas,
+        "tags":      tags
     })
 
 def api_dashboard(request):
@@ -350,6 +366,7 @@ def api_distribusi_leads(request):
     for lead in leads_page:
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
         assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
+        prioritas_cf  = CustomFields.objects.filter(id_lead=lead, field_name="prioritas").first()
         data.append({
             "id_lead":     lead.id_lead,
             "nama":        lead.nama,
@@ -359,6 +376,7 @@ def api_distribusi_leads(request):
             "status":      campaign_lead.funnel_position if campaign_lead else "New",
             "assigned_to": assignment.id_user.nama       if assignment and assignment.id_user else None,
             "assigned_id": assignment.id_user.id_user    if assignment and assignment.id_user else None,
+            "prioritas":   prioritas_cf.value            if prioritas_cf else None,
         })
 
     return JsonResponse({
