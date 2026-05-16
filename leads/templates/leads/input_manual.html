@@ -82,7 +82,7 @@ body {
   display: flex; align-items: center; gap: 7px;
   font-size: 12px; font-weight: 500; color: var(--red);
   cursor: pointer; padding: 7px; border-radius: var(--radius-sm);
-  transition: background .15s;
+  transition: background .15s; text-decoration: none;
 }
 .logout-btn:hover { background: var(--red-lt); }
 
@@ -118,7 +118,6 @@ body {
 }
 .back-btn:hover { border-color: var(--faint); color: white; }
 .topbar-title { font-size: 14px; font-weight: 700; color: white; }
-.topbar-count { font-size: 12px; color: #64748b; font-family: 'DM Mono', monospace; }
 .topbar-right { display: flex; align-items: center; gap: 8px; }
 .icon-btn {
   width: 32px; height: 32px; border-radius: var(--radius-sm);
@@ -261,14 +260,18 @@ body {
   background: var(--dark-card); border: 1px solid var(--dark-border);
   border-radius: var(--radius-sm); margin-top: 4px; z-index: 50;
   box-shadow: var(--shadow-lg); overflow: hidden;
+  max-height: 200px; overflow-y: auto;
 }
 .tag-wrap-outer { position: relative; }
 .tag-suggestions.show { display: block; }
 .tag-sug-item {
   padding: 8px 12px; font-size: 12px; color: var(--faint);
   cursor: pointer; transition: background .12s;
+  display: flex; align-items: center; justify-content: space-between;
 }
 .tag-sug-item:hover { background: rgba(255,255,255,.05); color: white; }
+.tag-sug-item.loading-tags { color: #475569; font-style: italic; cursor: default; }
+.tag-sug-no-match { padding: 8px 12px; font-size: 12px; color: #475569; font-style: italic; }
 
 /* ── FORM FOOTER ── */
 .form-footer {
@@ -375,7 +378,7 @@ body {
   <a class="nav-item active" href="#"><span class="nav-icon">📝</span> Input Manual</a>
 
   <div class="sb-bottom">
-    <div class="logout-btn" onclick="doLogout()">🚪 Logout </div>
+    <a class="logout-btn" href="{% url 'login' %}">🚪 Logout</a>
   </div>
 </aside>
 
@@ -391,8 +394,7 @@ body {
       <span class="topbar-title">Tambah Lead Baru</span>
     </div>
     <div class="topbar-right">
-      <div class="icon-btn" title="Refresh">🔄</div>
-      <div class="icon-btn">🔔</div>
+      <div class="icon-btn" onclick="resetForm()" title="Reset form">🔄</div>
       <span class="active-label">✏️ Input Manual</span>
     </div>
   </div>
@@ -480,7 +482,7 @@ body {
           <span class="field-hint">Pilih produk</span>
         </div>
 
-        <!-- Dropdown assign ke sales — diisi dari API -->
+        <!-- Dropdown assign ke sales — diisi dari /api/sales/ -->
         <div class="form-group" id="fg-assign">
           <label class="form-label">Assign ke Sales</label>
           <select class="form-select" id="f-assign">
@@ -491,7 +493,7 @@ body {
 
         <!-- Priority -->
         <div class="form-group full">
-          <label class="form-label">Prioritas <span class="req">*</span></label>
+          <label class="form-label">Prioritas</label>
           <div class="priority-opts">
             <div class="priority-opt selected" data-val="Normal" onclick="selectPriority(this)">
               <div class="po-dot normal"></div>
@@ -509,21 +511,16 @@ body {
           <input type="hidden" id="f-prioritas" value="Normal">
         </div>
 
-        <!-- Tags -->
+        <!-- Tags — suggestions diambil dari /api/tags/ -->
         <div class="form-group full">
           <label class="form-label">Tagging Lead</label>
           <div class="tag-wrap-outer">
             <div class="tag-wrap" id="tag-wrap" onclick="document.getElementById('tag-field').focus()">
-              <input class="tag-input-field" id="tag-field" placeholder="Ketik tag lalu tekan Enter..">
+              <input class="tag-input-field" id="tag-field" placeholder="Ketik atau pilih tag..">
             </div>
             <div class="tag-suggestions" id="tag-suggestions">
-              <div class="tag-sug-item" onclick="addTag('Follow Up')">Follow Up</div>
-              <div class="tag-sug-item" onclick="addTag('Premium')">Premium</div>
-              <div class="tag-sug-item" onclick="addTag('Hangat')">Hangat</div>
-              <div class="tag-sug-item" onclick="addTag('Cold')">Cold</div>
-              <div class="tag-sug-item" onclick="addTag('Prioritas')">Prioritas</div>
-              <div class="tag-sug-item" onclick="addTag('Enterprise')">Enterprise</div>
-              <div class="tag-sug-item" onclick="addTag('Starter')">Starter</div>
+              <!-- Diisi dari /api/tags/ oleh loadTagSuggestions() -->
+              <div class="tag-sug-item loading-tags">Memuat tag...</div>
             </div>
           </div>
         </div>
@@ -574,31 +571,35 @@ body {
 
 <script>
 // ─────────────────────────────────────────
-//  INIT: cek session & proteksi admin-only
+//  Helper: CSRF token untuk POST request
+// ─────────────────────────────────────────
+function getCookie(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? v.pop() : '';
+}
+
+// ─────────────────────────────────────────
+//  INIT
 // ─────────────────────────────────────────
 (function initPage() {
   const userId   = "{{ request.session.user_id|default:'' }}";
   const userName = "{{ request.session.user_name|default:'' }}";
   const userRole = "{{ request.session.user_role|default:'' }}";
 
-  // Belum login → ke halaman login
   if (!userId) {
     window.location.href = "{% url 'login' %}";
     return;
   }
-
-  // Bukan admin → tolak akses
   if (userRole && userRole !== 'admin') {
     window.location.href = "{% url 'dashboard_analisis' %}";
     return;
   }
 
-  // Isi profil sidebar
   document.getElementById('sb-username').textContent = userName || 'Admin';
   document.getElementById('sb-role').textContent     = (userRole || 'admin').toUpperCase();
 
-  // Muat daftar sales untuk dropdown assign
   loadSalesList();
+  loadTagSuggestions();
 })();
 
 // ─────────────────────────────────────────
@@ -611,16 +612,64 @@ async function loadSalesList() {
     const sel  = document.getElementById('f-assign');
 
     (data.sales || []).forEach(s => {
-      const opt = document.createElement('option');
+      const opt       = document.createElement('option');
       opt.value       = s.id_user;
       opt.textContent = `${s.nama} (${s.lead_aktif} lead aktif)`;
       sel.appendChild(opt);
     });
   } catch (e) {
-    // Gagal muat sales — dropdown tetap tampil "Belum di-assign"
     console.warn('Gagal memuat daftar sales:', e);
   }
 }
+
+// ─────────────────────────────────────────
+//  LOAD TAG SUGGESTIONS dari /api/tags/
+// ─────────────────────────────────────────
+let allTagsDB = [];   // cache tag dari DB
+
+async function loadTagSuggestions() {
+  const box = document.getElementById('tag-suggestions');
+  try {
+    const res  = await fetch('/api/tags/');
+    const data = await res.json();
+    allTagsDB  = (data.tags || []).map(t => t.label_tag);
+
+    renderSuggestions(allTagsDB);
+  } catch (e) {
+    box.innerHTML = '<div class="tag-sug-item loading-tags">Gagal memuat tag</div>';
+    console.warn('Gagal memuat tags:', e);
+  }
+}
+
+// Render item suggestion dengan filter pencarian
+function renderSuggestions(list) {
+  const box = document.getElementById('tag-suggestions');
+  box.innerHTML = '';
+
+  if (list.length === 0) {
+    box.innerHTML = '<div class="tag-sug-no-match">Tidak ada tag yang cocok</div>';
+    return;
+  }
+
+  list.forEach(label => {
+    const item = document.createElement('div');
+    item.className   = 'tag-sug-item';
+    item.textContent = label;
+    item.onclick     = () => addTag(label);
+    box.appendChild(item);
+  });
+}
+
+// Filter suggestion saat user mengetik
+document.getElementById('tag-field').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  if (!q) {
+    renderSuggestions(allTagsDB);
+    return;
+  }
+  const filtered = allTagsDB.filter(t => t.toLowerCase().includes(q));
+  renderSuggestions(filtered);
+});
 
 // ─────────────────────────────────────────
 //  PROGRESS STEPS
@@ -629,7 +678,7 @@ function setProgress(step) {
   for (let i = 1; i <= 3; i++) {
     const el = document.getElementById(`step-${i}`);
     el.classList.remove('active', 'done');
-    if (i < step)      el.classList.add('done');
+    if (i < step)       el.classList.add('done');
     else if (i === step) el.classList.add('active');
   }
 }
@@ -646,19 +695,20 @@ function selectPriority(el) {
 // ─────────────────────────────────────────
 //  TAGS
 // ─────────────────────────────────────────
-const tags = new Set();
+const selectedTags = new Set();
 
 function addTag(val) {
   const v = val.trim();
-  if (!v || tags.has(v)) return;
-  tags.add(v);
+  if (!v || selectedTags.has(v)) return;
+  selectedTags.add(v);
   renderTags();
   document.getElementById('tag-field').value = '';
+  renderSuggestions(allTagsDB);   // reset filter
   document.getElementById('tag-suggestions').classList.remove('show');
 }
 
 function removeTag(val) {
-  tags.delete(val);
+  selectedTags.delete(val);
   renderTags();
 }
 
@@ -666,25 +716,27 @@ function renderTags() {
   const wrap  = document.getElementById('tag-wrap');
   const field = document.getElementById('tag-field');
   wrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
-  tags.forEach(t => {
+  selectedTags.forEach(t => {
     const chip = document.createElement('div');
     chip.className = 'tag-chip';
-    chip.innerHTML = `${t}<span class="tag-remove" onclick="removeTag('${t}')">×</span>`;
+    chip.innerHTML = `${t}<span class="tag-remove" onclick="removeTag('${t.replace(/'/g, "\\'")}')">×</span>`;
     wrap.insertBefore(chip, field);
   });
 }
 
+// Keyboard: Enter / , → tambah tag; Backspace → hapus tag terakhir
 document.getElementById('tag-field').addEventListener('keydown', function(e) {
   if ((e.key === 'Enter' || e.key === ',') && this.value.trim()) {
     e.preventDefault();
     addTag(this.value.trim());
   }
-  if (e.key === 'Backspace' && !this.value && tags.size) {
-    removeTag([...tags].pop());
+  if (e.key === 'Backspace' && !this.value && selectedTags.size) {
+    removeTag([...selectedTags].pop());
   }
 });
 
 document.getElementById('tag-field').addEventListener('focus', () => {
+  renderSuggestions(allTagsDB);
   document.getElementById('tag-suggestions').classList.add('show');
 });
 document.addEventListener('click', (e) => {
@@ -699,6 +751,11 @@ document.addEventListener('click', (e) => {
 document.getElementById('f-catatan').addEventListener('input', function() {
   document.getElementById('char-count').textContent = this.value.length;
   if (this.value.length > 0) setProgress(2);
+});
+
+// Progress step 2 saat mengisi field Lead
+['f-produk', 'f-sumber'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => setProgress(2));
 });
 
 // ─────────────────────────────────────────
@@ -722,7 +779,7 @@ function validate() {
 }
 
 // ─────────────────────────────────────────
-//  SAVE — kirim ke /api/leads/ (api_create_lead)
+//  SAVE — kirim ke database
 // ─────────────────────────────────────────
 async function saveForm() {
   if (!validate()) {
@@ -735,6 +792,9 @@ async function saveForm() {
   btn.disabled = true;
   setProgress(3);
 
+  const csrf = getCookie('csrftoken');
+  const tagList = [...selectedTags];
+
   const payload = {
     nama:        document.getElementById('f-nama').value.trim(),
     no_whatsapp: document.getElementById('f-telp').value.trim(),
@@ -744,41 +804,63 @@ async function saveForm() {
     prioritas:   document.getElementById('f-prioritas').value,
     catatan:     document.getElementById('f-catatan').value.trim(),
     status:      'New',
-    tags:        [...tags],
   };
 
   try {
-    // 1. Buat lead
-    const res  = await fetch('/api/leads/', {
+    // ── 1. Buat lead ──────────────────────────────────
+    const res1  = await fetch('/api/leads/', {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
       body:    JSON.stringify(payload),
     });
-    const data = await res.json();
+    const data1 = await res1.json();
+    if (!res1.ok) throw new Error(data1.error || 'Gagal menyimpan lead');
 
-    if (!res.ok) {
-      throw new Error(data.error || 'Gagal menyimpan lead');
-    }
+    const idLead = data1.id_lead;
 
-    const idLead = data.id_lead;
-
-    // 2. Assign ke sales jika dipilih
+    // ── 2. Assign ke sales (jika dipilih) ─────────────
     const assignId = document.getElementById('f-assign').value;
     if (assignId) {
-      await fetch('/api/assign/', {
+      const res2 = await fetch('/api/assign/', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
         body:    JSON.stringify({ id_lead: idLead, id_user: assignId }),
       });
+      if (!res2.ok) {
+        const d2 = await res2.json();
+        console.warn('Assign gagal:', d2.error);
+        // Tidak throw — lead tetap tersimpan meski assign gagal
+      }
     }
 
-    // 3. Tampilkan success overlay
-    const nama   = payload.nama;
-    const salesEl = document.getElementById('f-assign');
+    // ── 3. Simpan tags ke leads_tag ───────────────────
+    if (tagList.length > 0) {
+      const res3 = await fetch('/api/leads/update-status/', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+        body:    JSON.stringify({
+          id_lead: idLead,
+          status:  'New',   // status tetap New, hanya menambah tag
+          tags:    tagList,
+          notes:   null,
+        }),
+      });
+      if (!res3.ok) {
+        const d3 = await res3.json();
+        console.warn('Tagging gagal:', d3.error);
+      }
+    }
+
+    // ── 4. Tampilkan success overlay ──────────────────
+    const salesEl   = document.getElementById('f-assign');
     const salesNama = salesEl.options[salesEl.selectedIndex]?.text || '';
 
     document.getElementById('success-sub').textContent =
-      `Lead atas nama "${nama}" telah disimpan${assignId ? ' dan di-assign ke ' + salesNama.split(' (')[0] : ''}. Data siap untuk diproses.`;
+      `Lead atas nama "${payload.nama}" telah disimpan` +
+      (assignId ? ` dan di-assign ke ${salesNama.split(' (')[0]}` : '') +
+      (tagList.length ? ` dengan ${tagList.length} tag` : '') +
+      '. Data siap untuk diproses.';
+
     document.getElementById('success-id').textContent = `ID Lead: ${idLead}`;
     document.getElementById('success-overlay').classList.add('show');
 
@@ -806,7 +888,7 @@ function resetForm() {
   document.querySelectorAll('.priority-opt').forEach((o, i) => {
     o.classList.toggle('selected', i === 0);
   });
-  tags.clear();
+  selectedTags.clear();
   renderTags();
   document.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
   setProgress(1);
@@ -829,18 +911,12 @@ function showToast(msg, type = 'green') {
 }
 
 // ─────────────────────────────────────────
-//  LOGOUT
-// ─────────────────────────────────────────
-function doLogout() {
-  window.location.href = "{% url 'login' %}";
-}
-
-// ─────────────────────────────────────────
 //  LIVE ERROR CLEAR
 // ─────────────────────────────────────────
 ['f-nama','f-telp','f-email'].forEach(id => {
   document.getElementById(id).addEventListener('input', () => {
     document.getElementById('fg-' + id.replace('f-',''))?.classList.remove('has-error');
+    setProgress(2);
   });
 });
 ['f-sumber','f-produk'].forEach(id => {
