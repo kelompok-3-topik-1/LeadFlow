@@ -19,7 +19,7 @@ from .views import (
     api_distribusi_leads,
     api_sales_list,
     api_kanban_leads,
-    input_manual_page
+    input_manual_page,
     input_otomatis_page
 )
 
