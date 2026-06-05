@@ -894,6 +894,131 @@
   /* dots divider */
   .dots { color: var(--text-muted); letter-spacing: 2px; }
 
+  /* ── INPUT LEAD DROPDOWN ── */
+  .input-dropdown-wrap { position: relative; }
+
+  .input-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(37,99,235,0.13);
+    min-width: 190px;
+    z-index: 500;
+    overflow: hidden;
+  }
+  .input-dropdown-menu.open { display: block; }
+
+  .input-dropdown-menu button,
+  .input-dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.12s;
+  }
+  .input-dropdown-menu button:hover,
+  .input-dropdown-menu a:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .dropdown-divider { height: 1px; background: var(--border); margin: 0; }
+
+
+  .delete-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.80);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .delete-modal-overlay.show { display: flex; }
+
+  .delete-dialog {
+    background: #d9d9d9;
+    border-radius: 16px;
+    width: 380px;
+    max-width: 95vw;
+    padding: 36px 28px 28px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    animation: slideUp 0.25s ease;
+  }
+
+  .delete-question-mark {
+    color: #e22f2f;
+    font-size: 86px;
+    line-height: 0.85;
+    font-weight: 900;
+    margin-bottom: 18px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .delete-dialog p {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 24px;
+  }
+
+  .delete-dialog-actions {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .btn-delete-no {
+    min-width: 70px;
+    padding: 7px 20px;
+    border-radius: 5px;
+    background: #fff;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.13s;
+  }
+  .btn-delete-no:hover { background: #e5e5e5; }
+
+  .btn-delete-yes {
+    min-width: 70px;
+    padding: 7px 20px;
+    border-radius: 5px;
+    background: #d82222;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.13s;
+  }
+  .btn-delete-yes:hover { background: #b91c1c; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
   /* ── PRIORITY BADGE ── */
   .pri-badge {
     display: inline-flex;
@@ -974,9 +1099,20 @@
         </div>
         <div class="icon-btn" title="Pengaturan">⚙️</div>
         <div class="icon-btn" title="Notifikasi">🔔</div>
-        <button class="btn-primary" onclick="openAssignModal()">
-          ＋ Assign Lead
-        </button>
+        <div class="input-dropdown-wrap">
+          <button class="btn-primary" id="inputLeadBtn" type="button" aria-haspopup="true" aria-expanded="false">
+            ＋ Input leads
+          </button>
+          <div class="input-dropdown-menu" id="inputDropdown" role="menu">
+            <button type="button" role="menuitem" onclick="showPage('input');closeInputDropdown()">
+              ✏️ Input Manual
+            </button>
+            <div class="dropdown-divider"></div>
+            <a href="input-otomatis.html" role="menuitem">
+              📄 Input Otomatis
+            </a>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1014,6 +1150,8 @@
             <p>Sorted by latest activity</p>
           </div>
           <div class="table-actions">
+            <button class="btn-outline">☰ Columns</button>
+            <button class="btn-outline">⚡ Filter</button>
             <button class="btn-outline" onclick="exportCSV()">↓ Export</button>
             <div class="view-toggle">
               <div class="view-btn active" title="Grid">⊞</div>
@@ -1209,6 +1347,18 @@
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal()">Batal</button>
       <button class="btn-assign" onclick="doAssign()">Assign Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DELETE MODAL ═══════════════ -->
+<div class="delete-modal-overlay" id="deleteModal">
+  <div class="delete-dialog">
+    <div class="delete-question-mark">?</div>
+    <p>Yakin ingin menghapus lead ini?</p>
+    <div class="delete-dialog-actions">
+      <button class="btn-delete-no" onclick="closeDeleteModal()">Tidak</button>
+      <button class="btn-delete-yes" onclick="doDeleteLead()">Ya</button>
     </div>
   </div>
 </div>
@@ -1421,6 +1571,7 @@
             <div class="action-btns" style="justify-content:flex-end">
               <div class="action-btn" title="Hubungi via WA" onclick="openWA('${lead.no_whatsapp || ''}')">📞</div>
               <div class="action-btn" title="Assign ke Sales" onclick="openAssignModal('${lead.id_lead}')">✏️</div>
+              <div class="action-btn" title="Hapus lead" onclick="confirmDeleteLead('${lead.id_lead}')" style="color:var(--red)">🗑️</div>
             </div>
           </td>
         </tr>`;
@@ -1610,6 +1761,45 @@
   }
 
   // ═══════════════════════════════════════════════
+  //  HAPUS LEAD
+  // ═══════════════════════════════════════════════
+  let pendingDeleteLeadId = null;
+
+  function confirmDeleteLead(leadId) {
+    pendingDeleteLeadId = leadId;
+    document.getElementById('deleteModal').classList.add('show');
+  }
+
+  function closeDeleteModal() {
+    pendingDeleteLeadId = null;
+    document.getElementById('deleteModal').classList.remove('show');
+  }
+
+  async function doDeleteLead() {
+    if (!pendingDeleteLeadId) return;
+    const id = pendingDeleteLeadId;
+    closeDeleteModal();
+
+    try {
+      const res = await fetch(`/api/leads/${id}/`, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+      });
+
+      if (res.ok || res.status === 204) {
+        showToast('✅ Lead berhasil dihapus!');
+        loadLeads();
+        loadStats();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showToast(data.error || 'Gagal menghapus lead', true);
+      }
+    } catch (err) {
+      showToast('Error koneksi ke server', true);
+    }
+  }
+
+  // ═══════════════════════════════════════════════
   //  EXPORT CSV
   // ═══════════════════════════════════════════════
   async function exportCSV() {
@@ -1702,6 +1892,33 @@ function initApp() {
   loadStats();
   loadLeads();
 }
+
+  // ═══════════════════════════════════════════════
+  //  INPUT LEAD DROPDOWN
+  // ═══════════════════════════════════════════════
+  (function() {
+    const btn      = document.getElementById('inputLeadBtn');
+    const dropdown = document.getElementById('inputDropdown');
+    if (!btn || !dropdown) return;
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+    });
+    document.addEventListener('click', () => {
+      dropdown.classList.remove('open');
+      btn.setAttribute('aria-expanded', false);
+    });
+    dropdown.addEventListener('click', (e) => e.stopPropagation());
+  })();
+
+  function closeInputDropdown() {
+    const dropdown = document.getElementById('inputDropdown');
+    const btn      = document.getElementById('inputLeadBtn');
+    if (dropdown) dropdown.classList.remove('open');
+    if (btn) btn.setAttribute('aria-expanded', false);
+  }
 
 function doLogout() {
   window.location.href = "{% url 'login' %}";
