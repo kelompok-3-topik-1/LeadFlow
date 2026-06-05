@@ -1104,9 +1104,9 @@
             ＋ Input leads
           </button>
           <div class="input-dropdown-menu" id="inputDropdown" role="menu">
-            <button type="button" role="menuitem" onclick="showPage('input');closeInputDropdown()">
+            <a href="input-manual.html" role="menuitem">
               ✏️ Input Manual
-            </button>
+            </a>
             <div class="dropdown-divider"></div>
             <a href="input-otomatis.html" role="menuitem">
               📄 Input Otomatis
@@ -1213,94 +1213,6 @@
         <div class="pagination">
           <span class="pagination-info" id="pagination-info">—</span>
           <div class="pagination-btns" id="pagination-btns"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ════ PAGE 2: INPUT MANUAL ════ -->
-  <div class="page" id="page-input">
-    <div class="page-title" style="color:#94a3b8;padding:16px 28px 0;background:#0f172a">Input lead manual</div>
-    <div class="topbar" style="background:#1e293b;border-bottom-color:#334155">
-      <div class="topbar-left" style="gap:14px">
-        <button class="back-btn" onclick="showPage('lead-list')">← kembali</button>
-        <span class="topbar-title" style="color:white">Lead List</span>
-        <span class="topbar-count">— All total leads</span>
-      </div>
-      <div class="topbar-right">
-        <div class="search-box" style="background:#0f172a;border-color:#334155;color:#64748b">
-          <span>🔍</span>
-          <span>Search leads, phone, model...</span>
-        </div>
-        <div class="icon-btn" style="background:#0f172a;border-color:#334155;color:#94a3b8">⚙️</div>
-        <div class="icon-btn" style="background:#0f172a;border-color:#334155;color:#94a3b8">🔔</div>
-        <button class="btn-primary">＋ Assign Lead</button>
-        <span class="active-label">Input manual</span>
-      </div>
-    </div>
-
-    <div class="form-overlay">
-      <div class="form-card">
-        <div class="form-section-title">Informasi Kontak</div>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Nama lengkap <span>*</span></label>
-            <input class="form-input" type="text" placeholder="Masukkan nama..">
-          </div>
-          <div class="form-group">
-            <label class="form-label">No. telepon <span>*</span></label>
-            <input class="form-input" type="tel" placeholder="+62..">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email <span>*</span></label>
-            <input class="form-input" type="email" placeholder="Email@domain.com">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Sumber lead <span>*</span></label>
-            <select class="form-select">
-              <option value="" disabled selected>Pilih sumber..</option>
-              <option>Facebook</option>
-              <option>Instagram</option>
-              <option>Website</option>
-              <option>Twitter</option>
-              <option>Ads</option>
-              <option>Form</option>
-              <option>Referral</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-section-title">Informasi lead</div>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Produk yang diminati <span>*</span></label>
-            <select class="form-select">
-              <option value="" disabled selected>Pilih produk..</option>
-              <option>Produk A</option>
-              <option>Produk B</option>
-              <option>Produk C</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Prioritas <span>*</span></label>
-            <select class="form-select">
-              <option>Normal</option>
-              <option>Tinggi</option>
-              <option>Sangat Tinggi</option>
-            </select>
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Catatan awal</label>
-            <textarea class="form-textarea" placeholder="Informasi tambahan tentang lead ini.."></textarea>
-          </div>
-        </div>
-
-        <div class="form-footer">
-          <button class="btn-reset" onclick="resetForm()">Reset</button>
-          <button class="btn-save" onclick="saveForm()">Simpan lead</button>
         </div>
       </div>
     </div>
