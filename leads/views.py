@@ -90,6 +90,13 @@ def input_manual_page(request):
         return redirect('dashboard_analisis')
     return render(request, "leads/input_manual.html")
 
+def input_otomatis_page(request):
+    if not request.session.get('user_id'):
+        return redirect('login')
+    if request.session.get('user_role') != 'admin':
+        return redirect('dashboard_analisis')
+    return render(request, "leads/input_otomatis.html")
+
 def generate_id(model, field_name, prefix):
     values = model.objects.filter(
         **{f"{field_name}__startswith": prefix}
