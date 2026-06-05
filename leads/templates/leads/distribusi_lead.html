@@ -1099,7 +1099,9 @@
         </div>
         <div class="icon-btn" title="Pengaturan">⚙️</div>
         <div class="icon-btn" title="Notifikasi">🔔</div>
-        <div class="input-dropdown-wrap">
+
+
+        <div class="input-dropdown-wrap" style="display:none;">
           <button class="btn-primary" id="inputLeadBtn" type="button" aria-haspopup="true" aria-expanded="false">
             ＋ Input leads
           </button>
@@ -1107,12 +1109,15 @@
             <a href="{% url 'input_manual' %}" role="menuitem">
               ✏️ Input Manual
             </a>
+
             <div class="dropdown-divider"></div>
             <a href="{% url 'input_otomatis' %}" role="menuitem">
               📄 Input Otomatis
             </a>
           </div>
         </div>
+
+
       </div>
     </div>
 
@@ -1793,6 +1798,12 @@ function initApp() {
   const navInputManual = document.getElementById('nav-input-manual');
   if (navInputManual) {
     navInputManual.style.display = (currentRole === 'admin') ? 'flex' : 'none';
+  }
+
+   // Tampilkan / sembunyikan menu Input — hanya admin
+  const navInput= document.getElementById('input-dropdown-wrap');
+  if (navInput) {
+    navInput.style.display = (currentRole === 'admin') ? 'flex' : 'none';
   }
 
   // Tampilkan dashboard admin/user jika elemen ada
