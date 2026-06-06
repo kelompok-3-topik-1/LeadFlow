@@ -920,12 +920,7 @@
     <a class="nav-item" href="{% url 'update_leads' %}">
       <span class="nav-icon">📅</span> Update dan Segmentasi
     </a>
-    
-
-    <!-- Input Manual — hanya tampil untuk admin, dikontrol JS -->
-    <a class="nav-item" id="nav-input-manual" href="{% url 'input_manual' %}" style="display:none;">
-      <span class="nav-icon">📝</span> Input Manual
-    </a>
+  
 
     <div class="sb-bottom">
       <div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout</div>
@@ -1652,12 +1647,6 @@ function initApp() {
   // Update sidebar profile
   document.getElementById('sb-username').textContent = userName;
   document.getElementById('sb-role-text').textContent = userRole.toUpperCase();
-
-  // Tampilkan / sembunyikan menu Input Manual — hanya admin
-  const navInputManual = document.getElementById('nav-input-manual');
-  if (navInputManual) {
-    navInputManual.style.display = (currentRole === 'admin') ? 'flex' : 'none';
-  }
 
    // Tampilkan / sembunyikan menu Input — hanya admin
   const navInput= document.getElementById('inputDropdownWrap');
