@@ -486,32 +486,34 @@ def api_tags_list(request):
     tags = Tag.objects.all().values("id_tag", "label_tag")
     return JsonResponse({"tags": list(tags)})
 
-
-# ─────────────────────────────────────────────────────────────
-#  API Hapus Lead
-# ─────────────────────────────────────────────────────────────
-
 @csrf_exempt
-def api_delete_lead(request, id_lead):
-    """
-    DELETE /api/leads/<id_lead>/
-    Menghapus lead beserta semua data terkait (assignment, campaign_leads, custom_fields, leads_tag).
-    """
-    if request.method != "DELETE":
-        return JsonResponse({"error": "Method not allowed"}, status=405)
-
+def lead_detail(request, id):
     try:
-        lead = Leads.objects.get(id_lead=id_lead)
-    except Leads.DoesNotExist:
-        return JsonResponse({"error": "Lead tidak ditemukan"}, status=404)
+        lead = Lead.objects.get(id_lead=id)
+    except Lead.DoesNotExist:
+        return JsonResponse({'error': 'Lead tidak ditemukan'}, status=404)
 
-    # Hapus data relasi terlebih dahulu
-    Assignment.objects.filter(id_lead=lead).delete()
-    CampaignLeads.objects.filter(id_lead=lead).delete()
-    CustomFields.objects.filter(id_lead=lead).delete()
-    LeadsTag.objects.filter(id_leads=lead).delete()
+    if request.method == 'GET':
+        return JsonResponse({
+            'id_lead': lead.id_lead,
+            'nama': lead.nama,
+            'no_whatsapp': lead.no_whatsapp,
+            'email': lead.email,
+            'source': lead.source,
+            'produk': lead.produk,
+            'prioritas': lead.prioritas,
+            'status': lead.status,
+            'catatan': lead.catatan,
+        })
 
-    # Hapus lead utama
-    lead.delete()
+    elif request.method in ['PATCH', 'PUT']:
+        data = json.loads(request.body)
+        for field in ['nama','no_whatsapp','email','source','produk','prioritas','status','catatan']:
+            if field in data:
+                setattr(lead, field, data[field])
+        lead.save()
+        return JsonResponse({'ok': True})
 
-    return JsonResponse({"message": "Lead berhasil dihapus", "id_lead": id_lead}, status=200)
+    elif request.method == 'DELETE':
+        lead.delete()
+        return JsonResponse({'ok': True}, status=204)

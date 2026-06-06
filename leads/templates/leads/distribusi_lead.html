@@ -878,6 +878,112 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* ════════════════════════════════
+     EDIT LEAD MODAL
+  ════════════════════════════════ */
+  .edit-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.80);
+    z-index: 1500;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .edit-modal-overlay.show { display: flex; }
+
+  .edit-modal {
+    background: #1e293b;
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    width: 560px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.25s ease;
+  }
+
+  .edit-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .edit-modal-sub {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  .edit-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .edit-form-full {
+    grid-column: span 2;
+  }
+
+  .edit-field label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .edit-field input,
+  .edit-field select,
+  .edit-field textarea {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: var(--radius-sm);
+    color: #e2e8f0;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+  }
+  .edit-field input:focus,
+  .edit-field select:focus,
+  .edit-field textarea:focus { border-color: var(--accent); }
+
+  .edit-field textarea {
+    height: 80px;
+    resize: vertical;
+  }
+
+  .edit-field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+  }
+
+  .edit-section-label {
+    grid-column: span 2;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 6px;
+    border-top: 1px solid #334155;
+    margin-top: 4px;
+  }
+
   /* ── PRIORITY BADGE ── */
   .pri-badge {
     display: inline-flex;
@@ -1101,6 +1207,87 @@
   </div>
 
 </main>
+
+<!-- ═══════════════ EDIT LEAD MODAL ═══════════════ -->
+<div class="edit-modal-overlay" id="editLeadModal" onclick="handleEditModalClose(event)">
+  <div class="edit-modal" id="editModalBox">
+    <div class="edit-modal-title">Edit Detail Lead</div>
+    <div class="edit-modal-sub">INFORMASI KONTAK</div>
+
+    <div class="edit-form-grid">
+      <div class="edit-field">
+        <label>Nama Lengkap *</label>
+        <input type="text" id="edit-nama" placeholder="Masukkan nama..">
+      </div>
+      <div class="edit-field">
+        <label>No. WhatsApp *</label>
+        <input type="tel" id="edit-wa" placeholder="+62...">
+      </div>
+      <div class="edit-field">
+        <label>Email *</label>
+        <input type="email" id="edit-email" placeholder="email@gmail.com">
+      </div>
+      <div class="edit-field">
+        <label>Sumber Lead *</label>
+        <select id="edit-source">
+          <option value="">Pilih sumber..</option>
+          <option value="Website">Website</option>
+          <option value="Facebook">Facebook</option>
+          <option value="Instagram">Instagram</option>
+          <option value="TikTok">TikTok</option>
+          <option value="Twitter">Twitter</option>
+          <option value="Ads">Ads</option>
+          <option value="Referral">Referral</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Google">Google</option>
+        </select>
+      </div>
+
+      <div class="edit-section-label">INFORMASI LEAD</div>
+
+      <div class="edit-field">
+        <label>Produk yang Diminati</label>
+        <select id="edit-produk">
+          <option value="">Pilih produk..</option>
+          <option value="Produk A">Produk A</option>
+          <option value="Produk B">Produk B</option>
+          <option value="Produk C">Produk C</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label>Prioritas</label>
+        <select id="edit-prioritas">
+          <option value="Normal">⚪ Normal</option>
+          <option value="Rendah">🟢 Rendah</option>
+          <option value="Sedang">🟡 Sedang</option>
+          <option value="Tinggi">🟠 Tinggi</option>
+          <option value="Sangat Tinggi">🔴 Sangat Tinggi</option>
+        </select>
+      </div>
+      <div class="edit-field edit-form-full">
+        <label>Status</label>
+        <select id="edit-status">
+          <option value="New">New</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Qualified">Qualified</option>
+          <option value="Proposal">Proposal</option>
+          <option value="Closed Won">Closed Won</option>
+          <option value="Closed Lost">Closed Lost</option>
+          <option value="Nurture">Nurture</option>
+        </select>
+      </div>
+      <div class="edit-field edit-form-full">
+        <label>Catatan</label>
+        <textarea id="edit-catatan" placeholder="Informasi tambahan tentang lead ini..."></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeEditModal()">Batal</button>
+      <button class="btn-assign" onclick="doEditLead()">💾 Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════ ASSIGN MODAL ═══════════════ -->
 <div class="modal-overlay" id="assignModal" onclick="handleModalClose(event)">
@@ -1340,9 +1527,12 @@
           <td>${assignedEl}</td>
           <td>
             <div class="action-btns" style="justify-content:flex-end">
-              <div class="action-btn" title="Hubungi via WA" onclick="openWA('${lead.no_whatsapp || ''}')">📞</div>
-              <div class="action-btn" title="Assign ke Sales" onclick="openAssignModal('${lead.id_lead}')">✏️</div>
-              <div class="action-btn" title="Hapus lead" onclick="confirmDeleteLead('${lead.id_lead}')" style="color:var(--red)">🗑️</div>
+              <div class="action-btn" title="Edit lead" onclick="openEditModal('${lead.id_lead}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              </div>
+              <div class="action-btn" title="Hapus lead" onclick="confirmDeleteLead('${lead.id_lead}')" style="color:var(--red)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M3 6h18M8 6V4h8v2M7 6l1 16h8l1-16"/><path d="M10 11v6M14 11v6"/></svg>
+              </div>
             </div>
           </td>
         </tr>`;
@@ -1525,6 +1715,84 @@
         loadStats();
       } else {
         showToast(data.error || 'Gagal menyimpan lead', true);
+      }
+    } catch (err) {
+      showToast('Error koneksi ke server', true);
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  EDIT LEAD
+  // ═══════════════════════════════════════════════
+  let editingLeadId = null;
+
+  async function openEditModal(leadId) {
+    editingLeadId = leadId;
+
+    // Fetch data lead terbaru dari API
+    try {
+      const res  = await fetch(`/api/leads/${leadId}/`);
+      const lead = await res.json();
+
+      document.getElementById('edit-nama').value      = lead.nama || '';
+      document.getElementById('edit-wa').value        = lead.no_whatsapp || '';
+      document.getElementById('edit-email').value     = lead.email || '';
+      document.getElementById('edit-source').value    = lead.source || '';
+      document.getElementById('edit-produk').value    = lead.produk || '';
+      document.getElementById('edit-prioritas').value = lead.prioritas || 'Normal';
+      document.getElementById('edit-status').value    = lead.status || 'New';
+      document.getElementById('edit-catatan').value   = lead.catatan || '';
+
+    } catch (err) {
+      showToast('Gagal memuat data lead', true); return;
+    }
+
+    document.getElementById('editLeadModal').classList.add('show');
+  }
+
+  function closeEditModal() {
+    editingLeadId = null;
+    document.getElementById('editLeadModal').classList.remove('show');
+  }
+
+  function handleEditModalClose(e) {
+    if (e.target === document.getElementById('editLeadModal')) closeEditModal();
+  }
+
+  async function doEditLead() {
+    if (!editingLeadId) return;
+
+    const nama      = document.getElementById('edit-nama').value.trim();
+    const no_wa     = document.getElementById('edit-wa').value.trim();
+    const email     = document.getElementById('edit-email').value.trim();
+    const source    = document.getElementById('edit-source').value;
+    const produk    = document.getElementById('edit-produk').value;
+    const prioritas = document.getElementById('edit-prioritas').value;
+    const status    = document.getElementById('edit-status').value;
+    const catatan   = document.getElementById('edit-catatan').value.trim();
+
+    if (!nama || !no_wa || !email || !source) {
+      showToast('Lengkapi data yang wajib diisi!', true); return;
+    }
+
+    try {
+      const res = await fetch(`/api/leads/${editingLeadId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ nama, no_whatsapp: no_wa, email, source, produk, prioritas, status, catatan }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        closeEditModal();
+        showToast('✅ Lead berhasil diperbarui!');
+        loadLeads();
+        loadStats();
+      } else {
+        showToast(data.error || 'Gagal memperbarui lead', true);
       }
     } catch (err) {
       showToast('Error koneksi ke server', true);
