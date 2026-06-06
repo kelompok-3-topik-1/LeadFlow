@@ -19,6 +19,7 @@ from .views import (
     api_distribusi_leads,
     api_sales_list,
     api_kanban_leads,
+    api_delete_lead,
     input_manual_page,
     input_otomatis_page
 )
@@ -46,4 +47,5 @@ urlpatterns = [
     path('api/distribusi/stats/', api_distribusi_stats, name='api_distribusi_stats'),
     path('api/distribusi/leads/', api_distribusi_leads, name='api_distribusi_leads'),
     path('api/sales/', api_sales_list, name='api_sales_list'),
+    path('api/leads/<str:id_lead>/', api_delete_lead, name='api_delete_lead'),
 ]
