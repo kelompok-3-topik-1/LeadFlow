@@ -47,6 +47,19 @@ class CustomFields(models.Model):
         managed = False
         db_table = 'custom_fields'
 
+class CustomColumn(models.Model):
+    TYPE_CHOICES = [('text','Text'), ('date','Date'), ('dropdown','Dropdown')]
+    id_col     = models.AutoField(primary_key=True)
+    name       = models.CharField(max_length=100, unique=True)
+    col_type   = models.CharField(max_length=20, choices=TYPE_CHOICES, default='text')
+    options    = models.JSONField(default=list, blank=True)
+    col_order  = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['col_order', 'created_at']
+        db_table = 'custom_column'
+
 
 class Leads(models.Model):
     id_lead = models.CharField(db_column='ID_lead', primary_key=True, max_length=10)  # Field name made lowercase.
@@ -155,3 +168,4 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
+

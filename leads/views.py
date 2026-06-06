@@ -15,6 +15,7 @@ from .models import (
     Tag,
     LeadsTag,
     CustomFields,
+    CustomColumn,
 )
 
 def login_view(request):
@@ -349,7 +350,7 @@ def api_distribusi_leads(request):
     page          = int(request.GET.get("page", 1))
     per_page      = int(request.GET.get("per_page", 10))
 
-    leads_qs = Leads.objects.all()
+    leads_qs = Leads.objects.prefetch_related('customfields_set').all()
 
     if search_query:
         leads_qs = leads_qs.filter(
@@ -373,17 +374,22 @@ def api_distribusi_leads(request):
     for lead in leads_page:
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
         assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
-        prioritas_cf  = CustomFields.objects.filter(id_lead=lead, field_name="prioritas").first()
+
+        # Ambil semua custom fields sekaligus dari prefetch
+        cf_all = {cf.field_name: cf.value for cf in lead.customfields_set.all()}
+
         data.append({
-            "id_lead":     lead.id_lead,
-            "nama":        lead.nama,
-            "email":       lead.email,
-            "no_whatsapp": lead.no_whatsapp,
-            "source":      campaign_lead.source          if campaign_lead else None,
-            "status":      campaign_lead.funnel_position if campaign_lead else "New",
-            "assigned_to": assignment.id_user.nama       if assignment and assignment.id_user else None,
-            "assigned_id": assignment.id_user.id_user    if assignment and assignment.id_user else None,
-            "prioritas":   prioritas_cf.value            if prioritas_cf else None,
+            "id_lead":       lead.id_lead,
+            "nama":          lead.nama,
+            "email":         lead.email,
+            "no_whatsapp":   lead.no_whatsapp,
+            "source":        campaign_lead.source          if campaign_lead else None,
+            "status":        campaign_lead.funnel_position if campaign_lead else "New",
+            "assigned_to":   assignment.id_user.nama       if assignment and assignment.id_user else None,
+            "assigned_id":   assignment.id_user.id_user    if assignment and assignment.id_user else None,
+            "prioritas":     cf_all.get("prioritas"),
+            # custom_fields: key = id_col (string), value = nilai — dipakai kolom kustom
+            "custom_fields": {k: v for k, v in cf_all.items() if k.isdigit()},
         })
 
     return JsonResponse({
@@ -489,31 +495,242 @@ def api_tags_list(request):
 @csrf_exempt
 def lead_detail(request, id):
     try:
-        lead = Lead.objects.get(id_lead=id)
-    except Lead.DoesNotExist:
+        lead = Leads.objects.get(id_lead=id)
+    except Leads.DoesNotExist:
         return JsonResponse({'error': 'Lead tidak ditemukan'}, status=404)
 
     if request.method == 'GET':
+        campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
+        cf = {row.field_name: row.value for row in CustomFields.objects.filter(id_lead=lead)}
         return JsonResponse({
-            'id_lead': lead.id_lead,
-            'nama': lead.nama,
+            'id_lead':     lead.id_lead,
+            'nama':        lead.nama,
             'no_whatsapp': lead.no_whatsapp,
-            'email': lead.email,
-            'source': lead.source,
-            'produk': lead.produk,
-            'prioritas': lead.prioritas,
-            'status': lead.status,
-            'catatan': lead.catatan,
+            'email':       lead.email,
+            'source':      campaign_lead.source          if campaign_lead else None,
+            'status':      campaign_lead.funnel_position if campaign_lead else 'New',
+            'produk':      cf.get('produk'),
+            'prioritas':   cf.get('prioritas'),
+            'catatan':     cf.get('catatan'),
         })
 
     elif request.method in ['PATCH', 'PUT']:
         data = json.loads(request.body)
-        for field in ['nama','no_whatsapp','email','source','produk','prioritas','status','catatan']:
+
+        # Update field di tabel Leads
+        for field in ['nama', 'no_whatsapp', 'email']:
             if field in data:
                 setattr(lead, field, data[field])
         lead.save()
+
+        # Update source & status di CampaignLeads
+        campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
+        if campaign_lead:
+            if 'source' in data:
+                campaign_lead.source = data['source']
+            if 'status' in data:
+                campaign_lead.funnel_position = data['status']
+            campaign_lead.save()
+        else:
+            CampaignLeads.objects.create(
+                id=generate_id(CampaignLeads, "id", "PIP"),
+                id_lead=lead,
+                funnel_position=data.get('status', 'New'),
+                source=data.get('source'),
+            )
+
+        # Update field di CustomFields (produk, prioritas, catatan)
+        for field in ['produk', 'prioritas', 'catatan']:
+            if field in data:
+                cf = CustomFields.objects.filter(id_lead=lead, field_name=field).first()
+                if cf:
+                    cf.value = data[field]
+                    cf.save()
+                else:
+                    CustomFields.objects.create(
+                        id=generate_id(CustomFields, "id", "CFD"),
+                        id_lead=lead,
+                        field_name=field,
+                        value=data[field],
+                    )
+
         return JsonResponse({'ok': True})
 
     elif request.method == 'DELETE':
         lead.delete()
-        return JsonResponse({'ok': True}, status=204)
+        return JsonResponse({'ok': True}, status=200)
+
+
+# ─────────────────────────────────────────────────────────────
+#  API Custom Columns
+# ─────────────────────────────────────────────────────────────
+
+def _col_to_dict(col):
+    return {
+        'id':      str(col.id_col),
+        'name':    col.name,
+        'type':    col.col_type,
+        'options': col.options or [],
+        'order':   col.col_order,
+    }
+
+def _get_builtin_prefs(request):
+    return request.session.get('col_builtin_prefs', {
+        'nama': True, 'status': True, 'prioritas': True,
+        'source': True, 'assigned_to': True,
+    })
+
+def _set_builtin_prefs(request, prefs):
+    request.session['col_builtin_prefs'] = prefs
+    request.session.modified = True
+
+
+@csrf_exempt
+def columns_list(request):
+    if request.method == 'GET':
+        return JsonResponse({
+            'builtin': _get_builtin_prefs(request),
+            'custom':  [_col_to_dict(c) for c in CustomColumn.objects.all()],
+        })
+
+    if request.method == 'POST':
+        try:
+            payload = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Body tidak valid'}, status=400)
+
+        action = payload.get('action')
+
+        if action == 'toggle_builtin':
+            key     = payload.get('key', '')
+            visible = bool(payload.get('visible', True))
+            VALID   = {'nama', 'status', 'prioritas', 'source', 'assigned_to'}
+            if key not in VALID:
+                return JsonResponse({'error': f'Key tidak valid: {key}'}, status=400)
+            if key == 'nama' and not visible:
+                return JsonResponse({'error': 'Kolom nama tidak bisa dinonaktifkan'}, status=400)
+            prefs      = _get_builtin_prefs(request)
+            prefs[key] = visible
+            _set_builtin_prefs(request, prefs)
+            return JsonResponse({'ok': True, 'key': key, 'visible': visible})
+
+        elif action == 'add_custom':
+            name     = (payload.get('name') or '').strip()
+            col_type = payload.get('type', 'text')
+            options  = payload.get('options', [])
+
+            if not name:
+                return JsonResponse({'error': 'Nama kolom wajib diisi'}, status=400)
+            if len(name) > 100:
+                return JsonResponse({'error': 'Nama kolom maksimal 100 karakter'}, status=400)
+            if col_type not in ('text', 'date', 'dropdown'):
+                return JsonResponse({'error': 'Tipe tidak valid'}, status=400)
+            if col_type == 'dropdown' and not options:
+                return JsonResponse({'error': 'Dropdown butuh minimal 1 pilihan'}, status=400)
+            if CustomColumn.objects.filter(name__iexact=name).exists():
+                return JsonResponse({'error': f'Kolom "{name}" sudah ada'}, status=400)
+
+            col = CustomColumn.objects.create(
+                name      = name,
+                col_type  = col_type,
+                options   = [str(o).strip() for o in options if str(o).strip()],
+                col_order = CustomColumn.objects.count(),
+            )
+            return JsonResponse({'ok': True, 'column': _col_to_dict(col)}, status=201)
+
+        elif action == 'reorder':
+            for idx, col_id in enumerate(payload.get('ids', [])):
+                try:
+                    CustomColumn.objects.filter(id_col=col_id).update(col_order=idx)
+                except Exception:
+                    pass
+            return JsonResponse({'ok': True})
+
+        return JsonResponse({'error': f'Action tidak dikenal: {action}'}, status=400)
+
+    return JsonResponse({'error': 'Method tidak didukung'}, status=405)
+
+
+@csrf_exempt
+def column_detail(request, col_id):
+    try:
+        col = CustomColumn.objects.get(id_col=col_id)
+    except CustomColumn.DoesNotExist:
+        return JsonResponse({'error': 'Kolom tidak ditemukan'}, status=404)
+
+    if request.method == 'GET':
+        return JsonResponse(_col_to_dict(col))
+
+    if request.method == 'PATCH':
+        try:
+            payload = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Body tidak valid'}, status=400)
+
+        if 'name' in payload:
+            name = payload['name'].strip()
+            if not name:
+                return JsonResponse({'error': 'Nama tidak boleh kosong'}, status=400)
+            if CustomColumn.objects.filter(name__iexact=name).exclude(id_col=col.id_col).exists():
+                return JsonResponse({'error': f'Nama "{name}" sudah dipakai'}, status=400)
+            col.name = name
+
+        if 'options' in payload and col.col_type == 'dropdown':
+            opts = [str(o).strip() for o in payload['options'] if str(o).strip()]
+            if not opts:
+                return JsonResponse({'error': 'Dropdown butuh minimal 1 pilihan'}, status=400)
+            col.options = opts
+
+        col.save()
+        return JsonResponse({'ok': True, 'column': _col_to_dict(col)})
+
+    if request.method == 'DELETE':
+        deleted_count = CustomFields.objects.filter(field_name=str(col.id_col)).delete()[0]
+        col.delete()
+        return JsonResponse({'ok': True, 'deleted_fields': deleted_count})
+
+    return JsonResponse({'error': 'Method tidak didukung'}, status=405)
+
+
+@csrf_exempt
+def lead_custom_fields(request, lead_id):
+    if request.method not in ('PATCH', 'PUT', 'POST'):
+        return JsonResponse({'error': 'Method tidak didukung'}, status=405)
+
+    try:
+        lead = Leads.objects.get(id_lead=lead_id)
+    except Leads.DoesNotExist:
+        return JsonResponse({'error': 'Lead tidak ditemukan'}, status=404)
+
+    try:
+        payload = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Body tidak valid'}, status=400)
+
+    updated = {}
+    for col_id_str, value in payload.items():
+        try:
+            col = CustomColumn.objects.get(id_col=int(col_id_str))
+        except (CustomColumn.DoesNotExist, ValueError):
+            continue
+
+        value_str = str(value).strip() if value is not None else ''
+
+        if col.col_type == 'dropdown' and value_str and value_str not in col.options:
+            continue
+
+        existing = CustomFields.objects.filter(id_lead=lead, field_name=str(col.id_col)).first()
+        if existing:
+            existing.value = value_str
+            existing.save()
+        else:
+            CustomFields.objects.create(
+                id=generate_id(CustomFields, "id", "CFD"),
+                id_lead=lead,
+                field_name=str(col.id_col),
+                value=value_str,
+            )
+
+        updated[col_id_str] = value_str
+
+    return JsonResponse({'ok': True, 'updated': updated})
