@@ -557,8 +557,15 @@ def lead_detail(request, id):
         return JsonResponse({'ok': True})
 
     elif request.method == 'DELETE':
+
+        Assignment.objects.filter(id_lead=lead).delete()
+        CampaignLeads.objects.filter(id_lead=lead).delete()
+        CustomFields.objects.filter(id_lead=lead).delete()
+        LeadsTag.objects.filter(id_leads=lead).delete()
+
         lead.delete()
-        return JsonResponse({'ok': True}, status=200)
+
+        return JsonResponse({'ok': True})
 
 
 # ─────────────────────────────────────────────────────────────
