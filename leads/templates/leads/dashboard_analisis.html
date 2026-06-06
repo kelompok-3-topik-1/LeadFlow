@@ -151,7 +151,7 @@ td{padding:11px 16px;vertical-align:middle;}
 .page-btn.next{padding:0 10px;width:auto;}
 .page-btn.prev{padding:0 10px;width:auto;}
 
-/* ══ USER DASHBOARD ══ 
+/* ══ USER DASHBOARD ══ */
 .user-content{padding:20px 26px;flex:1;display:flex;flex-direction:column;gap:18px;}
 .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:680px;margin:0 auto;width:100%;}
 .kpi-card{border-radius:var(--radius);padding:28px 26px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-md);transition:all .2s;cursor:default;}
@@ -358,7 +358,7 @@ td{padding:11px 16px;vertical-align:middle;}
           <div class="icon-btn">🔔</div>
         </div>
       </div>
-      <!-- 
+       
       <div class="user-content">
         <div class="kpi-grid">
           <div class="kpi-card pink">
@@ -395,7 +395,7 @@ td{padding:11px 16px;vertical-align:middle;}
             <div class="mini-kpi-label">Belum Assign</div>
           </div>
         </div>
-        -->
+        
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);max-width:680px;margin:0 auto;width:100%;">
           <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">ℹ️ Informasi Akses</div>
           <div style="font-size:13px;color:var(--text-2);line-height:1.65;">Dashboard ini menampilkan ringkasan metrik kampanye. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.</div>
@@ -725,22 +725,26 @@ async function loadAll() {
 //  INIT: deteksi role dari session Django
 // ────────────────────────────────────────────
 function initApp() {
-  // Ambil dari session yang dirender oleh Django template
   const userId   = "{{ request.session.user_id|default:'' }}";
   const userName = "{{ request.session.user_name|default:'' }}";
-  const userRole = "{{ request.session.user_role|default:'' }}";  // tambahkan ini di views.py jika belum
+  const userRole = "{{ request.session.user_role|default:'' }}";
 
   if (!userId) {
-    // Belum login → redirect ke halaman login
     window.location.href = "{% url 'login' %}";
     return;
   }
 
-  currentRole = userRole || 'admin'; // fallback admin jika role belum disimpan di session
+  currentRole = userRole || 'admin';
 
-  // Update sidebar profile
   document.getElementById('sb-username').textContent = userName || 'User';
   document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
+
+  // ✅ TAMBAHKAN INI — tampilkan dashboard sesuai role
+  if (currentRole === 'admin') {
+    document.getElementById('dash-admin').style.display = 'flex';
+  } else {
+    document.getElementById('dash-user').style.display = 'flex';
+  }
 
   loadAll();
 }
