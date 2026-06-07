@@ -5,12 +5,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count, Q
 from django.utils import timezone
 import re
+from django.db.models import Count
 
 from .models import (
     Users,
     LoginLogs,
     Leads,
     Assignment,
+    Campaign,
     CampaignLeads,
     Tag,
     LeadsTag,
@@ -113,6 +115,7 @@ def generate_id(model, field_name, prefix):
 
     new_number = max_number + 1
     return f"{prefix}{new_number:03d}"
+
 
 @csrf_exempt
 def api_login(request):
@@ -315,12 +318,21 @@ def api_dashboard(request):
         .annotate(total=Count("id"))
     )
 
+    product_counts = (
+        CustomFields.objects
+        .filter(field_name='produk')
+        .values('value')
+        .annotate(total=Count('id'))
+        .order_by('-total')
+    )
+
     return JsonResponse({
         "total_leads": total_leads,
         "assigned": assigned,
         "unassigned": unassigned,
         "status_counts": list(status_counts),
         "source_counts": list(source_counts),
+        "product_counts": list(product_counts)
     })
 
 
@@ -741,3 +753,4 @@ def lead_custom_fields(request, lead_id):
         updated[col_id_str] = value_str
 
     return JsonResponse({'ok': True, 'updated': updated})
+

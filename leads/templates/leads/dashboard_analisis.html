@@ -91,13 +91,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .pie-wrap{display:flex;justify-content:center;}
 .pie-svg{width:180px;height:180px;}
 
-/* INFO CARD */
+
+/* INFO CARD 
 .info-card{background:var(--navy);border-radius:var(--radius);padding:28px 30px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow-md);position:relative;overflow:hidden;}
 .info-card::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(37,99,235,.12);}
 .info-card::after{content:'';position:absolute;bottom:-60px;left:-20px;width:150px;height:150px;border-radius:50%;background:rgba(96,165,250,.07);}
 .info-tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:12px;}
 .info-title{font-size:20px;font-weight:800;color:white;margin-bottom:14px;letter-spacing:-.01em;}
 .info-body{font-size:12.5px;color:#94a3b8;line-height:1.7;position:relative;z-index:1;}
+*/
 
 /* ── ALL LEADS TABLE ── */
 .table-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
@@ -271,8 +273,23 @@ td{padding:11px 16px;vertical-align:middle;}
             </div>
             <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="pie-summary">—</div>
           </div>
+          
+          <!-- produk info card-->
+           <div class="chart-card">
+            <div class="chart-card-title">Produk Terpopuler</div>
+            <div class="chart-legend" id="produk-legend">
+              <span style="font-size:12px;color:var(--text-3)">Memuat data...</span>
+            </div>
+            <div class="pie-wrap">
+              <svg class="pie-svg" id="produk-svg" viewBox="0 0 180 180">
+                <circle cx="90" cy="90" r="60" fill="#e2e8f0"/>
+                <text x="90" y="95" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="DM Sans">Memuat...</text>
+              </svg>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="produk-summary">—</div>
+          </div>
 
-          <!-- Info Card -->
+          <!-- Info Card 
           <div class="info-card">
             <div class="info-tag">✦ Tentang Sistem</div>
             <div class="info-title">what is LEADFLOW?</div>
@@ -281,7 +298,8 @@ td{padding:11px 16px;vertical-align:middle;}
             </div>
           </div>
         </div>
-
+        -->
+        
         <!-- All Leads Table -->
         <div class="table-section">
           <div class="table-head-bar">
@@ -551,6 +569,50 @@ function buildPie(sourceCounts) {
   document.getElementById('pie-summary').textContent = `Total ${total} leads dari ${sourceCounts.length} sumber`;
 }
 
+function buildProduk(sourceCounts) {
+    const total = sourceCounts.reduce((s, r) => s + r.total, 0);
+    if (!total) return;
+
+    const svg = document.getElementById('produk-svg');     // ← fix ID
+    const legend = document.getElementById('produk-legend'); // ← fix ID
+    const cx = 90, cy = 90, r = 72;
+
+    let html = '';
+    let legendHtml = '';
+    let startAngle = -Math.PI / 2;
+
+    sourceCounts.forEach((row, i) => {
+        const pct = row.total / total;
+        const angle = pct * 2 * Math.PI;
+        const endAngle = startAngle + angle;
+        const x1 = cx + r * Math.cos(startAngle);
+        const y1 = cy + r * Math.sin(startAngle);
+        const x2 = cx + r * Math.cos(endAngle);
+        const y2 = cy + r * Math.sin(endAngle);
+        const large = angle > Math.PI ? 1 : 0;
+        const color = PIE_COLORS[i % PIE_COLORS.length];
+
+        html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${color}"/>`;
+
+        const midA = startAngle + angle / 2;
+        const lx = cx + (r * 0.6) * Math.cos(midA);
+        const ly = cy + (r * 0.6) * Math.sin(midA);
+        const pctStr = Math.round(pct * 100) + '%';
+        if (pct > 0.05) {
+            html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${row.nama_camp || 'Lainnya'}</text>`;
+            html += `<text x="${lx}" y="${ly + 9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
+        }
+
+        legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${row.nama_camp || 'Lainnya'} — ${row.total} leads (${pctStr})</div>`;
+        startAngle = endAngle;
+    });
+
+    svg.innerHTML = html;
+    legend.innerHTML = legendHtml;
+    document.getElementById('produk-summary').textContent = 
+        `Total ${total} leads dari ${sourceCounts.length} campaign`;  // ← fix ID
+}
+
 // ────────────────────────────────────────────
 //  RENDER LEADS TABLE
 // ────────────────────────────────────────────
@@ -703,6 +765,15 @@ async function loadAll() {
     if (dash.source_counts && dash.source_counts.length) {
       buildPie(dash.source_counts.map(r => ({ source: r.source, total: r.total })));
     }
+
+      // Produk terpopuler
+    if (dash.product_counts && dash.product_counts.length) {
+      buildProduk(dash.product_counts.map(r => ({ 
+      nama_camp: r.value,  // ← dari CustomFields.value
+      total: r.total 
+      })));
+    }
+
   }
 
   if (stats) {
