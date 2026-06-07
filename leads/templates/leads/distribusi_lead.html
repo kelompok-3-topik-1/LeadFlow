@@ -1674,9 +1674,9 @@
         <input type="email" id="edit-email" placeholder="email@gmail.com">
       </div>
       <div class="edit-field">
-        <label>Sumber Lead</label>
+        <label>Sumber Lead *</label>
         <select id="edit-source">
-          <option value="">— Tidak diketahui —</option>
+          <option value="">Pilih sumber..</option>
           <option value="Website">Website</option>
           <option value="Facebook">Facebook</option>
           <option value="Instagram">Instagram</option>
@@ -1691,24 +1691,6 @@
 
       <div class="edit-section-label">INFORMASI LEAD</div>
 
-      <div class="edit-field">
-        <label>Produk yang Diminati</label>
-        <select id="edit-produk">
-          <option value="">Pilih produk..</option>
-          <option value="Produk A">Produk A</option>
-          <option value="Produk B">Produk B</option>
-          <option value="Produk C">Produk C</option>
-        </select>
-      </div>
-      <div class="edit-field">
-        <label>Prioritas</label>
-        <select id="edit-prioritas">
-          <option value="">— Belum diset —</option>
-          <option value="Tinggi">🟠 Tinggi</option>
-          <option value="Sedang">🟡 Sedang</option>
-          <option value="Rendah">🟢 Rendah</option>
-        </select>
-      </div>
       <div class="edit-field edit-form-full">
         <label>Status</label>
         <select id="edit-status">
@@ -1720,10 +1702,6 @@
           <option value="Closed Lost">Closed Lost</option>
           <option value="Nurture">Nurture</option>
         </select>
-      </div>
-      <div class="edit-field edit-form-full">
-        <label>Catatan</label>
-        <textarea id="edit-catatan" placeholder="Informasi tambahan tentang lead ini..."></textarea>
       </div>
     </div>
 
@@ -2134,10 +2112,7 @@
       document.getElementById('edit-wa').value        = lead.no_whatsapp || '';
       document.getElementById('edit-email').value     = lead.email || '';
       document.getElementById('edit-source').value    = lead.source || '';
-      document.getElementById('edit-produk').value    = lead.produk || '';
-      document.getElementById('edit-prioritas').value = lead.prioritas || '';
       document.getElementById('edit-status').value    = lead.status || 'New';
-      document.getElementById('edit-catatan').value   = lead.catatan || '';
 
     } catch (err) {
       showToast('Gagal memuat data lead', true); return;
@@ -2162,13 +2137,10 @@
     const no_wa     = document.getElementById('edit-wa').value.trim();
     const email     = document.getElementById('edit-email').value.trim();
     const source    = document.getElementById('edit-source').value;
-    const produk    = document.getElementById('edit-produk').value;
-    const prioritas = document.getElementById('edit-prioritas').value;
     const status    = document.getElementById('edit-status').value;
-    const catatan   = document.getElementById('edit-catatan').value.trim();
 
-    if (!nama || !no_wa || !email) {
-      showToast('Lengkapi data yang wajib diisi! (Nama, No WA, Email)', true); return;
+    if (!nama || !no_wa || !email || !source) {
+      showToast('Lengkapi data yang wajib diisi! (Nama, No WA, Email, Sumber)', true); return;
     }
 
     try {
@@ -2178,7 +2150,7 @@
           'Content-Type': 'application/json',
           'X-CSRFToken': getCookie('csrftoken'),
         },
-        body: JSON.stringify({ nama, no_whatsapp: no_wa, email, source, produk, prioritas, status, catatan }),
+        body: JSON.stringify({ nama, no_whatsapp: no_wa, email, source, status }),
       });
       const data = await res.json();
 

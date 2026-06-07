@@ -592,9 +592,6 @@ def lead_detail(request, id):
             'email':       lead.email,
             'source':      campaign_lead.source          if campaign_lead else None,
             'status':      campaign_lead.funnel_position if campaign_lead else 'New',
-            'produk':      get_cf_value(lead, 'produk'),
-            'prioritas':   get_cf_value(lead, 'prioritas'),
-            'catatan':     get_cf_value(lead, 'catatan'),
         })
 
     elif request.method in ['PATCH', 'PUT']:
@@ -619,11 +616,6 @@ def lead_detail(request, id):
                 funnel_position = data.get('status', 'New'),
                 source          = data.get('source'),
             )
-
-        # Update field bawaan via helper
-        for field in ['produk', 'prioritas', 'catatan']:
-            if field in data:
-                set_cf_value(lead, field, data[field])
 
         return JsonResponse({'ok': True})
 
