@@ -2343,14 +2343,13 @@
   const BUILTIN_COLS = [
     { key: 'nama',        label: 'Nama',      icon: '👤', alwaysOn: true },
     { key: 'status',      label: 'Status',    icon: '🏷️', alwaysOn: false },
-    { key: 'prioritas',   label: 'Prioritas', icon: '🔥', alwaysOn: false },
     { key: 'source',      label: 'Source',    icon: '📌', alwaysOn: false },
     { key: 'assigned_to', label: 'Assigned',  icon: '👥', alwaysOn: false },
   ];
 
   // State kolom: mana yang aktif
   let colState = {
-    builtin: { nama: true, status: true, prioritas: true, source: true, assigned_to: true },
+    builtin: { nama: true, status: true, source: true, assigned_to: true },
     custom: [],   // [{ id, name, type, options:[] }]
   };
 
