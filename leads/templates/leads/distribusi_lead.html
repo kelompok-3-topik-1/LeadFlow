@@ -1481,13 +1481,15 @@
             <h3>All Leads</h3>
             <p>Sorted by latest activity</p>
           </div>
-          <div class="table-actions">
-            <button class="btn-outline" id="btn-columns" onclick="openColumnsPanel()">☰ Columns</button>
-            <button class="btn-outline">⚡ Filter</button>
-            <button class="btn-outline" onclick="exportCSV()">↓ Export</button>
-            <div class="view-toggle">
-              <div class="view-btn active" title="Grid">⊞</div>
-              <div class="view-btn" title="List">≡</div>
+            <div class="table-actions">
+              <button class="btn-outline" id="btn-columns" onclick="openColumnsPanel()">☰ Columns</button>
+              <button class="btn-outline">⚡ Filter</button>
+              <button class="btn-outline" onclick="exportCSV()">↓ Export</button>
+              <!-- TAMBAHAN: tombol Auto Assign, hanya muncul untuk admin -->
+              <button class="btn-primary" id="btn-auto-assign" style="display:none" onclick="doAutoAssign()">⚡ Auto Assign</button>
+              <div class="view-toggle">
+                <div class="view-btn active" title="Grid">⊞</div>
+                <div class="view-btn" title="List">≡</div>
             </div>
           </div>
         </div>
@@ -1689,7 +1691,7 @@
         </select>
       </div>
 
-      <div class="edit-section-label">INFORMASI LEAD</div>
+    <div class="edit-section-label">INFORMASI LEAD</div>
 
       <div class="edit-field edit-form-full">
         <label>Status</label>
@@ -1701,6 +1703,13 @@
           <option value="Closed Won">Closed Won</option>
           <option value="Closed Lost">Closed Lost</option>
           <option value="Nurture">Nurture</option>
+        </select>
+      </div>
+
+      <div class="edit-field edit-form-full" id="edit-assign-wrap" style="display:none">
+        <label>Assign ke Sales</label>
+        <select id="edit-assign-sales">
+          <option value="">— Tidak di-assign —</option>
         </select>
       </div>
     </div>
@@ -2111,24 +2120,43 @@
   async function openEditModal(leadId) {
     editingLeadId = leadId;
 
-    // Fetch data lead terbaru dari API
     try {
       const res  = await fetch(`/api/leads/${leadId}/`);
       const lead = await res.json();
 
-      document.getElementById('edit-nama').value      = lead.nama || '';
-      document.getElementById('edit-wa').value        = lead.no_whatsapp || '';
-      document.getElementById('edit-email').value     = lead.email || '';
-      document.getElementById('edit-source').value    = lead.source || '';
-      document.getElementById('edit-status').value    = lead.status || 'New';
+      document.getElementById('edit-nama').value   = lead.nama || '';
+      document.getElementById('edit-wa').value     = lead.no_whatsapp || '';
+      document.getElementById('edit-email').value  = lead.email || '';
+      document.getElementById('edit-source').value = lead.source || '';
+      document.getElementById('edit-status').value = lead.status || 'New';
+
+      // Load daftar sales jika admin
+      if (currentRole === 'admin') {
+        const assignWrap = document.getElementById('edit-assign-wrap');
+        assignWrap.style.display = '';
+
+        const salesSelect = document.getElementById('edit-assign-sales');
+        salesSelect.innerHTML = '<option value="">— Tidak di-assign —</option>';
+
+        const salesRes  = await fetch('/api/sales/');
+        const salesData = await salesRes.json();
+        (salesData.sales || []).forEach(s => {
+          const opt = document.createElement('option');
+          opt.value       = s.id_user;
+          opt.textContent = `${s.nama} (${s.lead_aktif} lead)`;
+          // Pre-select jika sudah di-assign
+          if (lead.assigned_id && lead.assigned_id === s.id_user) {
+            opt.selected = true;
+          }
+          salesSelect.appendChild(opt);
+        });
+      }
 
     } catch (err) {
       showToast('Gagal memuat data lead', true); return;
     }
 
-    // Render kolom kustom + isi nilai yang sudah ada
     renderEditCustomFields(leadId);
-
     document.getElementById('editLeadModal').classList.add('show');
   }
 
@@ -2189,11 +2217,11 @@
   async function doEditLead() {
     if (!editingLeadId) return;
 
-    const nama      = document.getElementById('edit-nama').value.trim();
-    const no_wa     = document.getElementById('edit-wa').value.trim();
-    const email     = document.getElementById('edit-email').value.trim();
-    const source    = document.getElementById('edit-source').value;
-    const status    = document.getElementById('edit-status').value;
+    const nama   = document.getElementById('edit-nama').value.trim();
+    const no_wa  = document.getElementById('edit-wa').value.trim();
+    const email  = document.getElementById('edit-email').value.trim();
+    const source = document.getElementById('edit-source').value;
+    const status = document.getElementById('edit-status').value;
 
     if (!nama || !no_wa || !email || !source) {
       showToast('Lengkapi data yang wajib diisi! (Nama, No WA, Email, Sumber)', true); return;
@@ -2211,6 +2239,18 @@
       const data = await res.json();
 
       if (res.ok) {
+        // Simpan assign sales jika admin dan ada perubahan
+        if (currentRole === 'admin') {
+          const salesId = document.getElementById('edit-assign-sales')?.value;
+          if (salesId) {
+            await fetch('/api/assign/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+              body: JSON.stringify({ id_lead: editingLeadId, id_user: salesId }),
+            });
+          }
+        }
+
         // Simpan custom fields jika ada
         const cfInputs = document.querySelectorAll('#edit-custom-fields-grid [data-cf-id]');
         if (cfInputs.length) {
@@ -2674,6 +2714,12 @@ function initApp() {
   if (dashAdmin) dashAdmin.style.display = (currentRole === 'admin') ? 'flex' : 'none';
   if (dashUser)  dashUser.style.display  = (currentRole === 'admin') ? 'none' : 'flex';
 
+  // Tampilkan tombol Auto Assign hanya untuk admin
+  const btnAutoAssign = document.getElementById('btn-auto-assign');
+  if (btnAutoAssign) {
+    btnAutoAssign.style.display = (currentRole === 'admin') ? 'flex' : 'none';
+  }
+
   loadStats();
   loadColumnConfig();
   loadLeads();
@@ -2708,6 +2754,36 @@ function initApp() {
 
 function doLogout() {
   window.location.href = "{% url 'login' %}";
+}
+
+// ═══════════════════════════════════════════════
+//  AUTO ASSIGN
+// ═══════════════════════════════════════════════
+async function doAutoAssign() {
+  const btn = document.getElementById('btn-auto-assign');
+  btn.disabled = true;
+  btn.textContent = '⏳ Memproses...';
+
+  try {
+    const res  = await fetch('/api/auto-assign/', {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      showToast(`✅ ${data.message}`);
+      loadLeads();
+      loadStats();
+    } else {
+      showToast(data.error || 'Gagal auto assign', true);
+    }
+  } catch (err) {
+    showToast('Error koneksi ke server', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚡ Auto Assign';
+  }
 }
 
 

@@ -38,7 +38,7 @@ def get_builtin_col(name: str) -> CustomColumn:
         defaults={
             "col_type": BUILTIN_COL_DEFS[name]["col_type"],
             "options":  BUILTIN_COL_DEFS[name]["options"],
-            "col_order": 999,   # urutan negatif agar tidak tampil di daftar kolom kustom user
+            "col_order": -1,   # urutan negatif agar tidak tampil di daftar kolom kustom user
         }
     )
     return col
@@ -281,6 +281,9 @@ def api_assign_lead(request):
     except Users.DoesNotExist:
         return JsonResponse({"error": "User sales tidak ditemukan"}, status=404)
 
+    # Hapus assignment lama jika sudah ada (re-assign)
+    Assignment.objects.filter(id_lead=lead).delete()
+
     assignment = Assignment.objects.create(
         id_assignment = generate_id(Assignment, "id_assignment", "ASN"),
         id_lead       = lead,
@@ -294,6 +297,61 @@ def api_assign_lead(request):
         "lead":          lead.nama,
         "sales":         user.nama,
     }, status=201)
+
+
+@csrf_exempt
+def api_auto_assign(request):
+    """
+    POST /api/auto-assign/
+    Auto-assign semua lead yang belum di-assign ke sales dengan lead paling sedikit.
+    Jika ada seri (jumlah lead sama), dipilih secara acak.
+    Hanya bisa diakses oleh admin.
+    """
+    if request.method != "POST":
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
+    # Ambil semua lead yang belum punya assignment
+    assigned_lead_ids = Assignment.objects.values_list("id_lead_id", flat=True)
+    unassigned_leads  = Leads.objects.exclude(id_lead__in=assigned_lead_ids)
+
+    if not unassigned_leads.exists():
+        return JsonResponse({"message": "Tidak ada lead yang perlu di-assign", "assigned_count": 0})
+
+    # Ambil semua sales
+    sales_users = list(Users.objects.filter(role="sales"))
+    if not sales_users:
+        return JsonResponse({"error": "Tidak ada sales yang tersedia"}, status=400)
+
+    assigned_count = 0
+
+    for lead in unassigned_leads:
+        # Hitung jumlah lead tiap sales
+        sales_counts = []
+        for user in sales_users:
+            count = Assignment.objects.filter(id_user=user).count()
+            sales_counts.append((user, count))
+
+        # Cari jumlah minimum
+        min_count = min(c for _, c in sales_counts)
+
+        # Ambil semua sales dengan jumlah minimum (untuk random jika seri)
+        candidates = [u for u, c in sales_counts if c == min_count]
+
+        import random
+        chosen_sales = random.choice(candidates)
+
+        Assignment.objects.create(
+            id_assignment = generate_id(Assignment, "id_assignment", "ASN"),
+            id_lead       = lead,
+            id_user       = chosen_sales,
+            assigned_at   = timezone.now(),
+        )
+        assigned_count += 1
+
+    return JsonResponse({
+        "message":       f"{assigned_count} lead berhasil di-assign secara otomatis",
+        "assigned_count": assigned_count,
+    })
 
 
 @csrf_exempt
@@ -346,7 +404,7 @@ def api_update_lead_status(request):
     if notes:
         col, _ = CustomColumn.objects.get_or_create(
             name="update_notes",
-            defaults={"col_type": "text", "options": [], "col_order": 999},
+            defaults={"col_type": "text", "options": [], "col_order": -1},
         )
         CustomFields.objects.create(
             id     = generate_id(CustomFields, "id", "CFD"),
@@ -592,6 +650,9 @@ def lead_detail(request, id):
             'email':       lead.email,
             'source':      campaign_lead.source          if campaign_lead else None,
             'status':      campaign_lead.funnel_position if campaign_lead else 'New',
+            'produk':      get_cf_value(lead, 'produk'),
+            'prioritas':   get_cf_value(lead, 'prioritas'),
+            'catatan':     get_cf_value(lead, 'catatan'),
         })
 
     elif request.method in ['PATCH', 'PUT']:
@@ -616,6 +677,11 @@ def lead_detail(request, id):
                 funnel_position = data.get('status', 'New'),
                 source          = data.get('source'),
             )
+
+        # Update field bawaan via helper
+        for field in ['produk', 'prioritas', 'catatan']:
+            if field in data:
+                set_cf_value(lead, field, data[field])
 
         return JsonResponse({'ok': True})
 
