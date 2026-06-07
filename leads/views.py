@@ -20,9 +20,58 @@ from .models import (
     CustomColumn,
 )
 
+# ─────────────────────────────────────────────────────────────
+#  Helper: ambil atau buat CustomColumn untuk field bawaan
+#  (produk, prioritas, catatan)
+# ─────────────────────────────────────────────────────────────
+
+BUILTIN_COL_DEFS = {
+    "produk":    {"col_type": "text",    "options": []},
+    "prioritas": {"col_type": "dropdown","options": ["Tinggi", "Sedang", "Rendah"]},
+    "catatan":   {"col_type": "text",    "options": []},
+}
+
+def get_builtin_col(name: str) -> CustomColumn:
+    """Kembalikan CustomColumn untuk field bawaan; buat jika belum ada."""
+    col, _ = CustomColumn.objects.get_or_create(
+        name=name,
+        defaults={
+            "col_type": BUILTIN_COL_DEFS[name]["col_type"],
+            "options":  BUILTIN_COL_DEFS[name]["options"],
+            "col_order": -1,   # urutan negatif agar tidak tampil di daftar kolom kustom user
+        }
+    )
+    return col
+
+def get_cf_value(lead, col_name: str):
+    """Ambil value CustomFields berdasarkan nama kolom bawaan."""
+    col = get_builtin_col(col_name)
+    cf  = CustomFields.objects.filter(id_lead=lead, id_col=col).first()
+    return cf.value if cf else None
+
+def set_cf_value(lead, col_name: str, value):
+    """Simpan / update CustomFields berdasarkan nama kolom bawaan."""
+    col = get_builtin_col(col_name)
+    cf  = CustomFields.objects.filter(id_lead=lead, id_col=col).first()
+    if cf:
+        cf.value = value
+        cf.save()
+    else:
+        CustomFields.objects.create(
+            id=generate_id(CustomFields, "id", "CFD"),
+            id_lead=lead,
+            id_col=col,
+            value=value,
+        )
+
+
+# ─────────────────────────────────────────────────────────────
+#  Auth views
+# ─────────────────────────────────────────────────────────────
+
 def login_view(request):
     if request.method == "POST":
-        email = request.POST.get("email")
+        email    = request.POST.get("email")
         password = request.POST.get("password")
         try:
             user = Users.objects.get(email=email)
@@ -47,10 +96,10 @@ def register_view(request):
     role = request.GET.get("role", "admin")
 
     if request.method == 'POST':
-        nama = request.POST['nama']
-        email = request.POST.get("email")
-        asal_perusahaan = request.POST.get("asal_perusahaan")
-        password = request.POST['password']
+        nama             = request.POST['nama']
+        email            = request.POST.get("email")
+        asal_perusahaan  = request.POST.get("asal_perusahaan")
+        password         = request.POST['password']
         confirm_password = request.POST['confirm_password']
 
         if password == confirm_password:
@@ -70,6 +119,11 @@ def register_view(request):
             return render(request, 'leads/register.html', {'error': 'Password tidak sama'})
 
     return render(request, 'leads/register.html')
+
+
+# ─────────────────────────────────────────────────────────────
+#  Page views
+# ─────────────────────────────────────────────────────────────
 
 def home(request):
     return render(request, "leads/home_page.html")
@@ -100,6 +154,11 @@ def input_otomatis_page(request):
         return redirect('dashboard_analisis')
     return render(request, "leads/input_otomatis.html")
 
+
+# ─────────────────────────────────────────────────────────────
+#  Utility
+# ─────────────────────────────────────────────────────────────
+
 def generate_id(model, field_name, prefix):
     values = model.objects.filter(
         **{f"{field_name}__startswith": prefix}
@@ -117,13 +176,17 @@ def generate_id(model, field_name, prefix):
     return f"{prefix}{new_number:03d}"
 
 
+# ─────────────────────────────────────────────────────────────
+#  API Auth
+# ─────────────────────────────────────────────────────────────
+
 @csrf_exempt
 def api_login(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
-    data = json.loads(request.body)
-    email = data.get("email")
+    data     = json.loads(request.body)
+    email    = data.get("email")
     password = data.get("password")
 
     try:
@@ -139,30 +202,35 @@ def api_login(request):
     return JsonResponse({
         "message": "Login berhasil",
         "user": {
-            "id_user": user.id_user,
-            "nama": user.nama,
-            "email": user.email,
-            "role": user.role,
+            "id_user":        user.id_user,
+            "nama":           user.nama,
+            "email":          user.email,
+            "role":           user.role,
             "asal_perusahaan": user.asal_perusahaan,
         }
     })
+
+
+# ─────────────────────────────────────────────────────────────
+#  API Leads (input manual / otomatis)
+# ─────────────────────────────────────────────────────────────
 
 @csrf_exempt
 def api_create_lead(request):
     if request.method == "GET":
         leads = Leads.objects.all()
-        data = []
+        data  = []
         for lead in leads:
             campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
-            assignment = Assignment.objects.filter(id_lead=lead).first()
+            assignment    = Assignment.objects.filter(id_lead=lead).first()
             data.append({
-                "id_lead": lead.id_lead,
-                "nama": lead.nama,
-                "email": lead.email,
+                "id_lead":     lead.id_lead,
+                "nama":        lead.nama,
+                "email":       lead.email,
                 "no_whatsapp": lead.no_whatsapp,
-                "source": campaign_lead.source if campaign_lead else None,
-                "status": campaign_lead.funnel_position if campaign_lead else "New",
-                "assigned_to": assignment.id_user.nama if assignment and assignment.id_user else None,
+                "source":      campaign_lead.source          if campaign_lead else None,
+                "status":      campaign_lead.funnel_position if campaign_lead else "New",
+                "assigned_to": assignment.id_user.nama       if assignment and assignment.id_user else None,
             })
         return JsonResponse({"leads": data})
 
@@ -172,39 +240,36 @@ def api_create_lead(request):
     data = json.loads(request.body)
 
     lead = Leads.objects.create(
-        id_lead=generate_id(Leads, "id_lead", "LED"),
-        nama=data.get("nama"),
-        email=data.get("email"),
-        no_whatsapp=data.get("no_whatsapp")
+        id_lead      = generate_id(Leads, "id_lead", "LED"),
+        nama         = data.get("nama"),
+        email        = data.get("email"),
+        no_whatsapp  = data.get("no_whatsapp"),
     )
 
     CampaignLeads.objects.create(
-        id=generate_id(CampaignLeads, "id", "PIP"),
-        id_lead=lead,
-        funnel_position=data.get("status", "New"),
-        source=data.get("source")
+        id             = generate_id(CampaignLeads, "id", "PIP"),
+        id_lead        = lead,
+        funnel_position= data.get("status", "New"),
+        source         = data.get("source"),
     )
 
+    # Simpan field bawaan melalui helper
     for field in ["produk", "prioritas", "catatan"]:
         if data.get(field):
-            CustomFields.objects.create(
-                id=generate_id(CustomFields, "id", "CFD"),
-                id_lead=lead,
-                field_name=field,
-                value=data.get(field)
-            )
+            set_cf_value(lead, field, data.get(field))
 
     return JsonResponse({
         "message": "Lead berhasil dibuat",
-        "id_lead": lead.id_lead
+        "id_lead": lead.id_lead,
     }, status=201)
+
 
 @csrf_exempt
 def api_assign_lead(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
-    data = json.loads(request.body)
+    data    = json.loads(request.body)
     id_lead = data.get("id_lead")
     id_user = data.get("id_user")
 
@@ -217,30 +282,30 @@ def api_assign_lead(request):
         return JsonResponse({"error": "User sales tidak ditemukan"}, status=404)
 
     assignment = Assignment.objects.create(
-        id_assignment=generate_id(Assignment, "id_assignment", "ASN"),
-        id_lead=lead,
-        id_user=user,
-        assigned_at=timezone.now()
+        id_assignment = generate_id(Assignment, "id_assignment", "ASN"),
+        id_lead       = lead,
+        id_user       = user,
+        assigned_at   = timezone.now(),
     )
 
     return JsonResponse({
-        "message": "Lead berhasil di-assign",
+        "message":       "Lead berhasil di-assign",
         "id_assignment": assignment.id_assignment,
-        "lead": lead.nama,
-        "sales": user.nama
+        "lead":          lead.nama,
+        "sales":         user.nama,
     }, status=201)
+
 
 @csrf_exempt
 def api_update_lead_status(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
-    data = json.loads(request.body)
-
-    id_lead = data.get("id_lead")
-    status  = data.get("status")
-    tags    = data.get("tags", [])
-    notes   = data.get("notes")
+    data      = json.loads(request.body)
+    id_lead   = data.get("id_lead")
+    status    = data.get("status")
+    tags      = data.get("tags", [])
+    notes     = data.get("notes")
     prioritas = data.get("prioritas")
 
     try:
@@ -248,31 +313,23 @@ def api_update_lead_status(request):
     except Leads.DoesNotExist:
         return JsonResponse({"error": "Lead tidak ditemukan"}, status=404)
 
+    # Update funnel position
     campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
     if campaign_lead:
         campaign_lead.funnel_position = status
         campaign_lead.save()
     else:
         CampaignLeads.objects.create(
-            id=generate_id(CampaignLeads, "id", "CLD"),
-            id_lead=lead,
-            funnel_position=status
+            id              = generate_id(CampaignLeads, "id", "CLD"),
+            id_lead         = lead,
+            funnel_position = status,
         )
 
-    # Update atau buat custom field prioritas
+    # Update prioritas via helper
     if prioritas:
-        cf_prioritas = CustomFields.objects.filter(id_lead=lead, field_name="prioritas").first()
-        if cf_prioritas:
-            cf_prioritas.value = prioritas
-            cf_prioritas.save()
-        else:
-            CustomFields.objects.create(
-                id=generate_id(CustomFields, "id", "CFD"),
-                id_lead=lead,
-                field_name="prioritas",
-                value=prioritas
-            )
+        set_cf_value(lead, "prioritas", prioritas)
 
+    # Update tags
     for label in tags:
         tag, created = Tag.objects.get_or_create(
             label_tag=label,
@@ -280,17 +337,22 @@ def api_update_lead_status(request):
         )
         if not LeadsTag.objects.filter(id_leads=lead, id_tag=tag).exists():
             LeadsTag.objects.create(
-                id=generate_id(LeadsTag, "id", "LDT"),
-                id_leads=lead,
-                id_tag=tag
+                id       = generate_id(LeadsTag, "id", "LDT"),
+                id_leads = lead,
+                id_tag   = tag,
             )
 
+    # Simpan catatan update sebagai custom field bawaan "update_notes"
     if notes:
+        col, _ = CustomColumn.objects.get_or_create(
+            name="update_notes",
+            defaults={"col_type": "text", "options": [], "col_order": -1},
+        )
         CustomFields.objects.create(
-            id=generate_id(CustomFields, "id", "CFD"),
-            id_lead=lead,
-            field_name="update_notes",
-            value=notes
+            id     = generate_id(CustomFields, "id", "CFD"),
+            id_lead= lead,
+            id_col = col,
+            value  = notes,
         )
 
     return JsonResponse({
@@ -298,20 +360,24 @@ def api_update_lead_status(request):
         "id_lead":   lead.id_lead,
         "status":    status,
         "prioritas": prioritas,
-        "tags":      tags
+        "tags":      tags,
     })
+
+
+# ─────────────────────────────────────────────────────────────
+#  API Dashboard
+# ─────────────────────────────────────────────────────────────
 
 def api_dashboard(request):
     from django.db.models import Sum
+
     total_leads = Leads.objects.count()
-    assigned = Assignment.objects.count()
-    unassigned = total_leads - assigned
+    assigned    = Assignment.objects.count()
+    unassigned  = total_leads - assigned
 
-    # Conversion Rate: persen leads yang statusnya "Closed Won"
     closed_won_count = CampaignLeads.objects.filter(funnel_position="Closed Won").count()
-    conversion_rate = round((closed_won_count / total_leads * 100), 1) if total_leads > 0 else 0
+    conversion_rate  = round((closed_won_count / total_leads * 100), 1) if total_leads > 0 else 0
 
-    # Cost per Lead: total production_cost semua campaign dibagi total leads
     total_campaign_cost = Campaign.objects.aggregate(total=Sum('production_cost'))['total'] or 0
     cost_per_lead = round(float(total_campaign_cost) / total_leads, 0) if total_leads > 0 else 0
 
@@ -327,42 +393,44 @@ def api_dashboard(request):
         .annotate(total=Count("id"))
     )
 
+    # product_counts: pakai id_col FK ke kolom "produk"
+    produk_col = get_builtin_col("produk")
     product_counts = (
         CustomFields.objects
-        .filter(field_name='produk')
+        .filter(id_col=produk_col)
         .values('value')
         .annotate(total=Count('id'))
         .order_by('-total')
     )
 
     return JsonResponse({
-        "total_leads": total_leads,
-        "assigned": assigned,
-        "unassigned": unassigned,
+        "total_leads":    total_leads,
+        "assigned":       assigned,
+        "unassigned":     unassigned,
         "conversion_rate": conversion_rate,
-        "cost_per_lead": int(cost_per_lead),
-        "status_counts": list(status_counts),
-        "source_counts": list(source_counts),
-        "product_counts": list(product_counts)
+        "cost_per_lead":  int(cost_per_lead),
+        "status_counts":  list(status_counts),
+        "source_counts":  list(source_counts),
+        "product_counts": list(product_counts),
     })
 
 
 # ─────────────────────────────────────────────────────────────
-#  API untuk halaman Distribusi Lead
+#  API Distribusi Lead
 # ─────────────────────────────────────────────────────────────
 
 def api_distribusi_stats(request):
-    total_leads = Leads.objects.count()
-    pending_count = CampaignLeads.objects.filter(funnel_position__in=["New"]).count()
+    total_leads     = Leads.objects.count()
+    pending_count   = CampaignLeads.objects.filter(funnel_position__in=["New"]).count()
     qualified_count = CampaignLeads.objects.filter(funnel_position="Qualified").count()
-    status_counts = {}
+    status_counts   = {}
     for row in CampaignLeads.objects.values("funnel_position").annotate(total=Count("id")):
         status_counts[row["funnel_position"]] = row["total"]
 
     return JsonResponse({
         "total_leads": total_leads,
-        "pending": pending_count,
-        "qualified": qualified_count,
+        "pending":     pending_count,
+        "qualified":   qualified_count,
         "status_counts": status_counts,
     })
 
@@ -373,7 +441,7 @@ def api_distribusi_leads(request):
     page          = int(request.GET.get("page", 1))
     per_page      = int(request.GET.get("per_page", 10))
 
-    leads_qs = Leads.objects.prefetch_related('customfields_set').all()
+    leads_qs = Leads.objects.prefetch_related('customfields_set__id_col').all()
 
     if search_query:
         leads_qs = leads_qs.filter(
@@ -388,18 +456,25 @@ def api_distribusi_leads(request):
         ).values_list("id_lead_id", flat=True)
         leads_qs = leads_qs.filter(id_lead__in=lead_ids)
 
-    total = leads_qs.count()
-    start = (page - 1) * per_page
-    end   = start + per_page
-    leads_page = leads_qs[start:end]
+    total      = leads_qs.count()
+    start      = (page - 1) * per_page
+    leads_page = leads_qs[start: start + per_page]
 
     data = []
     for lead in leads_page:
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
         assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
 
-        # Ambil semua custom fields sekaligus dari prefetch
-        cf_all = {cf.field_name: cf.value for cf in lead.customfields_set.all()}
+        # Bangun dict: col_name -> value  dan  col_id (str) -> value (untuk custom)
+        cf_by_name = {}   # builtin: nama kolom -> value
+        cf_by_id   = {}   # custom : str(id_col) -> value
+        for cf in lead.customfields_set.all():
+            if cf.id_col_id is not None:
+                col_name = cf.id_col.name if cf.id_col else None
+                if col_name in BUILTIN_COL_DEFS:
+                    cf_by_name[col_name] = cf.value
+                else:
+                    cf_by_id[str(cf.id_col_id)] = cf.value
 
         data.append({
             "id_lead":       lead.id_lead,
@@ -410,9 +485,8 @@ def api_distribusi_leads(request):
             "status":        campaign_lead.funnel_position if campaign_lead else "New",
             "assigned_to":   assignment.id_user.nama       if assignment and assignment.id_user else None,
             "assigned_id":   assignment.id_user.id_user    if assignment and assignment.id_user else None,
-            "prioritas":     cf_all.get("prioritas"),
-            # custom_fields: key = id_col (string), value = nilai — dipakai kolom kustom
-            "custom_fields": {k: v for k, v in cf_all.items() if k.isdigit()},
+            "prioritas":     cf_by_name.get("prioritas"),
+            "custom_fields": cf_by_id,
         })
 
     return JsonResponse({
@@ -439,18 +513,12 @@ def api_sales_list(request):
 
 
 # ─────────────────────────────────────────────────────────────
-#  API BARU – Update & Segmentasi (Kanban)
+#  API Kanban
 # ─────────────────────────────────────────────────────────────
 
-# Urutan kolom kanban yang diakui sistem
 FUNNEL_ORDER = ["New", "Contacted", "Qualified", "Proposal", "Closed Won", "Closed Lost"]
 
 def api_kanban_leads(request):
-    """
-    GET /api/kanban/leads/?search=
-    Mengembalikan semua leads dikelompokkan per funnel_position,
-    lengkap dengan tags yang sudah diberikan ke setiap lead.
-    """
     search_query = request.GET.get("search", "").strip()
 
     leads_qs = Leads.objects.all()
@@ -461,18 +529,17 @@ def api_kanban_leads(request):
             Q(email__icontains=search_query)
         )
 
-    # Kelompokkan per kolom
-    columns = {col: [] for col in FUNNEL_ORDER}
+    prioritas_col = get_builtin_col("prioritas")
+    columns       = {col: [] for col in FUNNEL_ORDER}
 
     for lead in leads_qs:
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
         assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
 
-        # Ambil prioritas dari custom_fields
-        prioritas_cf  = CustomFields.objects.filter(id_lead=lead, field_name="prioritas").first()
-        prioritas     = prioritas_cf.value if prioritas_cf else None
+        # Ambil prioritas via FK
+        prioritas_cf = CustomFields.objects.filter(id_lead=lead, id_col=prioritas_col).first()
+        prioritas    = prioritas_cf.value if prioritas_cf else None
 
-        # Ambil semua tag lead ini
         lead_tags = list(
             LeadsTag.objects.filter(id_leads=lead)
             .select_related("id_tag")
@@ -480,7 +547,6 @@ def api_kanban_leads(request):
         )
 
         funnel = campaign_lead.funnel_position if campaign_lead else "New"
-        # Pastikan funnel dikenal; kalau tidak, masukkan ke "New"
         if funnel not in columns:
             funnel = "New"
 
@@ -497,23 +563,18 @@ def api_kanban_leads(request):
             "assigned_id": assignment.id_user.id_user if assignment and assignment.id_user else None,
         })
 
-    # Format respons sebagai list kolom (urutan tetap)
-    result = [
-        {"column": col, "leads": columns[col]}
-        for col in FUNNEL_ORDER
-    ]
-
+    result = [{"column": col, "leads": columns[col]} for col in FUNNEL_ORDER]
     return JsonResponse({"columns": result})
 
 
 def api_tags_list(request):
-    """
-    GET /api/tags/
-    Mengembalikan semua tag yang tersimpan di tabel tag.
-    Digunakan untuk mengisi pill tag di modal update.
-    """
     tags = Tag.objects.all().values("id_tag", "label_tag")
     return JsonResponse({"tags": list(tags)})
+
+
+# ─────────────────────────────────────────────────────────────
+#  API Lead Detail (GET / PATCH / DELETE)
+# ─────────────────────────────────────────────────────────────
 
 @csrf_exempt
 def lead_detail(request, id):
@@ -524,7 +585,6 @@ def lead_detail(request, id):
 
     if request.method == 'GET':
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
-        cf = {row.field_name: row.value for row in CustomFields.objects.filter(id_lead=lead)}
         return JsonResponse({
             'id_lead':     lead.id_lead,
             'nama':        lead.nama,
@@ -532,21 +592,19 @@ def lead_detail(request, id):
             'email':       lead.email,
             'source':      campaign_lead.source          if campaign_lead else None,
             'status':      campaign_lead.funnel_position if campaign_lead else 'New',
-            'produk':      cf.get('produk'),
-            'prioritas':   cf.get('prioritas'),
-            'catatan':     cf.get('catatan'),
+            'produk':      get_cf_value(lead, 'produk'),
+            'prioritas':   get_cf_value(lead, 'prioritas'),
+            'catatan':     get_cf_value(lead, 'catatan'),
         })
 
     elif request.method in ['PATCH', 'PUT']:
         data = json.loads(request.body)
 
-        # Update field di tabel Leads
         for field in ['nama', 'no_whatsapp', 'email']:
             if field in data:
                 setattr(lead, field, data[field])
         lead.save()
 
-        # Update source & status di CampaignLeads
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
         if campaign_lead:
             if 'source' in data:
@@ -556,38 +614,25 @@ def lead_detail(request, id):
             campaign_lead.save()
         else:
             CampaignLeads.objects.create(
-                id=generate_id(CampaignLeads, "id", "PIP"),
-                id_lead=lead,
-                funnel_position=data.get('status', 'New'),
-                source=data.get('source'),
+                id              = generate_id(CampaignLeads, "id", "PIP"),
+                id_lead         = lead,
+                funnel_position = data.get('status', 'New'),
+                source          = data.get('source'),
             )
 
-        # Update field di CustomFields (produk, prioritas, catatan)
+        # Update field bawaan via helper
         for field in ['produk', 'prioritas', 'catatan']:
             if field in data:
-                cf = CustomFields.objects.filter(id_lead=lead, field_name=field).first()
-                if cf:
-                    cf.value = data[field]
-                    cf.save()
-                else:
-                    CustomFields.objects.create(
-                        id=generate_id(CustomFields, "id", "CFD"),
-                        id_lead=lead,
-                        field_name=field,
-                        value=data[field],
-                    )
+                set_cf_value(lead, field, data[field])
 
         return JsonResponse({'ok': True})
 
     elif request.method == 'DELETE':
-
         Assignment.objects.filter(id_lead=lead).delete()
         CampaignLeads.objects.filter(id_lead=lead).delete()
         CustomFields.objects.filter(id_lead=lead).delete()
         LeadsTag.objects.filter(id_leads=lead).delete()
-
         lead.delete()
-
         return JsonResponse({'ok': True})
 
 
@@ -618,9 +663,10 @@ def _set_builtin_prefs(request, prefs):
 @csrf_exempt
 def columns_list(request):
     if request.method == 'GET':
+        # Tampilkan hanya kolom kustom (col_order >= 0), bukan kolom bawaan
         return JsonResponse({
             'builtin': _get_builtin_prefs(request),
-            'custom':  [_col_to_dict(c) for c in CustomColumn.objects.all()],
+            'custom':  [_col_to_dict(c) for c in CustomColumn.objects.filter(col_order__gte=0)],
         })
 
     if request.method == 'POST':
@@ -664,7 +710,7 @@ def columns_list(request):
                 name      = name,
                 col_type  = col_type,
                 options   = [str(o).strip() for o in options if str(o).strip()],
-                col_order = CustomColumn.objects.count(),
+                col_order = CustomColumn.objects.filter(col_order__gte=0).count(),
             )
             return JsonResponse({'ok': True, 'column': _col_to_dict(col)}, status=201)
 
@@ -715,7 +761,8 @@ def column_detail(request, col_id):
         return JsonResponse({'ok': True, 'column': _col_to_dict(col)})
 
     if request.method == 'DELETE':
-        deleted_count = CustomFields.objects.filter(field_name=str(col.id_col)).delete()[0]
+        # Hapus semua CustomFields yang merujuk kolom ini (via FK)
+        deleted_count = CustomFields.objects.filter(id_col=col).delete()[0]
         col.delete()
         return JsonResponse({'ok': True, 'deleted_fields': deleted_count})
 
@@ -749,16 +796,16 @@ def lead_custom_fields(request, lead_id):
         if col.col_type == 'dropdown' and value_str and value_str not in col.options:
             continue
 
-        existing = CustomFields.objects.filter(id_lead=lead, field_name=str(col.id_col)).first()
+        existing = CustomFields.objects.filter(id_lead=lead, id_col=col).first()
         if existing:
             existing.value = value_str
             existing.save()
         else:
             CustomFields.objects.create(
-                id=generate_id(CustomFields, "id", "CFD"),
-                id_lead=lead,
-                field_name=str(col.id_col),
-                value=value_str,
+                id      = generate_id(CustomFields, "id", "CFD"),
+                id_lead = lead,
+                id_col  = col,
+                value   = value_str,
             )
 
         updated[col_id_str] = value_str
