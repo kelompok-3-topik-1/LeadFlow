@@ -1674,9 +1674,9 @@
         <input type="email" id="edit-email" placeholder="email@gmail.com">
       </div>
       <div class="edit-field">
-        <label>Sumber Lead *</label>
+        <label>Sumber Lead</label>
         <select id="edit-source">
-          <option value="">Pilih sumber..</option>
+          <option value="">— Tidak diketahui —</option>
           <option value="Website">Website</option>
           <option value="Facebook">Facebook</option>
           <option value="Instagram">Instagram</option>
@@ -1703,11 +1703,10 @@
       <div class="edit-field">
         <label>Prioritas</label>
         <select id="edit-prioritas">
-          <option value="Normal">⚪ Normal</option>
-          <option value="Rendah">🟢 Rendah</option>
-          <option value="Sedang">🟡 Sedang</option>
+          <option value="">— Belum diset —</option>
           <option value="Tinggi">🟠 Tinggi</option>
-          <option value="Sangat Tinggi">🔴 Sangat Tinggi</option>
+          <option value="Sedang">🟡 Sedang</option>
+          <option value="Rendah">🟢 Rendah</option>
         </select>
       </div>
       <div class="edit-field edit-form-full">
@@ -2136,7 +2135,7 @@
       document.getElementById('edit-email').value     = lead.email || '';
       document.getElementById('edit-source').value    = lead.source || '';
       document.getElementById('edit-produk').value    = lead.produk || '';
-      document.getElementById('edit-prioritas').value = lead.prioritas || 'Normal';
+      document.getElementById('edit-prioritas').value = lead.prioritas || '';
       document.getElementById('edit-status').value    = lead.status || 'New';
       document.getElementById('edit-catatan').value   = lead.catatan || '';
 
@@ -2168,8 +2167,8 @@
     const status    = document.getElementById('edit-status').value;
     const catatan   = document.getElementById('edit-catatan').value.trim();
 
-    if (!nama || !no_wa || !email || !source) {
-      showToast('Lengkapi data yang wajib diisi!', true); return;
+    if (!nama || !no_wa || !email) {
+      showToast('Lengkapi data yang wajib diisi! (Nama, No WA, Email)', true); return;
     }
 
     try {
