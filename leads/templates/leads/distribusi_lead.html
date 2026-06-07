@@ -1705,6 +1705,14 @@
       </div>
     </div>
 
+    <!-- Kolom kustom — dirender JS jika ada -->
+    <div id="edit-custom-fields-wrap" style="display:none">
+      <div class="edit-section-label" style="margin-bottom:12px">KOLOM KUSTOM</div>
+      <div class="edit-form-grid" id="edit-custom-fields-grid">
+        <!-- diisi JS -->
+      </div>
+    </div>
+
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeEditModal()">Batal</button>
       <button class="btn-assign" onclick="doEditLead()">💾 Simpan Perubahan</button>
@@ -2118,7 +2126,55 @@
       showToast('Gagal memuat data lead', true); return;
     }
 
+    // Render kolom kustom + isi nilai yang sudah ada
+    renderEditCustomFields(leadId);
+
     document.getElementById('editLeadModal').classList.add('show');
+  }
+
+  async function renderEditCustomFields(leadId) {
+    const wrap = document.getElementById('edit-custom-fields-wrap');
+    const grid = document.getElementById('edit-custom-fields-grid');
+
+    if (!colState.custom.length) {
+      wrap.style.display = 'none';
+      return;
+    }
+
+    wrap.style.display = '';
+    grid.innerHTML = '';
+
+    // Ambil nilai custom fields lead yang sudah tersimpan
+    let existingValues = {};
+    try {
+      // Gunakan data dari leads tabel yang sudah di-load (via distribusi leads)
+      // Fetch ulang dari API distribusi untuk mendapatkan custom_fields
+      const res  = await fetch(`/api/distribusi/leads/?page=1&per_page=10000`);
+      const data = await res.json();
+      const found = (data.leads || []).find(l => l.id_lead === leadId);
+      if (found) existingValues = found.custom_fields || {};
+    } catch (_) {}
+
+    colState.custom.forEach(col => {
+      const currentVal = existingValues[col.id] || '';
+      let inputHtml = '';
+
+      if (col.type === 'dropdown') {
+        const opts = (col.options || []).map(o =>
+          `<option value="${o}" ${currentVal === o ? 'selected' : ''}>${o}</option>`
+        ).join('');
+        inputHtml = `<select data-cf-id="${col.id}"><option value="">— Pilih —</option>${opts}</select>`;
+      } else if (col.type === 'date') {
+        inputHtml = `<input type="date" data-cf-id="${col.id}" value="${currentVal}">`;
+      } else {
+        inputHtml = `<input type="text" data-cf-id="${col.id}" value="${currentVal}" placeholder="Isi ${col.name}...">`;
+      }
+
+      const fieldEl = document.createElement('div');
+      fieldEl.className = 'edit-field';
+      fieldEl.innerHTML = `<label>${col.name}</label>${inputHtml}`;
+      grid.appendChild(fieldEl);
+    });
   }
 
   function closeEditModal() {
@@ -2155,6 +2211,18 @@
       const data = await res.json();
 
       if (res.ok) {
+        // Simpan custom fields jika ada
+        const cfInputs = document.querySelectorAll('#edit-custom-fields-grid [data-cf-id]');
+        if (cfInputs.length) {
+          const cfPayload = {};
+          cfInputs.forEach(el => { cfPayload[el.dataset.cfId] = el.value; });
+          await fetch(`/api/leads/${editingLeadId}/custom_fields/`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify(cfPayload),
+          });
+        }
+
         closeEditModal();
         showToast('✅ Lead berhasil diperbarui!');
         loadLeads();
