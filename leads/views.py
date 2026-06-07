@@ -38,7 +38,7 @@ def get_builtin_col(name: str) -> CustomColumn:
         defaults={
             "col_type": BUILTIN_COL_DEFS[name]["col_type"],
             "options":  BUILTIN_COL_DEFS[name]["options"],
-            "col_order": -1,   # urutan negatif agar tidak tampil di daftar kolom kustom user
+            "col_order": 999,   # urutan negatif agar tidak tampil di daftar kolom kustom user
         }
     )
     return col
@@ -346,7 +346,7 @@ def api_update_lead_status(request):
     if notes:
         col, _ = CustomColumn.objects.get_or_create(
             name="update_notes",
-            defaults={"col_type": "text", "options": [], "col_order": -1},
+            defaults={"col_type": "text", "options": [], "col_order": 999},
         )
         CustomFields.objects.create(
             id     = generate_id(CustomFields, "id", "CFD"),
