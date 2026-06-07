@@ -38,10 +38,10 @@ class CampaignLeads(models.Model):
 
 
 class CustomFields(models.Model):
-    id = models.CharField(db_column='Id', primary_key=True, max_length=10)  # Field name made lowercase.
-    id_lead = models.ForeignKey('Leads', models.DO_NOTHING, db_column='Id_lead', blank=True, null=True)  # Field name made lowercase.
-    field_name = models.CharField(db_column='Field_name', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    value = models.TextField(db_column='Value', blank=True, null=True)  # Field name made lowercase.
+    id = models.CharField(db_column='Id', primary_key=True, max_length=10)
+    id_lead = models.ForeignKey('Leads', models.DO_NOTHING, db_column='Id_lead', blank=True, null=True)
+    id_col = models.ForeignKey('CustomColumn', models.DO_NOTHING, db_column='Id_col', blank=True, null=True)
+    value = models.TextField(db_column='Value', blank=True, null=True)
 
     class Meta:
         managed = False
