@@ -91,16 +91,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .pie-wrap{display:flex;justify-content:center;}
 .pie-svg{width:180px;height:180px;}
 
-
-/* INFO CARD 
-.info-card{background:var(--navy);border-radius:var(--radius);padding:28px 30px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow-md);position:relative;overflow:hidden;}
-.info-card::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(37,99,235,.12);}
-.info-card::after{content:'';position:absolute;bottom:-60px;left:-20px;width:150px;height:150px;border-radius:50%;background:rgba(96,165,250,.07);}
-.info-tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:12px;}
-.info-title{font-size:20px;font-weight:800;color:white;margin-bottom:14px;letter-spacing:-.01em;}
-.info-body{font-size:12.5px;color:#94a3b8;line-height:1.7;position:relative;z-index:1;}
-*/
-
 /* ── ALL LEADS TABLE ── */
 .table-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
 .table-head-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
@@ -242,17 +232,17 @@ td{padding:11px 16px;vertical-align:middle;}
             </div>
           </div>
           <div class="stat-card green">
-            <div class="stat-icon green">✅</div>
+            <div class="stat-icon green">🎯</div>
             <div>
-              <div class="stat-value" id="stat-assigned">—</div>
-              <div class="stat-label">Lead Assigned</div>
+              <div class="stat-value" id="stat-conversion">—</div>
+              <div class="stat-label">Conversion Rate (Closed Won)</div>
             </div>
           </div>
           <div class="stat-card amber">
-            <div class="stat-icon amber">⏳</div>
+            <div class="stat-icon amber">💰</div>
             <div>
-              <div class="stat-value" id="stat-unassigned">—</div>
-              <div class="stat-label">Lead Belum Assign</div>
+              <div class="stat-value" id="stat-cpl">—</div>
+              <div class="stat-label">Cost per Lead</div>
             </div>
           </div>
         </div>
@@ -745,9 +735,24 @@ async function loadAll() {
 
   if (dash) {
     // Admin stat cards
-    document.getElementById('stat-total').textContent     = dash.total_leads ?? '—';
-    document.getElementById('stat-assigned').textContent  = dash.assigned ?? '—';
-    document.getElementById('stat-unassigned').textContent = dash.unassigned ?? '—';
+    document.getElementById('stat-total').textContent      = dash.total_leads ?? '—';
+    document.getElementById('stat-conversion').textContent = (dash.conversion_rate != null) ? dash.conversion_rate + '%' : '—';
+
+    // Format cost per lead ke Rupiah singkat, e.g. "Rp 25K" atau "Rp 1,2M"
+    if (dash.cost_per_lead != null) {
+      const cpl = dash.cost_per_lead;
+      let label;
+      if (cpl >= 1_000_000) {
+        label = 'Rp ' + (cpl / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+      } else if (cpl >= 1_000) {
+        label = 'Rp ' + (cpl / 1_000).toFixed(0) + 'K';
+      } else {
+        label = 'Rp ' + cpl;
+      }
+      document.getElementById('stat-cpl').textContent = label;
+    } else {
+      document.getElementById('stat-cpl').textContent = '—';
+    }
 
     // User dashboard
     document.getElementById('u-total').textContent    = dash.total_leads ?? '—';

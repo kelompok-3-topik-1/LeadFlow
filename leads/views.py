@@ -302,9 +302,18 @@ def api_update_lead_status(request):
     })
 
 def api_dashboard(request):
+    from django.db.models import Sum
     total_leads = Leads.objects.count()
     assigned = Assignment.objects.count()
     unassigned = total_leads - assigned
+
+    # Conversion Rate: persen leads yang statusnya "Closed Won"
+    closed_won_count = CampaignLeads.objects.filter(funnel_position="Closed Won").count()
+    conversion_rate = round((closed_won_count / total_leads * 100), 1) if total_leads > 0 else 0
+
+    # Cost per Lead: total production_cost semua campaign dibagi total leads
+    total_campaign_cost = Campaign.objects.aggregate(total=Sum('production_cost'))['total'] or 0
+    cost_per_lead = round(float(total_campaign_cost) / total_leads, 0) if total_leads > 0 else 0
 
     status_counts = (
         CampaignLeads.objects
@@ -330,6 +339,8 @@ def api_dashboard(request):
         "total_leads": total_leads,
         "assigned": assigned,
         "unassigned": unassigned,
+        "conversion_rate": conversion_rate,
+        "cost_per_lead": int(cost_per_lead),
         "status_counts": list(status_counts),
         "source_counts": list(source_counts),
         "product_counts": list(product_counts)
@@ -753,4 +764,3 @@ def lead_custom_fields(request, lead_id):
         updated[col_id_str] = value_str
 
     return JsonResponse({'ok': True, 'updated': updated})
-
