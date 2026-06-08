@@ -270,21 +270,18 @@ def api_create_lead(request):
     }, status=201)
 
 @csrf_exempt
-def api_import_sheet(request):
+def api_import_csv(request):
     """
-    POST /api/leads/import-sheet/
-    Baca CSV dari Google Sheets (Publish to web → CSV),
-    lalu buat Lead + CampaignLeads + CustomFields untuk tiap baris.
+    POST /api/leads/import-csv/
+    Terima data rows yang sudah di-parse di frontend (JSON),
+    lalu simpan ke database. Tidak perlu Google Sheets.
     
-    Kolom yang dikenali (case-insensitive, fleksibel):
-      nama / name
-      no_whatsapp / whatsapp / telp / phone / no_hp
-      email
-      source / sumber
-      status / funnel
-      produk / product
-      prioritas / priority
-      catatan / notes / note
+    Payload:
+    {
+        "rows": [ {"nama": "...", "no_whatsapp": "...", ...}, ... ],
+        "col_mapping": {"nama": "nama", "no_whatsapp": "no_whatsapp", ...},
+        "id_campaign": "CAM001"  // opsional
+    }
     """
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
@@ -294,91 +291,22 @@ def api_import_sheet(request):
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Body tidak valid'}, status=400)
 
-    sheet_url   = (payload.get('sheet_url') or '').strip()
+    rows        = payload.get('rows', [])
+    col         = payload.get('col_mapping', {})
     id_campaign = payload.get('id_campaign') or None
-    preview_only= bool(payload.get('preview', False))
 
-    if not sheet_url:
-        return JsonResponse({'error': 'sheet_url wajib diisi'}, status=400)
+    if not rows:
+        return JsonResponse({'error': 'Tidak ada data untuk diimpor'}, status=400)
 
-    # ── Fetch CSV ──
-    import urllib.request
-    import csv, io
-
-    try:
-        with urllib.request.urlopen(sheet_url, timeout=10) as resp:
-            raw = resp.read().decode('utf-8-sig')  # utf-8-sig strip BOM
-    except Exception as e:
-        return JsonResponse({
-            'error': f'Gagal mengakses URL: {str(e)}. '
-                     'Pastikan sheet sudah di-publish ke web sebagai CSV.'
-        }, status=400)
-
-    # ── Parse CSV ──
-    reader = csv.DictReader(io.StringIO(raw))
-
-    # Normalkan nama header → lowercase tanpa spasi
-    def norm(s):
-        return (s or '').lower().strip().replace(' ', '_')
-
-    COL_MAP = {
-        'nama':         ['nama', 'name', 'nama_lengkap', 'full_name'],
-        'no_whatsapp':  ['no_whatsapp', 'whatsapp', 'wa', 'telp', 'phone',
-                         'no_hp', 'nomor', 'no_telp', 'nomor_wa'],
-        'email':        ['email', 'e-mail', 'mail'],
-        'source':       ['source', 'sumber', 'platform'],
-        'status':       ['status', 'funnel', 'funnel_position'],
-        'produk':       ['produk', 'product', 'produk_diminati'],
-        'prioritas':    ['prioritas', 'priority'],
-        'catatan':      ['catatan', 'notes', 'note', 'keterangan'],
-    }
+    if not col.get('nama'):
+        return JsonResponse({'error': 'Kolom "nama" tidak ditemukan di mapping'}, status=400)
 
     VALID_STATUSES = {
         'new', 'contacted', 'qualified', 'proposal',
         'closed won', 'closed lost', 'nurture'
     }
 
-    def find_col(headers, candidates):
-        for h in headers:
-            if norm(h) in candidates:
-                return h
-        return None
-
-    rows = list(reader)
-    if not rows:
-        return JsonResponse({'error': 'Sheet kosong atau tidak ada data'}, status=400)
-
-    headers = list(rows[0].keys())
-    col = {k: find_col(headers, v) for k, v in COL_MAP.items()}
-
-    # Validasi: minimal kolom nama + (whatsapp atau email)
-    if not col['nama']:
-        return JsonResponse({
-            'error': f'Kolom "nama" tidak ditemukan. Header yang tersedia: {", ".join(headers)}'
-        }, status=400)
-    if not col['no_whatsapp'] and not col['email']:
-        return JsonResponse({
-            'error': 'Minimal ada kolom "no_whatsapp" atau "email"'
-        }, status=400)
-
-    # ── Preview mode ── kembalikan 5 baris pertama tanpa simpan
-    if preview_only:
-        preview_rows = []
-        for row in rows[:5]:
-            preview_rows.append({
-                'nama':        row.get(col['nama'], '').strip(),
-                'no_whatsapp': row.get(col['no_whatsapp'], '').strip() if col['no_whatsapp'] else '',
-                'email':       row.get(col['email'], '').strip()       if col['email']       else '',
-                'source':      row.get(col['source'], '').strip()      if col['source']      else '',
-                'status':      row.get(col['status'], 'New').strip()   if col['status']      else 'New',
-            })
-        return JsonResponse({
-            'preview':     preview_rows,
-            'total_rows':  len(rows),
-            'col_mapping': {k: v for k, v in col.items() if v},
-        })
-
-    # ── Ambil campaign jika ada ──
+    # Ambil campaign jika ada
     camp_obj = None
     if id_campaign:
         try:
@@ -386,43 +314,37 @@ def api_import_sheet(request):
         except Campaign.DoesNotExist:
             pass
 
-    # ── Import baris per baris ──
-    imported   = 0
-    skipped    = 0
+    imported     = 0
+    skipped      = 0
     skip_reasons = []
 
     for i, row in enumerate(rows, start=1):
-        nama = row.get(col['nama'], '').strip()
+        nama = row.get(col.get('nama', ''), '').strip()
         if not nama:
             skipped += 1
             skip_reasons.append(f'Baris {i}: nama kosong')
             continue
 
-        no_wa = (row.get(col['no_whatsapp'], '').strip()
-                 if col['no_whatsapp'] else '')
-        email = (row.get(col['email'], '').strip()
-                 if col['email'] else '')
+        no_wa = row.get(col.get('no_whatsapp', ''), '').strip() if col.get('no_whatsapp') else ''
+        email = row.get(col.get('email', ''), '').strip()       if col.get('email')        else ''
 
         if not no_wa and not email:
             skipped += 1
-            skip_reasons.append(f'Baris {i}: no WA dan email kosong')
+            skip_reasons.append(f'Baris {i} ({nama}): no WA dan email kosong')
             continue
 
-        # Skip duplikat berdasarkan no_whatsapp atau email
+        # Cek duplikat
         if no_wa and Leads.objects.filter(no_whatsapp=no_wa).exists():
             skipped += 1
-            skip_reasons.append(f'Baris {i}: no WA {no_wa} sudah ada')
+            skip_reasons.append(f'Baris {i} ({nama}): no WA {no_wa} sudah ada')
             continue
         if email and not no_wa and Leads.objects.filter(email=email).exists():
             skipped += 1
-            skip_reasons.append(f'Baris {i}: email {email} sudah ada')
+            skip_reasons.append(f'Baris {i} ({nama}): email {email} sudah ada')
             continue
 
-        source = (row.get(col['source'], '').strip()
-                  if col['source'] else '') or None
-
-        raw_status = (row.get(col['status'], '').strip()
-                      if col['status'] else '')
+        source = row.get(col.get('source', ''), '').strip() if col.get('source') else ''
+        raw_status = row.get(col.get('status', ''), '').strip() if col.get('status') else ''
         status = raw_status if raw_status.lower() in VALID_STATUSES else 'New'
 
         # Buat lead
@@ -437,13 +359,13 @@ def api_import_sheet(request):
             id              = generate_id(CampaignLeads, 'id', 'PIP'),
             id_lead         = lead,
             funnel_position = status,
-            source          = source,
+            source          = source or None,
             id_camp         = camp_obj,
         )
 
         # Custom fields bawaan
         for field in ['produk', 'prioritas', 'catatan']:
-            if col[field]:
+            if col.get(field):
                 val = row.get(col[field], '').strip()
                 if val:
                     try:
@@ -459,7 +381,7 @@ def api_import_sheet(request):
         'message':      f'{imported} lead berhasil diimpor',
         'imported':     imported,
         'skipped':      skipped,
-        'skip_reasons': skip_reasons[:10],  # max 10 alasan
+        'skip_reasons': skip_reasons[:10],
         'batch_id':     batch_id,
         'campaign':     camp_obj.nama_camp if camp_obj else None,
     }, status=201)

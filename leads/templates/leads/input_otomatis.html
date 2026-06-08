@@ -137,7 +137,6 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── SECTION TITLE ── */
 .form-section-title {
   font-size: 15px; font-weight: 700; color: white;
   margin-bottom: 18px; padding-bottom: 10px;
@@ -145,41 +144,72 @@ body {
   display: flex; align-items: center; gap: 8px;
 }
 
-/* ── FORM GRID ── */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-group.full { grid-column: 1 / -1; }
 .form-label {
   font-size: 11px; font-weight: 600; color: var(--faint);
-  letter-spacing: .04em; display: flex; align-items: center; gap: 3px;
+  letter-spacing: .04em;
 }
 .req { color: var(--red); }
 
-.form-input, .form-select {
+.form-select {
   background: var(--dark-input);
   border: 1px solid var(--dark-border);
   border-radius: var(--radius-sm);
   padding: 9px 12px; font-size: 13px; color: white;
   font-family: 'DM Sans', sans-serif; outline: none;
-  transition: border-color .15s, box-shadow .15s;
-  width: 100%;
-}
-.form-input::placeholder { color: #475569; }
-.form-input:focus, .form-select:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96,165,250,.12);
-}
-.form-select {
-  cursor: pointer; appearance: none;
+  transition: border-color .15s;
+  width: 100%; cursor: pointer; appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px;
 }
+.form-select:focus { border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,.12); }
 .form-select option { background: var(--dark-card); }
-
 .field-hint { font-size: 11px; color: #64748b; margin-top: 3px; line-height: 1.5; }
-.field-hint.error { color: var(--red); display: none; }
-.form-group.has-error .field-hint.error { display: block; }
-.form-group.has-error .form-input { border-color: var(--red); }
+
+/* ── DROP ZONE ── */
+.drop-zone {
+  border: 2px dashed var(--dark-border);
+  border-radius: var(--radius);
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+  background: rgba(255,255,255,.02);
+}
+.drop-zone:hover, .drop-zone.dragover {
+  border-color: #60a5fa;
+  background: rgba(96,165,250,.06);
+}
+.drop-zone.has-file {
+  border-color: var(--green);
+  background: rgba(16,185,129,.06);
+  border-style: solid;
+}
+.drop-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.drop-icon { font-size: 36px; margin-bottom: 10px; }
+.drop-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 6px; }
+.drop-sub { font-size: 12px; color: var(--faint); }
+.drop-sub span { color: #60a5fa; text-decoration: underline; cursor: pointer; }
+.file-info {
+  display: none;
+  align-items: center; gap: 10px;
+  background: rgba(16,185,129,.1);
+  border: 1px solid rgba(16,185,129,.25);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-top: 12px;
+}
+.file-info.show { display: flex; }
+.file-icon { font-size: 20px; }
+.file-name { font-size: 13px; font-weight: 600; color: #34d399; flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-size { font-size: 11px; color: var(--faint); font-family: 'DM Mono', monospace; }
+.file-remove { font-size: 16px; cursor: pointer; color: var(--faint); padding: 2px 6px; border-radius: 4px; transition: all .15s; }
+.file-remove:hover { color: var(--red); background: rgba(239,68,68,.1); }
 
 /* ── GUIDE BOX ── */
 .guide-box {
@@ -189,208 +219,98 @@ body {
   padding: 14px 16px;
   margin-bottom: 20px;
 }
-.guide-title {
-  font-size: 11px; font-weight: 700; color: #93c5fd;
-  letter-spacing: .06em; text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.guide-cols {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px;
-}
-.guide-col-item {
-  font-size: 11px; color: #94a3b8; display: flex; align-items: center; gap: 5px;
-}
-.guide-col-item .col-name {
-  font-family: 'DM Mono', monospace; font-size: 11px; color: #60a5fa;
-  background: rgba(96,165,250,.1); padding: 1px 6px; border-radius: 3px;
-}
+.guide-title { font-size: 11px; font-weight: 700; color: #93c5fd; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 10px; }
+.guide-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+.guide-col-item { font-size: 11px; color: #94a3b8; display: flex; align-items: center; gap: 5px; }
+.guide-col-item .col-name { font-family: 'DM Mono', monospace; font-size: 11px; color: #60a5fa; background: rgba(96,165,250,.1); padding: 1px 6px; border-radius: 3px; }
 .guide-col-item .col-req { color: var(--red); font-size: 9px; font-weight: 700; }
-.guide-note {
-  font-size: 11px; color: #64748b;
-  margin-top: 10px; padding-top: 8px;
-  border-top: 1px solid rgba(255,255,255,.06);
-  line-height: 1.5;
+.guide-note { font-size: 11px; color: #64748b; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.06); line-height: 1.5; }
+
+/* ── DOWNLOAD TEMPLATE ── */
+.template-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: rgba(139,92,246,.12);
+  border: 1px solid rgba(139,92,246,.3);
+  border-radius: var(--radius-sm);
+  color: #c4b5fd; font-size: 12px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  transition: all .15s; font-family: 'DM Sans', sans-serif;
+  margin-bottom: 20px;
 }
+.template-btn:hover { background: rgba(139,92,246,.2); border-color: rgba(139,92,246,.5); }
 
 /* ── PREVIEW TABLE ── */
-.preview-wrap {
-  display: none;
-  margin-top: 16px;
-  border: 1px solid var(--dark-border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
+.preview-wrap { display: none; margin-top: 16px; border: 1px solid var(--dark-border); border-radius: var(--radius-sm); overflow: hidden; }
 .preview-wrap.show { display: block; }
-.preview-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 14px;
-  background: rgba(255,255,255,.04);
-  border-bottom: 1px solid var(--dark-border);
-}
+.preview-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,.04); border-bottom: 1px solid var(--dark-border); }
 .preview-header-title { font-size: 12px; font-weight: 700; color: #93c5fd; }
 .preview-header-count { font-size: 11px; color: var(--faint); font-family: 'DM Mono', monospace; }
 .preview-table-wrap { overflow-x: auto; }
-.preview-table {
-  width: 100%; border-collapse: collapse; font-size: 12px;
-}
-.preview-table th {
-  padding: 7px 12px; text-align: left;
-  font-size: 10px; font-weight: 700; letter-spacing: .06em;
-  text-transform: uppercase; color: var(--faint);
-  background: rgba(255,255,255,.03);
-  border-bottom: 1px solid var(--dark-border);
-  white-space: nowrap;
-}
-.preview-table td {
-  padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,.04);
-  color: #cbd5e1; vertical-align: middle;
-}
+.preview-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.preview-table th { padding: 7px 12px; text-align: left; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); background: rgba(255,255,255,.03); border-bottom: 1px solid var(--dark-border); white-space: nowrap; }
+.preview-table td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,.04); color: #cbd5e1; vertical-align: middle; }
 .preview-table tr:last-child td { border-bottom: none; }
-.preview-more {
-  padding: 8px 14px; font-size: 11px; color: var(--faint);
-  text-align: center; font-style: italic;
-  background: rgba(255,255,255,.02);
-  border-top: 1px solid var(--dark-border);
-}
+.preview-more { padding: 8px 14px; font-size: 11px; color: var(--faint); text-align: center; font-style: italic; background: rgba(255,255,255,.02); border-top: 1px solid var(--dark-border); }
 
 /* ── COL MAPPING ── */
-.col-mapping {
-  display: none;
-  flex-wrap: wrap; gap: 6px;
-  padding: 10px 14px;
-  background: rgba(16,185,129,.06);
-  border-top: 1px solid rgba(16,185,129,.15);
-}
+.col-mapping { display: none; flex-wrap: wrap; gap: 6px; padding: 10px 14px; background: rgba(16,185,129,.06); border-top: 1px solid rgba(16,185,129,.15); }
 .col-mapping.show { display: flex; }
-.col-map-chip {
-  display: inline-flex; align-items: center; gap: 4px;
-  background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.2);
-  border-radius: 20px; padding: 2px 8px;
-  font-size: 10px; font-weight: 600; color: #34d399;
-}
+.col-map-chip { display: inline-flex; align-items: center; gap: 4px; background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.2); border-radius: 20px; padding: 2px 8px; font-size: 10px; font-weight: 600; color: #34d399; }
 
 /* ── SKIP LOG ── */
-.skip-log {
-  display: none;
-  margin-top: 12px;
-  background: rgba(239,68,68,.06);
-  border: 1px solid rgba(239,68,68,.2);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-}
+.skip-log { display: none; margin-top: 12px; background: rgba(239,68,68,.06); border: 1px solid rgba(239,68,68,.2); border-radius: var(--radius-sm); padding: 12px 14px; }
 .skip-log.show { display: block; }
 .skip-log-title { font-size: 11px; font-weight: 700; color: #fca5a5; margin-bottom: 8px; }
-.skip-log-item  { font-size: 11px; color: #94a3b8; line-height: 1.7; font-family: 'DM Mono', monospace; }
+.skip-log-item { font-size: 11px; color: #94a3b8; line-height: 1.7; font-family: 'DM Mono', monospace; }
 
 /* ── FORM FOOTER ── */
-.form-footer {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: 20px; padding-top: 18px;
-  border-top: 1px solid var(--dark-border);
-}
+.form-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--dark-border); }
 .form-footer-left { font-size: 11px; color: #475569; }
 .form-footer-right { display: flex; gap: 10px; }
-.btn-reset {
-  padding: 8px 20px; background: transparent;
-  border: 1px solid #475569; border-radius: var(--radius-sm);
-  color: var(--faint); font-size: 13px; font-weight: 500;
-  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s;
-}
+.btn-reset { padding: 8px 20px; background: transparent; border: 1px solid #475569; border-radius: var(--radius-sm); color: var(--faint); font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
 .btn-reset:hover { border-color: var(--faint); color: white; }
-
-.btn-preview {
-  padding: 8px 18px; background: transparent;
-  border: 1px solid rgba(96,165,250,.4); border-radius: var(--radius-sm);
-  color: #93c5fd; font-size: 13px; font-weight: 600;
-  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s;
-  display: flex; align-items: center; gap: 6px;
-}
+.btn-preview { padding: 8px 18px; background: transparent; border: 1px solid rgba(96,165,250,.4); border-radius: var(--radius-sm); color: #93c5fd; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; display: flex; align-items: center; gap: 6px; }
 .btn-preview:hover { background: rgba(96,165,250,.08); border-color: #60a5fa; }
 .btn-preview:disabled { opacity: .4; cursor: not-allowed; }
-
-.btn-save {
-  padding: 8px 22px; background: var(--accent); border: none;
-  border-radius: var(--radius-sm); color: white;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  font-family: 'DM Sans', sans-serif; transition: all .15s;
-  display: flex; align-items: center; gap: 6px;
-}
+.btn-save { padding: 8px 22px; background: var(--accent); border: none; border-radius: var(--radius-sm); color: white; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; display: flex; align-items: center; gap: 6px; }
 .btn-save:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,.35); }
 .btn-save:disabled { background: #334155; cursor: not-allowed; transform: none; box-shadow: none; }
-
-.btn-spinner {
-  width: 13px; height: 13px;
-  border: 2px solid rgba(255,255,255,.4);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin .6s linear infinite;
-  display: none;
-}
+.btn-spinner { width: 13px; height: 13px; border: 2px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; display: none; }
 .btn-save.loading .btn-spinner { display: inline-block; }
-.btn-save.loading .btn-label   { display: none; }
+.btn-save.loading .btn-label { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── TOAST ── */
-.toast {
-  position: fixed; bottom: 22px; right: 22px;
-  border-radius: var(--radius); padding: 12px 18px;
-  font-size: 13px; font-weight: 600; color: white;
-  box-shadow: var(--shadow-lg); z-index: 2000;
-  display: none; align-items: center; gap: 8px;
-}
-.toast.show  { display: flex; animation: slideUp .28s ease; }
+.toast { position: fixed; bottom: 22px; right: 22px; border-radius: var(--radius); padding: 12px 18px; font-size: 13px; font-weight: 600; color: white; box-shadow: var(--shadow-lg); z-index: 2000; display: none; align-items: center; gap: 8px; }
+.toast.show { display: flex; animation: slideUp .28s ease; }
 .toast.green { background: #1e293b; border: 1px solid var(--green); border-left: 4px solid var(--green); }
 .toast.red   { background: #1e293b; border: 1px solid var(--red);   border-left: 4px solid var(--red); }
 
 /* ── SUCCESS OVERLAY ── */
-.success-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(15,23,42,.85); z-index: 2000;
-  align-items: center; justify-content: center;
-}
+.success-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.85); z-index: 2000; align-items: center; justify-content: center; }
 .success-overlay.show { display: flex; animation: fadeIn .25s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.success-card {
-  background: var(--dark-card); border: 1px solid #334155;
-  border-radius: var(--radius-lg); padding: 40px;
-  text-align: center; max-width: 400px; width: 90%;
-  animation: slideUp .3s ease;
-}
+.success-card { background: var(--dark-card); border: 1px solid #334155; border-radius: var(--radius-lg); padding: 40px; text-align: center; max-width: 400px; width: 90%; animation: slideUp .3s ease; }
 .success-icon  { font-size: 52px; margin-bottom: 16px; }
 .success-title { font-size: 20px; font-weight: 800; color: white; margin-bottom: 10px; }
 .success-sub   { font-size: 13px; color: var(--faint); margin-bottom: 16px; line-height: 1.6; }
-.success-stats {
-  display: flex; gap: 12px; justify-content: center; margin-bottom: 20px;
-}
-.success-stat {
-  background: rgba(255,255,255,.05); border: 1px solid var(--dark-border);
-  border-radius: var(--radius-sm); padding: 10px 18px; text-align: center;
-}
-.success-stat-val  { font-size: 22px; font-weight: 800; color: white; font-family: 'DM Mono', monospace; }
-.success-stat-label{ font-size: 10px; color: var(--faint); font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-top: 2px; }
+.success-stats { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; }
+.success-stat  { background: rgba(255,255,255,.05); border: 1px solid var(--dark-border); border-radius: var(--radius-sm); padding: 10px 18px; text-align: center; }
+.success-stat-val   { font-size: 22px; font-weight: 800; color: white; font-family: 'DM Mono', monospace; }
+.success-stat-label { font-size: 10px; color: var(--faint); font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-top: 2px; }
 .success-stat-val.green { color: #34d399; }
 .success-stat-val.amber { color: #fbbf24; }
-.success-id    { font-family: 'DM Mono', monospace; color: #60a5fa; font-size: 12px; margin-bottom: 20px; }
-.success-btns  { display: flex; gap: 10px; justify-content: center; }
-.btn-back-list {
-  padding: 9px 18px; background: var(--accent); border: none;
-  border-radius: var(--radius-sm); color: white; font-size: 13px;
-  font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  text-decoration: none; transition: all .15s;
-}
+.success-btns { display: flex; gap: 10px; justify-content: center; }
+.btn-back-list { padding: 9px 18px; background: var(--accent); border: none; border-radius: var(--radius-sm); color: white; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: none; transition: all .15s; }
 .btn-back-list:hover { background: #1d4ed8; }
-.btn-add-more {
-  padding: 9px 18px; background: transparent;
-  border: 1px solid #475569; border-radius: var(--radius-sm);
-  color: var(--faint); font-size: 13px; font-weight: 500;
-  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s;
-}
+.btn-add-more { padding: 9px 18px; background: transparent; border: 1px solid #475569; border-radius: var(--radius-sm); color: var(--faint); font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
 .btn-add-more:hover { border-color: var(--faint); color: white; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════ SIDEBAR ═══════════ -->
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sb-profile">
     <div class="sb-avatar">👤</div>
@@ -402,21 +322,18 @@ body {
   <a class="nav-item" href="{% url 'dashboard_analisis' %}"><span class="nav-icon">🖥️</span> Analisis Dashboard</a>
   <a class="nav-item" href="{% url 'distribusi_lead' %}"><span class="nav-icon">📋</span> Distribusi Lead</a>
   <a class="nav-item" href="{% url 'update_leads' %}"><span class="nav-icon">📅</span> Update dan Segmentasi</a>
-
   <div class="sb-bottom">
     <a class="logout-btn" href="{% url 'login' %}">🚪 Logout</a>
   </div>
 </aside>
 
-<!-- ═══════════ MAIN ═══════════ -->
+<!-- MAIN -->
 <main class="main">
-
   <div class="page-label">Input Lead Otomatis</div>
-
   <div class="topbar">
     <div class="topbar-left">
       <a class="back-btn" href="{% url 'distribusi_lead' %}">← Kembali</a>
-      <span class="topbar-title">Import dari Google Sheets</span>
+      <span class="topbar-title">Import dari File CSV</span>
     </div>
     <div class="topbar-right">
       <span class="active-label">📄 Input Otomatis</span>
@@ -426,66 +343,52 @@ body {
   <div class="form-overlay">
     <div class="form-card">
 
-      <!-- ── PANDUAN KOLOM ── -->
-      <div class="form-section-title">
-        <span>📋</span> Panduan Format Sheet
-      </div>
+      <!-- PANDUAN -->
+      <div class="form-section-title"><span>📋</span> Panduan Format CSV</div>
 
       <div class="guide-box">
         <div class="guide-title">📌 Kolom yang dikenali sistem</div>
         <div class="guide-cols">
-          <div class="guide-col-item">
-            <span class="col-name">nama</span>
-            <span class="col-req">WAJIB</span>
-          </div>
-          <div class="guide-col-item">
-            <span class="col-name">no_whatsapp</span>
-            <span style="font-size:10px;color:#64748b">/ telp / phone</span>
-          </div>
-          <div class="guide-col-item">
-            <span class="col-name">email</span>
-            <span style="font-size:10px;color:#64748b">salah satu wajib</span>
-          </div>
-          <div class="guide-col-item">
-            <span class="col-name">source</span>
-            <span style="font-size:10px;color:#64748b">/ sumber</span>
-          </div>
-          <div class="guide-col-item">
-            <span class="col-name">status</span>
-            <span style="font-size:10px;color:#64748b">New/Contacted/dll</span>
-          </div>
-          <div class="guide-col-item">
-            <span class="col-name">produk</span>
-            <span style="font-size:10px;color:#64748b">produk diminati</span>
-          </div>
-          <div class="guide-col-item">
-            <span class="col-name">prioritas</span>
-            <span style="font-size:10px;color:#64748b">Tinggi/Sedang/Rendah</span>
-          </div>
-          <div class="guide-col-item">
-            <span class="col-name">catatan</span>
-            <span style="font-size:10px;color:#64748b">/ notes</span>
-          </div>
+          <div class="guide-col-item"><span class="col-name">nama</span><span class="col-req">WAJIB</span></div>
+          <div class="guide-col-item"><span class="col-name">no_whatsapp</span><span style="font-size:10px;color:#64748b">/ telp / phone</span></div>
+          <div class="guide-col-item"><span class="col-name">email</span><span style="font-size:10px;color:#64748b">salah satu wajib</span></div>
+          <div class="guide-col-item"><span class="col-name">source</span><span style="font-size:10px;color:#64748b">/ sumber</span></div>
+          <div class="guide-col-item"><span class="col-name">status</span><span style="font-size:10px;color:#64748b">New/Contacted/dll</span></div>
+          <div class="guide-col-item"><span class="col-name">produk</span><span style="font-size:10px;color:#64748b">produk diminati</span></div>
+          <div class="guide-col-item"><span class="col-name">prioritas</span><span style="font-size:10px;color:#64748b">Tinggi/Sedang/Rendah</span></div>
+          <div class="guide-col-item"><span class="col-name">catatan</span><span style="font-size:10px;color:#64748b">/ notes</span></div>
         </div>
         <div class="guide-note">
-          ⚠️ Gunakan <strong>File → Share → Publish to web → pilih sheet → CSV</strong> lalu salin link-nya.<br>
-          Bukan link edit/share biasa. Lead dengan no WA atau email duplikat akan dilewati otomatis.
+          ⚠️ Pastikan baris pertama adalah header. Kolom dengan nama berbeda dari daftar di atas akan diabaikan. Lead dengan no WA atau email duplikat akan dilewati otomatis.
         </div>
       </div>
 
-      <!-- ── INPUT LINK ── -->
-      <div class="form-section-title" style="margin-top:4px">
-        <span>🔗</span> Sumber Data
-      </div>
+      <!-- Download Template -->
+      <button class="template-btn" onclick="downloadTemplate()">
+        ⬇️ Download Template CSV
+      </button>
+
+      <!-- UPLOAD SECTION -->
+      <div class="form-section-title" style="margin-top:4px"><span>📂</span> Upload File</div>
 
       <div class="form-grid">
-        <!-- Link Sheet -->
-        <div class="form-group full" id="fg-link">
-          <label class="form-label">Link Google Sheets (CSV) <span class="req">*</span></label>
-          <input class="form-input" id="f-link" type="url"
-            placeholder="https://docs.google.com/spreadsheets/.../pub?output=csv">
-          <span class="field-hint error">Masukkan URL yang valid (harus dimulai dengan https://)</span>
-          <span class="field-hint">Pastikan sheet sudah di-publish ke web sebagai CSV</span>
+        <!-- Drop Zone -->
+        <div class="form-group full">
+          <label class="form-label">File CSV <span class="req">*</span></label>
+          <div class="drop-zone" id="drop-zone">
+            <input type="file" id="f-csv" accept=".csv,text/csv" onchange="onFileChange(this)">
+            <div id="drop-content">
+              <div class="drop-icon">📁</div>
+              <div class="drop-title">Drag & drop file CSV di sini</div>
+              <div class="drop-sub">atau <span>klik untuk pilih file</span></div>
+            </div>
+          </div>
+          <div class="file-info" id="file-info">
+            <span class="file-icon">📄</span>
+            <span class="file-name" id="file-name">—</span>
+            <span class="file-size" id="file-size">—</span>
+            <span class="file-remove" onclick="removeFile()" title="Hapus file">✕</span>
+          </div>
         </div>
 
         <!-- Campaign -->
@@ -494,11 +397,11 @@ body {
           <select class="form-select" id="f-campaign">
             <option value="">— Tidak terhubung campaign —</option>
           </select>
-          <span class="field-hint">Semua lead dari sheet ini akan terhubung ke campaign yang dipilih</span>
+          <span class="field-hint">Semua lead dari file ini akan terhubung ke campaign yang dipilih</span>
         </div>
       </div>
 
-      <!-- ── PREVIEW AREA ── -->
+      <!-- PREVIEW -->
       <div class="preview-wrap" id="preview-wrap">
         <div class="preview-header">
           <span class="preview-header-title">👁️ Preview Data</span>
@@ -506,15 +409,10 @@ body {
         </div>
         <div class="col-mapping" id="col-mapping"></div>
         <div class="preview-table-wrap">
-          <table class="preview-table" id="preview-table">
+          <table class="preview-table">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Nama</th>
-                <th>No WA</th>
-                <th>Email</th>
-                <th>Source</th>
-                <th>Status</th>
+                <th>#</th><th>Nama</th><th>No WA</th><th>Email</th><th>Source</th><th>Status</th>
               </tr>
             </thead>
             <tbody id="preview-tbody"></tbody>
@@ -523,24 +421,20 @@ body {
         <div class="preview-more" id="preview-more"></div>
       </div>
 
-      <!-- Footer -->
+      <!-- FOOTER -->
       <div class="form-footer">
-        <div class="form-footer-left">
-          <span class="req">*</span> Wajib diisi
-        </div>
+        <div class="form-footer-left"><span class="req">*</span> Wajib diisi</div>
         <div class="form-footer-right">
           <button class="btn-reset" onclick="resetForm()">Reset</button>
-          <button class="btn-preview" id="btn-preview" onclick="doPreview()">
-            👁️ Preview
-          </button>
-          <button class="btn-save" id="btn-save" onclick="saveForm()">
+          <button class="btn-preview" id="btn-preview" onclick="doPreview()" disabled>👁️ Preview</button>
+          <button class="btn-save" id="btn-save" onclick="saveForm()" disabled>
             <span class="btn-spinner"></span>
             <span class="btn-label">Import Lead →</span>
           </button>
         </div>
       </div>
 
-      <!-- Skip log (muncul setelah import) -->
+      <!-- Skip log -->
       <div class="skip-log" id="skip-log">
         <div class="skip-log-title">⚠️ Baris yang Dilewati</div>
         <div class="skip-log-item" id="skip-log-content"></div>
@@ -550,12 +444,12 @@ body {
   </div>
 </main>
 
-<!-- ═══════════ SUCCESS OVERLAY ═══════════ -->
+<!-- SUCCESS OVERLAY -->
 <div class="success-overlay" id="success-overlay">
   <div class="success-card">
     <div class="success-icon">✅</div>
     <div class="success-title">Import Berhasil!</div>
-    <div class="success-sub" id="success-sub">Lead dari Google Sheets berhasil diimpor.</div>
+    <div class="success-sub" id="success-sub">Lead dari file CSV berhasil diimpor.</div>
     <div class="success-stats">
       <div class="success-stat">
         <div class="success-stat-val green" id="sstat-imported">0</div>
@@ -566,7 +460,6 @@ body {
         <div class="success-stat-label">Dilewati</div>
       </div>
     </div>
-    <div class="success-id" id="success-id"></div>
     <div class="success-btns">
       <a class="btn-back-list" href="{% url 'distribusi_lead' %}">Lihat Lead List</a>
       <button class="btn-add-more" onclick="addMore()">＋ Import Lagi</button>
@@ -574,7 +467,6 @@ body {
   </div>
 </div>
 
-<!-- ═══════════ TOAST ═══════════ -->
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
@@ -583,18 +475,18 @@ function getCookie(name) {
   return v ? v.pop() : '';
 }
 
+let parsedRows = [];
+let parsedHeaders = [];
+
 // ── INIT ──
 (function initPage() {
   const userId   = "{{ request.session.user_id|default:'' }}";
   const userName = "{{ request.session.user_name|default:'' }}";
   const userRole = "{{ request.session.user_role|default:'' }}";
-
   if (!userId) { window.location.href = "{% url 'login' %}"; return; }
   if (userRole && userRole !== 'admin') { window.location.href = "{% url 'dashboard_analisis' %}"; return; }
-
   document.getElementById('sb-username').textContent = userName || 'Admin';
   document.getElementById('sb-role').textContent     = (userRole || 'admin').toUpperCase();
-
   loadCampaignList();
 })();
 
@@ -604,91 +496,170 @@ async function loadCampaignList() {
     const data = await res.json();
     const sel  = document.getElementById('f-campaign');
     (data.campaigns || []).forEach(c => {
-      const opt       = document.createElement('option');
-      opt.value       = c.id_campaign;
+      const opt = document.createElement('option');
+      opt.value = c.id_campaign;
       opt.textContent = c.nama_camp + (c.source ? ` — ${c.source}` : '');
       sel.appendChild(opt);
     });
   } catch (_) {}
 }
 
+// ── DRAG & DROP ──
+const dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+
+function onFileChange(input) {
+  if (input.files[0]) handleFile(input.files[0]);
+}
+
+function handleFile(file) {
+  if (!file.name.endsWith('.csv') && file.type !== 'text/csv') {
+    showToast('File harus berformat .csv', 'red'); return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('Ukuran file maksimal 5MB', 'red'); return;
+  }
+
+  // Tampilkan info file
+  document.getElementById('file-name').textContent = file.name;
+  document.getElementById('file-size').textContent = formatBytes(file.size);
+  document.getElementById('file-info').classList.add('show');
+  dropZone.classList.add('has-file');
+
+  // Parse CSV di browser
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text = e.target.result;
+    parseCSV(text);
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+// ── PARSE CSV ──
+function parseCSV(text) {
+  // Strip BOM
+  text = text.replace(/^\uFEFF/, '');
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) { showToast('File CSV kosong atau hanya ada header', 'red'); return; }
+
+  // Parse header
+  parsedHeaders = splitCSVLine(lines[0]);
+  parsedRows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = splitCSVLine(lines[i]);
+    if (cols.every(c => !c.trim())) continue; // skip baris kosong
+    const row = {};
+    parsedHeaders.forEach((h, idx) => { row[h] = (cols[idx] || '').trim(); });
+    parsedRows.push(row);
+  }
+
+  document.getElementById('btn-preview').disabled = false;
+  document.getElementById('btn-save').disabled = false;
+  showToast(`✅ File terbaca — ${parsedRows.length} baris ditemukan`, 'green');
+  doPreview();
+}
+
+function splitCSVLine(line) {
+  const result = [];
+  let cur = '', inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') { inQuotes = !inQuotes; }
+    else if (ch === ',' && !inQuotes) { result.push(cur); cur = ''; }
+    else { cur += ch; }
+  }
+  result.push(cur);
+  return result.map(s => s.replace(/^"|"$/g, '').trim());
+}
+
+// ── COLUMN MAPPING ──
+const COL_MAP = {
+  nama:        ['nama', 'name', 'nama_lengkap', 'full_name'],
+  no_whatsapp: ['no_whatsapp', 'whatsapp', 'wa', 'telp', 'phone', 'no_hp', 'nomor', 'no_telp', 'nomor_wa'],
+  email:       ['email', 'e-mail', 'mail'],
+  source:      ['source', 'sumber', 'platform'],
+  status:      ['status', 'funnel', 'funnel_position'],
+  produk:      ['produk', 'product', 'produk_diminati'],
+  prioritas:   ['prioritas', 'priority'],
+  catatan:     ['catatan', 'notes', 'note', 'keterangan'],
+};
+const VALID_STATUSES = new Set(['new','contacted','qualified','proposal','closed won','closed lost','nurture']);
+
+function norm(s) { return (s||'').toLowerCase().trim().replace(/\s+/g,'_'); }
+function findCol(headers, candidates) {
+  return headers.find(h => candidates.includes(norm(h))) || null;
+}
+function getMapping() {
+  const col = {};
+  for (const [k, v] of Object.entries(COL_MAP)) col[k] = findCol(parsedHeaders, v);
+  return col;
+}
+
 // ── PREVIEW ──
-async function doPreview() {
-  const url = document.getElementById('f-link').value.trim();
-  if (!url) { showToast('Masukkan link Google Sheets terlebih dahulu', 'red'); return; }
+function doPreview() {
+  if (!parsedRows.length) { showToast('Upload file CSV terlebih dahulu', 'red'); return; }
 
-  const btn = document.getElementById('btn-preview');
-  btn.disabled = true;
-  btn.textContent = '⏳ Memuat...';
+  const col = getMapping();
 
-  try {
-    const res  = await fetch('/api/leads/import-sheet/', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
-      body:    JSON.stringify({ sheet_url: url, preview: true }),
-    });
-    const data = await res.json();
+  // Validasi kolom wajib
+  if (!col.nama) {
+    showToast(`Kolom "nama" tidak ditemukan. Header: ${parsedHeaders.join(', ')}`, 'red');
+    return;
+  }
+  if (!col.no_whatsapp && !col.email) {
+    showToast('Minimal ada kolom "no_whatsapp" atau "email"', 'red');
+    return;
+  }
 
-    if (!res.ok) throw new Error(data.error || 'Gagal preview');
+  // Tampilkan mapping chips
+  const mapEl = document.getElementById('col-mapping');
+  mapEl.innerHTML = Object.entries(col).filter(([,v])=>v).map(([k,v]) =>
+    `<div class="col-map-chip">✓ ${k} → <em>${v}</em></div>`
+  ).join('');
+  mapEl.classList.add('show');
 
-    // Render preview table
-    const tbody  = document.getElementById('preview-tbody');
-    tbody.innerHTML = '';
-    (data.preview || []).forEach((row, i) => {
-      tbody.innerHTML += `<tr>
-        <td style="color:var(--faint);font-family:'DM Mono',monospace">${i+1}</td>
-        <td style="font-weight:600;color:#e2e8f0">${row.nama || '—'}</td>
-        <td style="font-family:'DM Mono',monospace">${row.no_whatsapp || '—'}</td>
-        <td>${row.email || '—'}</td>
-        <td>${row.source || '—'}</td>
-        <td>${row.status || 'New'}</td>
-      </tr>`;
-    });
+  // Preview 5 baris
+  const tbody = document.getElementById('preview-tbody');
+  tbody.innerHTML = parsedRows.slice(0,5).map((row, i) => {
+    const status = row[col.status] || 'New';
+    return `<tr>
+      <td style="color:var(--faint);font-family:'DM Mono',monospace">${i+1}</td>
+      <td style="font-weight:600;color:#e2e8f0">${row[col.nama] || '—'}</td>
+      <td style="font-family:'DM Mono',monospace">${col.no_whatsapp ? row[col.no_whatsapp]||'—' : '—'}</td>
+      <td>${col.email ? row[col.email]||'—' : '—'}</td>
+      <td>${col.source ? row[col.source]||'—' : '—'}</td>
+      <td>${status || 'New'}</td>
+    </tr>`;
+  }).join('');
 
-    // Total count
-    document.getElementById('preview-count').textContent =
-      `${data.total_rows} baris ditemukan, preview 5 pertama`;
-
-    // Col mapping chips
-    const mapEl = document.getElementById('col-mapping');
-    mapEl.innerHTML = Object.entries(data.col_mapping || {}).map(([k, v]) =>
-      `<div class="col-map-chip">✓ ${k} → <em>${v}</em></div>`
-    ).join('');
-    mapEl.classList.toggle('show', Object.keys(data.col_mapping || {}).length > 0);
-
-    // Show preview
-    document.getElementById('preview-wrap').classList.add('show');
-    if (data.total_rows > 5) {
-      document.getElementById('preview-more').textContent =
-        `... dan ${data.total_rows - 5} baris lainnya`;
-    }
-
-    showToast(`✅ Preview berhasil — ${data.total_rows} baris siap diimpor`, 'green');
-
-  } catch (err) {
-    showToast('❌ ' + err.message, 'red');
-    document.getElementById('preview-wrap').classList.remove('show');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '👁️ Preview';
+  document.getElementById('preview-count').textContent = `${parsedRows.length} baris, preview 5 pertama`;
+  document.getElementById('preview-wrap').classList.add('show');
+  if (parsedRows.length > 5) {
+    document.getElementById('preview-more').textContent = `... dan ${parsedRows.length - 5} baris lainnya`;
+  } else {
+    document.getElementById('preview-more').textContent = '';
   }
 }
 
 // ── SAVE / IMPORT ──
 async function saveForm() {
-  const url = document.getElementById('f-link').value.trim();
-  const fg  = document.getElementById('fg-link');
+  if (!parsedRows.length) { showToast('Upload file CSV terlebih dahulu', 'red'); return; }
 
-  // Validasi URL
-  try {
-    if (!url) throw new Error();
-    new URL(url);
-    fg.classList.remove('has-error');
-  } catch {
-    fg.classList.add('has-error');
-    showToast('Masukkan URL yang valid', 'red');
-    return;
-  }
+  const col = getMapping();
+  if (!col.nama) { showToast('Kolom "nama" tidak ditemukan di file CSV', 'red'); return; }
 
   const btn = document.getElementById('btn-save');
   btn.classList.add('loading');
@@ -696,28 +667,32 @@ async function saveForm() {
 
   const campaignId = document.getElementById('f-campaign').value || null;
 
+  // Kirim data parsed (bukan file) ke backend
   try {
-    const res  = await fetch('/api/leads/import-sheet/', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
-      body:    JSON.stringify({ sheet_url: url, id_campaign: campaignId }),
+    const res = await fetch('/api/leads/import-csv/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify({
+        rows: parsedRows,
+        col_mapping: col,
+        id_campaign: campaignId,
+      }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Gagal mengimpor lead');
 
-    // Success overlay
     document.getElementById('sstat-imported').textContent = data.imported ?? 0;
     document.getElementById('sstat-skipped').textContent  = data.skipped  ?? 0;
 
     let subText = `${data.imported} lead berhasil diimpor`;
-    if (data.campaign) subText += ` dan terhubung ke campaign "${data.campaign}"`;
-    if (data.skipped)  subText += `. ${data.skipped} baris dilewati (duplikat/kosong).`;
+    if (data.campaign) subText += ` ke campaign "${data.campaign}"`;
+    if (data.skipped)  subText += `. ${data.skipped} baris dilewati.`;
     document.getElementById('success-sub').textContent = subText;
-    document.getElementById('success-id').textContent  =
-      data.batch_id ? `Batch ID: ${data.batch_id}` : '';
     document.getElementById('success-overlay').classList.add('show');
 
-    // Tampilkan skip log jika ada
     if (data.skip_reasons && data.skip_reasons.length) {
       document.getElementById('skip-log-content').innerHTML =
         data.skip_reasons.map(r => `• ${r}`).join('<br>');
@@ -732,20 +707,45 @@ async function saveForm() {
   }
 }
 
+// ── REMOVE FILE ──
+function removeFile() {
+  parsedRows = [];
+  parsedHeaders = [];
+  document.getElementById('f-csv').value = '';
+  document.getElementById('file-info').classList.remove('show');
+  document.getElementById('drop-zone').classList.remove('has-file');
+  document.getElementById('preview-wrap').classList.remove('show');
+  document.getElementById('col-mapping').classList.remove('show');
+  document.getElementById('btn-preview').disabled = true;
+  document.getElementById('btn-save').disabled = true;
+}
+
 // ── RESET ──
 function resetForm() {
-  document.getElementById('f-link').value = '';
+  removeFile();
   document.getElementById('f-campaign').selectedIndex = 0;
-  document.getElementById('fg-link').classList.remove('has-error');
-  document.getElementById('preview-wrap').classList.remove('show');
   document.getElementById('skip-log').classList.remove('show');
-  document.getElementById('col-mapping').classList.remove('show');
   showToast('Form berhasil direset', 'green');
 }
 
 function addMore() {
   document.getElementById('success-overlay').classList.remove('show');
   resetForm();
+}
+
+// ── DOWNLOAD TEMPLATE ──
+function downloadTemplate() {
+  const header = 'nama,no_whatsapp,email,source,status,produk,prioritas,catatan';
+  const contoh = [
+    'Budi Santoso,08111234501,budi@gmail.com,Instagram,New,Paket Premium,Tinggi,Tertarik promo',
+    'Sari Dewi,08111234502,,TikTok,Contacted,Paket Starter,Sedang,Sudah follow up',
+    'Ahmad Fauzi,,ahmad@yahoo.com,Facebook,Qualified,Paket Basic,Rendah,',
+  ].join('\n');
+  const blob = new Blob([header + '\n' + contoh], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'template_leads.csv';
+  a.click(); URL.revokeObjectURL(url);
 }
 
 // ── TOAST ──
@@ -755,12 +755,6 @@ function showToast(msg, type = 'green') {
   t.className = `toast show ${type}`;
   setTimeout(() => t.classList.remove('show'), 3500);
 }
-
-// Live clear error
-document.getElementById('f-link').addEventListener('input', () => {
-  document.getElementById('fg-link').classList.remove('has-error');
-  document.getElementById('preview-wrap').classList.remove('show');
-});
 </script>
 </body>
 </html>
