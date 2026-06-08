@@ -677,16 +677,19 @@ def lead_detail(request, id):
 
     if request.method == 'GET':
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
+        assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
         return JsonResponse({
-            'id_lead':     lead.id_lead,
-            'nama':        lead.nama,
-            'no_whatsapp': lead.no_whatsapp,
-            'email':       lead.email,
-            'source':      campaign_lead.source          if campaign_lead else None,
-            'status':      campaign_lead.funnel_position if campaign_lead else 'New',
-            'produk':      get_cf_value(lead, 'produk'),
-            'prioritas':   get_cf_value(lead, 'prioritas'),
-            'catatan':     get_cf_value(lead, 'catatan'),
+        'id_lead':     lead.id_lead,
+        'nama':        lead.nama,
+        'no_whatsapp': lead.no_whatsapp,
+        'email':       lead.email,
+        'source':      campaign_lead.source          if campaign_lead else None,
+        'status':      campaign_lead.funnel_position if campaign_lead else 'New',
+        'produk':      get_cf_value(lead, 'produk'),
+        'prioritas':   get_cf_value(lead, 'prioritas'),
+        'catatan':     get_cf_value(lead, 'catatan'),
+        'assigned_id': assignment.id_user.id_user if assignment and assignment.id_user else None,
+        'assigned_to': assignment.id_user.nama    if assignment and assignment.id_user else None,
         })
 
     elif request.method in ['PATCH', 'PUT']:

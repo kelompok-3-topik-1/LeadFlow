@@ -2339,38 +2339,51 @@
     wrap.style.display = '';
     grid.innerHTML = '';
 
-    // Ambil nilai custom fields lead yang sudah tersimpan
-    let existingValues = {};
+    // Ambil data lead dari API detail (sudah ada produk, prioritas, catatan, custom_fields)
+    let leadData = {};
+    let cfById   = {};
     try {
-      // Gunakan data dari leads tabel yang sudah di-load (via distribusi leads)
-      // Fetch ulang dari API distribusi untuk mendapatkan custom_fields
-      const res  = await fetch(`/api/distribusi/leads/?page=1&per_page=10000`);
-      const data = await res.json();
-      const found = (data.leads || []).find(l => l.id_lead === leadId);
-      if (found) existingValues = found.custom_fields || {};
+      const res  = await fetch(`/api/leads/${leadId}/`);
+      leadData   = await res.json();
+
+      // Ambil juga custom_fields by id dari distribusi leads
+      const res2  = await fetch(`/api/distribusi/leads/?page=1&per_page=10000`);
+      const data2 = await res2.json();
+      const found = (data2.leads || []).find(l => l.id_lead === leadId);
+      if (found) cfById = found.custom_fields || {};
     } catch (_) {}
 
+    // Nama builtin yang disimpan via set_cf_value
+    const BUILTIN_NAMES = ['produk', 'prioritas', 'catatan'];
+
     colState.custom.forEach(col => {
-      const currentVal = existingValues[col.id] || '';
+      const isBuiltin = BUILTIN_NAMES.includes(col.name.toLowerCase());
+      // Builtin: ambil dari leadData langsung; custom: ambil dari cfById
+      const currentVal = isBuiltin
+        ? (leadData[col.name.toLowerCase()] || '')
+        : (cfById[col.id] || '');
+
       let inputHtml = '';
 
       if (col.type === 'dropdown') {
         const opts = (col.options || []).map(o =>
           `<option value="${o}" ${currentVal === o ? 'selected' : ''}>${o}</option>`
         ).join('');
-        inputHtml = `<select data-cf-id="${col.id}"><option value="">— Pilih —</option>${opts}</select>`;
+        inputHtml = `<select data-cf-id="${col.id}" data-builtin="${isBuiltin}" data-name="${col.name.toLowerCase()}">
+          <option value="">— Pilih —</option>${opts}
+        </select>`;
       } else if (col.type === 'date') {
-        inputHtml = `<input type="date" data-cf-id="${col.id}" value="${currentVal}">`;
+        inputHtml = `<input type="date" data-cf-id="${col.id}" data-builtin="${isBuiltin}" data-name="${col.name.toLowerCase()}" value="${currentVal}">`;
       } else {
-        inputHtml = `<input type="text" data-cf-id="${col.id}" value="${currentVal}" placeholder="Isi ${col.name}...">`;
+        inputHtml = `<input type="text" data-cf-id="${col.id}" data-builtin="${isBuiltin}" data-name="${col.name.toLowerCase()}" value="${currentVal}" placeholder="Isi ${col.name}...">`;
       }
 
       const fieldEl = document.createElement('div');
       fieldEl.className = 'edit-field';
       fieldEl.innerHTML = `<label>${col.name}</label>${inputHtml}`;
       grid.appendChild(fieldEl);
-    });
-  }
+  });
+}
 
   function closeEditModal() {
     editingLeadId = null;
@@ -2418,19 +2431,40 @@
           }
         }
 
-        // Simpan custom fields jika ada
-        const cfInputs = document.querySelectorAll('#edit-custom-fields-grid [data-cf-id]');
-        if (cfInputs.length) {
-          const cfPayload = {};
-          cfInputs.forEach(el => { cfPayload[el.dataset.cfId] = el.value; });
-          await fetch(`/api/leads/${editingLeadId}/custom_fields/`, {
+        // Simpan custom fields — pisahkan builtin dan custom
+    const cfInputs = document.querySelectorAll('#edit-custom-fields-grid [data-cf-id]');
+      if (cfInputs.length) {
+        const builtinPayload = {};
+        const customPayload  = {};
+
+        cfInputs.forEach(el => {
+          if (el.dataset.builtin === 'true') {
+            builtinPayload[el.dataset.name] = el.value;
+          } else {
+            customPayload[el.dataset.cfId] = el.value;
+          }
+        });
+
+        // Simpan builtin (produk, prioritas, catatan) via PATCH lead_detail
+        if (Object.keys(builtinPayload).length) {
+          await fetch(`/api/leads/${editingLeadId}/`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
-            body: JSON.stringify(cfPayload),
+            body: JSON.stringify(builtinPayload),
           });
         }
 
-        closeEditModal();
+        // Simpan custom columns via custom_fields endpoint
+        if (Object.keys(customPayload).length) {
+          await fetch(`/api/leads/${editingLeadId}/custom_fields/`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify(customPayload),
+          });
+        }
+      }
+
+      closeEditModal();
         showToast('✅ Lead berhasil diperbarui!');
         loadLeads();
         loadStats();
@@ -2441,7 +2475,6 @@
       showToast('Error koneksi ke server', true);
     }
   }
-
   // ═══════════════════════════════════════════════
   //  HAPUS LEAD
   // ═══════════════════════════════════════════════
