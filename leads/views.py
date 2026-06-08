@@ -453,25 +453,91 @@ def api_dashboard(request):
 
     # product_counts: pakai id_col FK ke kolom "produk"
     produk_col = get_builtin_col("produk")
-    product_counts = (
-        CustomFields.objects
-        .filter(id_col=produk_col)
-        .values('value')
+    campaign_counts = (
+        CampaignLeads.objects
+        .filter(id_camp__isnull=False)
+        .values('id_camp__id_campaign', 'id_camp__nama_camp')
         .annotate(total=Count('id'))
         .order_by('-total')
     )
 
     return JsonResponse({
-        "total_leads":    total_leads,
-        "assigned":       assigned,
-        "unassigned":     unassigned,
+        "total_leads":     total_leads,
+        "assigned":        assigned,
+        "unassigned":      unassigned,
         "conversion_rate": conversion_rate,
-        "cost_per_lead":  int(cost_per_lead),
-        "status_counts":  list(status_counts),
-        "source_counts":  list(source_counts),
-        "product_counts": list(product_counts),
+        "cost_per_lead":   int(cost_per_lead),
+        "status_counts":   list(status_counts),
+        "source_counts":   list(source_counts),
+        "campaign_counts": list(campaign_counts),
     })
 
+# ─────────────────────────────────────────────────────────────
+#  API Campaign
+# ─────────────────────────────────────────────────────────────
+
+@csrf_exempt
+def api_campaign_list(request):
+    if request.method == 'GET':
+        campaigns = Campaign.objects.all().order_by('start_date')
+        data = []
+        for c in campaigns:
+            lead_count = CampaignLeads.objects.filter(id_camp=c).count()
+            data.append({
+                'id_campaign':      c.id_campaign,
+                'nama_camp':        c.nama_camp,
+                'source':           c.source,
+                'production_cost':  float(c.production_cost) if c.production_cost else None,
+                'start_date':       str(c.start_date)  if c.start_date  else None,
+                'end_date':         str(c.end_date)    if c.end_date    else None,
+                'total_leads':      lead_count,
+            })
+        return JsonResponse({'campaigns': data})
+
+    if request.method == 'POST':
+        try:
+            payload = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Body tidak valid'}, status=400)
+
+        nama_camp       = (payload.get('nama_camp') or '').strip()
+        source          = (payload.get('source') or '').strip()
+        production_cost = payload.get('production_cost')
+        start_date      = payload.get('start_date') or None
+        end_date        = payload.get('end_date')   or None
+
+        if not nama_camp:
+            return JsonResponse({'error': 'Nama campaign wajib diisi'}, status=400)
+
+        campaign = Campaign.objects.create(
+            id_campaign     = generate_id(Campaign, 'id_campaign', 'CMP'),
+            nama_camp       = nama_camp,
+            source          = source or None,
+            production_cost = production_cost or None,
+            start_date      = start_date,
+            end_date        = end_date,
+        )
+        return JsonResponse({
+            'message':     'Campaign berhasil ditambahkan',
+            'id_campaign': campaign.id_campaign,
+        }, status=201)
+
+    return JsonResponse({'error': 'Method tidak didukung'}, status=405)
+
+
+@csrf_exempt
+def api_campaign_detail(request, id_campaign):
+    try:
+        campaign = Campaign.objects.get(id_campaign=id_campaign)
+    except Campaign.DoesNotExist:
+        return JsonResponse({'error': 'Campaign tidak ditemukan'}, status=404)
+
+    if request.method == 'DELETE':
+        # Hapus hanya campaign-nya, CampaignLeads tidak ikut terhapus
+        campaign.delete()
+        return JsonResponse({'ok': True})
+
+    return JsonResponse({'error': 'Method tidak didukung'}, status=405)
 
 # ─────────────────────────────────────────────────────────────
 #  API Distribusi Lead
