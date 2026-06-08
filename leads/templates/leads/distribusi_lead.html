@@ -1875,6 +1875,14 @@
           <option value="">— Tidak di-assign —</option>
         </select>
       </div>
+
+      <div class="edit-field edit-form-full">
+        <label>Campaign</label>
+        <select id="edit-campaign">
+          <option value="">— Tidak ada campaign —</option>
+        </select>
+      </div>
+
     </div>
 
     <!-- Kolom kustom — dirender JS jika ada -->
@@ -2284,6 +2292,16 @@
   // ═══════════════════════════════════════════════
   let editingLeadId = null;
 
+  let cachedCampaigns = []; // cache list campaigns untuk dropdown
+
+  async function loadCampaignCache() {
+    try {
+      const res  = await fetch('/api/campaigns/');
+      const data = await res.json();
+      cachedCampaigns = data.campaigns || [];
+    } catch (_) { cachedCampaigns = []; }
+  }
+
   async function openEditModal(leadId) {
     editingLeadId = leadId;
 
@@ -2316,6 +2334,16 @@
             opt.selected = true;
           }
           salesSelect.appendChild(opt);
+        });
+
+        const campSelect = document.getElementById('edit-campaign');
+        campSelect.innerHTML = '<option value="">— Tidak ada campaign —</option>';
+        cachedCampaigns.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value       = c.id_campaign;
+          opt.textContent = c.nama_camp;
+          if (lead.id_campaign === c.id_campaign) opt.selected = true;
+          campSelect.appendChild(opt);
         });
       }
 
@@ -2414,7 +2442,15 @@
           'Content-Type': 'application/json',
           'X-CSRFToken': getCookie('csrftoken'),
         },
-        body: JSON.stringify({ nama, no_whatsapp: no_wa, email, source, status }),
+        body: JSON.stringify({
+          nama,
+          no_whatsapp: no_wa,
+          email,
+          source,
+          status,
+          id_campaign: document.getElementById('edit-campaign')?.value || null,
+        }),
+        
       });
       const data = await res.json();
 
@@ -2581,15 +2617,16 @@
 
   // Kolom bawaan — key = field di objek lead, bisa di-toggle
   const BUILTIN_COLS = [
-    { key: 'nama',        label: 'Nama',      icon: '👤', alwaysOn: true },
-    { key: 'status',      label: 'Status',    icon: '🏷️', alwaysOn: false },
-    { key: 'source',      label: 'Source',    icon: '📌', alwaysOn: false },
-    { key: 'assigned_to', label: 'Assigned',  icon: '👥', alwaysOn: false },
+    { key: 'nama',         label: 'Nama',      icon: '👤', alwaysOn: true },
+    { key: 'status',       label: 'Status',    icon: '🏷️', alwaysOn: false },
+    { key: 'source',       label: 'Source',    icon: '📌', alwaysOn: false },
+    { key: 'assigned_to',  label: 'Assigned',  icon: '👥', alwaysOn: false },
+    { key: 'id_campaign',  label: 'Campaign',  icon: '📣', alwaysOn: false },
   ];
 
   // State kolom: mana yang aktif
   let colState = {
-    builtin: { nama: true, status: true, source: true, assigned_to: true },
+     builtin: { nama: true, status: true, source: true, assigned_to: true, id_campaign: false },
     custom: [],   // [{ id, name, type, options:[] }]
   };
 
@@ -2677,6 +2714,11 @@
             ? `<span class="assigned-text">${lead.assigned_to}</span>`
             : `<span class="assigned-empty">Belum di-assign</span>`;
           row += `<td>${assignedEl}</td>`;
+        } else if (col.key === 'id_campaign') {
+          const campEl = lead.nama_campaign
+            ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#1d4ed8;background:#eff6ff;padding:3px 8px;border-radius:12px;white-space:nowrap;">📣 ${lead.nama_campaign}</span>`
+            : `<span style="font-size:11px;color:var(--text-muted);font-style:italic">—</span>`;
+          row += `<td>${campEl}</td>`;
         }
       });
 
@@ -2925,6 +2967,7 @@ function initApp() {
   }
 
   loadStats();
+  loadCampaignCache();   // ← tambahkan ini
   loadColumnConfig();
   loadLeads();
 }

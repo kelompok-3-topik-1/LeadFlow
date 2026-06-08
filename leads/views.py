@@ -646,6 +646,8 @@ def api_distribusi_leads(request):
             "produk":        cf_by_name.get("produk"),      
             "catatan":       cf_by_name.get("catatan"),     
             "custom_fields": cf_by_id,
+            "id_campaign":   campaign_lead.id_camp.id_campaign if campaign_lead and campaign_lead.id_camp else None,
+            "nama_campaign": campaign_lead.id_camp.nama_camp   if campaign_lead and campaign_lead.id_camp else None,
         })
 
     return JsonResponse({
@@ -758,6 +760,8 @@ def lead_detail(request, id):
         'catatan':     get_cf_value(lead, 'catatan'),
         'assigned_id': assignment.id_user.id_user if assignment and assignment.id_user else None,
         'assigned_to': assignment.id_user.nama    if assignment and assignment.id_user else None,
+        'id_campaign':   campaign_lead.id_camp.id_campaign if campaign_lead and campaign_lead.id_camp else None,
+        'nama_campaign': campaign_lead.id_camp.nama_camp   if campaign_lead and campaign_lead.id_camp else None,
         })
 
     elif request.method in ['PATCH', 'PUT']:
@@ -767,6 +771,31 @@ def lead_detail(request, id):
             if field in data:
                 setattr(lead, field, data[field])
         lead.save()
+
+        # Di dalam elif request.method in ['PATCH', 'PUT']:
+        if 'id_campaign' in data:
+            campaign_id = data['id_campaign']
+            campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
+            if campaign_id:
+                try:
+                    campaign = Campaign.objects.get(id_campaign=campaign_id)
+                    if campaign_lead:
+                        campaign_lead.id_camp = campaign
+                        campaign_lead.save()
+                    else:
+                        CampaignLeads.objects.create(
+                            id=generate_id(CampaignLeads, "id", "PIP"),
+                            id_lead=lead,
+                            id_camp=campaign,
+                            funnel_position='New',
+                        )
+                except Campaign.DoesNotExist:
+                    pass
+            else:
+                # Kosongkan campaign
+                if campaign_lead:
+                    campaign_lead.id_camp = None
+                    campaign_lead.save()
 
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
         if campaign_lead:
