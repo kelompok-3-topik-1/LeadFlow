@@ -492,12 +492,15 @@ def api_distribusi_stats(request):
         "status_counts": status_counts,
     })
 
-
 def api_distribusi_leads(request):
-    status_filter = request.GET.get("status", "")
-    search_query  = request.GET.get("search", "").strip()
-    page          = int(request.GET.get("page", 1))
-    per_page      = int(request.GET.get("per_page", 10))
+    status_filter   = request.GET.get("status", "")
+    search_query    = request.GET.get("search", "").strip()
+    assigned_filter = request.GET.get("assigned", "")   # "assigned" | "unassigned" | ""
+    source_filter   = request.GET.get("source", "")
+    prioritas_filter= request.GET.get("prioritas", "")
+    sales_filter    = request.GET.get("sales", "")      # id_user
+    page            = int(request.GET.get("page", 1))
+    per_page        = int(request.GET.get("per_page", 10))
 
     leads_qs = Leads.objects.prefetch_related('customfields_set__id_col').all()
 
@@ -514,6 +517,37 @@ def api_distribusi_leads(request):
         ).values_list("id_lead_id", flat=True)
         leads_qs = leads_qs.filter(id_lead__in=lead_ids)
 
+    # Filter assigned / unassigned
+    if assigned_filter == "assigned":
+        assigned_ids = Assignment.objects.values_list("id_lead_id", flat=True)
+        leads_qs = leads_qs.filter(id_lead__in=assigned_ids)
+    elif assigned_filter == "unassigned":
+        assigned_ids = Assignment.objects.values_list("id_lead_id", flat=True)
+        leads_qs = leads_qs.exclude(id_lead__in=assigned_ids)
+
+    # Filter by source
+    if source_filter:
+        lead_ids = CampaignLeads.objects.filter(
+            source__iexact=source_filter
+        ).values_list("id_lead_id", flat=True)
+        leads_qs = leads_qs.filter(id_lead__in=lead_ids)
+
+    # Filter by sales
+    if sales_filter:
+        lead_ids = Assignment.objects.filter(
+            id_user__id_user=sales_filter
+        ).values_list("id_lead_id", flat=True)
+        leads_qs = leads_qs.filter(id_lead__in=lead_ids)
+
+    # Filter by prioritas
+    if prioritas_filter:
+        prioritas_col = get_builtin_col("prioritas")
+        lead_ids = CustomFields.objects.filter(
+            id_col=prioritas_col,
+            value__iexact=prioritas_filter
+        ).values_list("id_lead_id", flat=True)
+        leads_qs = leads_qs.filter(id_lead__in=lead_ids)
+
     total      = leads_qs.count()
     start      = (page - 1) * per_page
     leads_page = leads_qs[start: start + per_page]
@@ -523,9 +557,8 @@ def api_distribusi_leads(request):
         campaign_lead = CampaignLeads.objects.filter(id_lead=lead).first()
         assignment    = Assignment.objects.filter(id_lead=lead).order_by("-assigned_at").first()
 
-        # Bangun dict: col_name -> value  dan  col_id (str) -> value (untuk custom)
-        cf_by_name = {}   # builtin: nama kolom -> value
-        cf_by_id   = {}   # custom : str(id_col) -> value
+        cf_by_name = {}
+        cf_by_id   = {}
         for cf in lead.customfields_set.all():
             if cf.id_col_id is not None:
                 col_name = cf.id_col.name if cf.id_col else None
@@ -554,6 +587,7 @@ def api_distribusi_leads(request):
         "per_page": per_page,
         "pages":    (total + per_page - 1) // per_page,
     })
+
 
 
 def api_sales_list(request):

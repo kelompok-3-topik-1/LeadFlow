@@ -1369,6 +1369,115 @@
     margin-left: 4px;
     letter-spacing: 0;
   }
+    /* ════════════════════════════════
+    FILTER PANEL DROPDOWN
+  ════════════════════════════════ */
+  .filter-wrap { position: relative; }
+
+  .filter-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 300px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    z-index: 600;
+    padding: 16px;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .filter-panel.open { display: flex; }
+
+  .filter-panel-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-group label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .filter-group select {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    background: var(--bg);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .filter-group select:focus { border-color: var(--accent); background: #fff; }
+
+  .filter-panel-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    gap: 8px;
+  }
+
+  .btn-filter-reset {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    padding: 4px 0;
+    transition: color 0.13s;
+  }
+  .btn-filter-reset:hover { color: var(--red); }
+
+  .btn-filter-apply {
+    flex: 1;
+    padding: 7px 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.13s;
+  }
+  .btn-filter-apply:hover { background: #1d4ed8; }
+
+  .filter-active-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    margin-left: 2px;
+  }
 </style>
 </head>
 <body>
@@ -1483,7 +1592,61 @@
           </div>
             <div class="table-actions">
               <button class="btn-outline" id="btn-columns" onclick="openColumnsPanel()">☰ Columns</button>
-              <button class="btn-outline">⚡ Filter</button>
+              <div class="filter-wrap" id="filterWrap">
+                <button class="btn-outline" id="btn-filter" onclick="toggleFilterPanel(event)">
+                  ⚡ Filter <span id="filter-badge" style="display:none" class="filter-active-badge">0</span>
+                </button>
+                <div class="filter-panel" id="filterPanel">
+                  <div class="filter-panel-title">Filter Lead</div>
+
+                  <div class="filter-group">
+                    <label>Status Assign</label>
+                    <select id="filter-assigned">
+                      <option value="">Semua</option>
+                      <option value="assigned">Sudah di-assign</option>
+                      <option value="unassigned">Belum di-assign</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label>Source</label>
+                    <select id="filter-source">
+                      <option value="">Semua Source</option>
+                      <option value="Instagram">Instagram</option>
+                      <option value="TikTok">TikTok</option>
+                      <option value="Facebook">Facebook</option>
+                      <option value="Website">Website</option>
+                      <option value="WhatsApp">WhatsApp</option>
+                      <option value="Google">Google</option>
+                      <option value="Referral">Referral</option>
+                      <option value="Ads">Ads</option>
+                      <option value="Twitter">Twitter</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label>Prioritas</label>
+                    <select id="filter-prioritas">
+                      <option value="">Semua Prioritas</option>
+                      <option value="Tinggi">Tinggi</option>
+                      <option value="Sedang">Sedang</option>
+                      <option value="Rendah">Rendah</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label>Sales</label>
+                    <select id="filter-sales">
+                      <option value="">Semua Sales</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-panel-footer">
+                    <button class="btn-filter-reset" onclick="resetFilter()">Reset Filter</button>
+                    <button class="btn-filter-apply" onclick="applyFilter()">Terapkan</button>
+                  </div>
+                </div>
+              </div>
               <button class="btn-outline" onclick="exportCSV()">↓ Export</button>
               <!-- TAMBAHAN: tombol Auto Assign, hanya muncul untuk admin -->
               <button class="btn-primary" id="btn-auto-assign" style="display:none" onclick="doAutoAssign()">⚡ Auto Assign</button>
@@ -1907,10 +2070,14 @@
     tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-muted)"><span style="font-size:24px">⏳</span><br>Memuat data...</td></tr>`;
 
     const params = new URLSearchParams({
-      status:   state.currentStatus === 'all' ? '' : state.currentStatus,
-      search:   state.searchQuery,
-      page:     state.currentPage,
-      per_page: state.perPage,
+      status:    state.currentStatus === 'all' ? '' : state.currentStatus,
+      search:    state.searchQuery,
+      page:      state.currentPage,
+      per_page:  state.perPage,
+      assigned:  filterState.assigned,
+      source:    filterState.source,
+      prioritas: filterState.prioritas,
+      sales:     filterState.sales,
     });
 
     try {
@@ -2751,6 +2918,82 @@ function initApp() {
     if (dropdown) dropdown.classList.remove('open');
     if (btn) btn.setAttribute('aria-expanded', false);
   }
+
+  // ═══════════════════════════════════════════════
+//  FILTER PANEL
+// ═══════════════════════════════════════════════
+let filterState = {
+  assigned:  '',
+  source:    '',
+  prioritas: '',
+  sales:     '',
+};
+
+function toggleFilterPanel(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('filterPanel');
+  const isOpen = panel.classList.toggle('open');
+  if (isOpen) loadSalesFilterOptions();
+}
+
+async function loadSalesFilterOptions() {
+  const sel = document.getElementById('filter-sales');
+  if (sel.options.length > 1) return; // sudah diisi
+  try {
+    const res  = await fetch('/api/sales/');
+    const data = await res.json();
+    (data.sales || []).forEach(s => {
+      const opt = document.createElement('option');
+      opt.value       = s.id_user;
+      opt.textContent = s.nama;
+      if (filterState.sales === s.id_user) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  } catch (_) {}
+}
+
+function applyFilter() {
+  filterState.assigned  = document.getElementById('filter-assigned').value;
+  filterState.source    = document.getElementById('filter-source').value;
+  filterState.prioritas = document.getElementById('filter-prioritas').value;
+  filterState.sales     = document.getElementById('filter-sales').value;
+
+  // Hitung berapa filter aktif
+  const activeCount = [filterState.assigned, filterState.source, filterState.prioritas, filterState.sales]
+    .filter(Boolean).length;
+
+  const badge = document.getElementById('filter-badge');
+  if (activeCount > 0) {
+    badge.style.display = 'inline-flex';
+    badge.textContent   = activeCount;
+  } else {
+    badge.style.display = 'none';
+  }
+
+  document.getElementById('filterPanel').classList.remove('open');
+  state.currentPage = 1;
+  loadLeads();
+}
+
+function resetFilter() {
+  filterState = { assigned: '', source: '', prioritas: '', sales: '' };
+  document.getElementById('filter-assigned').value  = '';
+  document.getElementById('filter-source').value    = '';
+  document.getElementById('filter-prioritas').value = '';
+  document.getElementById('filter-sales').value     = '';
+  document.getElementById('filter-badge').style.display = 'none';
+  state.currentPage = 1;
+  loadLeads();
+  document.getElementById('filterPanel').classList.remove('open');
+}
+
+// Tutup panel jika klik di luar
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('filterWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('filterPanel')?.classList.remove('open');
+  }
+});
 
 function doLogout() {
   window.location.href = "{% url 'login' %}";
