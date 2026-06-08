@@ -91,57 +91,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .pie-wrap{display:flex;justify-content:center;}
 .pie-svg{width:180px;height:180px;}
 
-/* ── ALL LEADS TABLE ── */
-.table-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
-.table-head-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
-.table-head-bar h3{font-size:14px;font-weight:700;}
-.table-head-bar p{font-size:11px;color:var(--text-3);margin-top:1px;}
-.table-head-right{display:flex;align-items:center;gap:8px;}
-.search-mini{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 11px;font-size:12px;color:var(--text-3);}
-.search-mini input{border:none;background:transparent;outline:none;font-size:12px;color:var(--text);font-family:'DM Sans',sans-serif;width:130px;}
-.search-mini input::placeholder{color:var(--text-3);}
-.tabs{display:flex;align-items:center;gap:3px;padding:10px 18px;border-bottom:1px solid var(--border);}
-.tab{display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid transparent;color:var(--text-2);transition:all .12s;}
-.tab:hover{background:var(--bg);}
-.tab.active{background:var(--accent);color:white;font-weight:600;}
-.tab-ct{background:rgba(255,255,255,.25);border-radius:10px;padding:1px 5px;font-size:10px;font-family:'DM Mono',monospace;}
-.tab:not(.active) .tab-ct{background:var(--border);color:var(--text-3);}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead th{padding:9px 16px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);background:var(--bg);border-bottom:1px solid var(--border);}
-tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
-tbody tr:hover{background:var(--bg);}
-tbody tr:last-child{border-bottom:none;}
-td{padding:11px 16px;vertical-align:middle;}
-.lead-cell{display:flex;align-items:center;gap:9px;}
-.lead-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;}
-.lead-name{font-weight:600;font-size:13px;}
-.lead-phone{font-size:11px;color:var(--text-3);font-family:'DM Mono',monospace;}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
-.badge-dot{width:5px;height:5px;border-radius:50%;}
-.badge.new{background:var(--accent-light);color:var(--accent);}
-.badge.new .badge-dot{background:var(--accent);}
-.badge.contacted{background:var(--yellow-light);color:#b45309;}
-.badge.contacted .badge-dot{background:var(--yellow);}
-.badge.qualified{background:var(--green-light);color:#065f46;}
-.badge.qualified .badge-dot{background:var(--green);}
-.badge.proposal{background:#ede9fe;color:#5b21b6;}
-.badge.proposal .badge-dot{background:#8b5cf6;}
-.badge.closed-won{background:#d1fae5;color:#065f46;}
-.badge.closed-won .badge-dot{background:#10b981;}
-.badge.closed-lost, .badge.lost{background:var(--red-light);color:#991b1b;}
-.badge.closed-lost .badge-dot, .badge.lost .badge-dot{background:var(--red);}
-.src-cell{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-2);}
-.assign-text{font-size:12px;color:var(--text-2);font-weight:500;}
-.assign-empty{font-size:12px;color:var(--text-3);font-style:italic;}
-.date-text{font-size:12px;color:var(--text-2);}
-.pagination{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;border-top:1px solid var(--border);}
-.page-info{font-size:12px;color:var(--text-3);}
-.page-btns{display:flex;gap:4px;}
-.page-btn{width:28px;height:28px;border-radius:var(--radius-sm);background:transparent;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:500;color:var(--text-2);font-family:'DM Sans',sans-serif;transition:all .12s;}
-.page-btn:hover{border-color:var(--accent);color:var(--accent);}
-.page-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
-.page-btn.next{padding:0 10px;width:auto;}
-.page-btn.prev{padding:0 10px;width:auto;}
 
 /* ══ USER DASHBOARD ══ */
 .user-content{padding:20px 26px;flex:1;display:flex;flex-direction:column;gap:18px;}
@@ -172,6 +121,18 @@ td{padding:11px 16px;vertical-align:middle;}
 /* Toast notification */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a202c;color:white;padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;}
 .toast.show{opacity:1;}
+
+/* ── BAR CHARTS ── */
+.bar-chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.bar-chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.bar-chart-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+.bar-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.bar-label { font-size: 11px; font-weight: 600; color: var(--text-2); width: 90px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { flex: 1; background: var(--bg); border-radius: 20px; height: 10px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 20px; transition: width 0.5s ease; }
+.bar-count { font-size: 11px; font-weight: 700; color: var(--text-2); font-family: 'DM Mono', monospace; width: 28px; text-align: right; flex-shrink: 0; }
+
+
 </style>
 </head>
 <body>
@@ -281,67 +242,24 @@ td{padding:11px 16px;vertical-align:middle;}
 
         </div>
         
-        
-        <!-- All Leads Table -->
-        <div class="table-section">
-          <div class="table-head-bar">
-            <div>
-              <h3>All Leads</h3>
-              <p id="table-subtitle">Sorted by latest activity</p>
+          <!-- Bar Charts Row -->
+          <div class="bar-chart-row">
+            <!-- Funnel Chart -->
+            <div class="bar-chart-card">
+              <div class="bar-chart-title">📊 Lead per Funnel Stage</div>
+              <div id="funnel-bars">
+                <div style="font-size:12px;color:var(--text-3)">Memuat data...</div>
+              </div>
             </div>
-            <div class="table-head-right">
-              <div class="search-mini">🔍 <input type="text" id="search-input" placeholder="Cari nama / No. HP.." oninput="onSearch()"></div>
-            </div>
-          </div>
-
-          <!-- Status Tabs -->
-          <div class="tabs" id="status-tabs">
-            <div class="tab active" data-status="all" onclick="switchTab(this)">
-              All <span class="tab-ct" id="tab-ct-all">—</span>
-            </div>
-            <div class="tab" data-status="New" onclick="switchTab(this)">
-              New <span class="tab-ct" id="tab-ct-New">—</span>
-            </div>
-            <div class="tab" data-status="Contacted" onclick="switchTab(this)">
-              Contacted <span class="tab-ct" id="tab-ct-Contacted">—</span>
-            </div>
-            <div class="tab" data-status="Qualified" onclick="switchTab(this)">
-              Qualified <span class="tab-ct" id="tab-ct-Qualified">—</span>
-            </div>
-            <div class="tab" data-status="Proposal" onclick="switchTab(this)">
-              Proposal <span class="tab-ct" id="tab-ct-Proposal">—</span>
-            </div>
-            <div class="tab" data-status="Closed Won" onclick="switchTab(this)">
-              Closed Won <span class="tab-ct" id="tab-ct-Closed Won">—</span>
-            </div>
-            <div class="tab" data-status="Closed Lost" onclick="switchTab(this)">
-              Closed Lost <span class="tab-ct" id="tab-ct-Closed Lost">—</span>
+            <!-- Performa Sales -->
+            <div class="bar-chart-card">
+              <div class="bar-chart-title">👥 Performa Sales</div>
+              <div id="sales-bars">
+                <div style="font-size:12px;color:var(--text-3)">Memuat data...</div>
+              </div>
             </div>
           </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th style="width:36px"><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th>
-                <th>Nama</th>
-                <th>Status</th>
-                <th>Source</th>
-                <th>Assigned</th>
-                <th>No. WA</th>
-              </tr>
-            </thead>
-            <tbody id="leads-tbody">
-              <tr class="loading-row">
-                <td colspan="6"><span class="spinner"></span> Memuat data lead...</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="pagination">
-            <span class="page-info" id="page-info">—</span>
-            <div class="page-btns" id="page-btns"></div>
-          </div>
-        </div>
+         </div>
       </div>
     </div>
 
@@ -595,132 +513,9 @@ function buildProduk(sourceCounts) {
         `Total ${total} leads dari ${sourceCounts.length} campaign`;  // ← fix ID
 }
 
-// ────────────────────────────────────────────
-//  RENDER LEADS TABLE
-// ────────────────────────────────────────────
-function renderLeads(data) {
-  const tbody = document.getElementById('leads-tbody');
-  if (!data || !data.leads || data.leads.length === 0) {
-    tbody.innerHTML = `<tr class="loading-row"><td colspan="6">Tidak ada data lead ditemukan.</td></tr>`;
-    document.getElementById('page-info').textContent = '0 leads';
-    document.getElementById('page-btns').innerHTML = '';
-    return;
-  }
 
-  const rows = data.leads.map(lead => {
-    const color = avatarColor(lead.nama || '');
-    const init  = initials(lead.nama || '?');
-    const badgeC = statusBadgeClass(lead.status);
-    const icon  = sourceIcon(lead.source);
-    const assignedHtml = lead.assigned_to
-      ? `<span class="assign-text">${lead.assigned_to}</span>`
-      : `<span class="assign-empty">Unassigned</span>`;
 
-    return `
-      <tr>
-        <td><input type="checkbox" class="row-check" data-id="${lead.id_lead}"></td>
-        <td>
-          <div class="lead-cell">
-            <div class="lead-av" style="background:${color}">${init}</div>
-            <div>
-              <div class="lead-name">${lead.nama}</div>
-              <div class="lead-phone">${lead.email || '—'}</div>
-            </div>
-          </div>
-        </td>
-        <td><span class="badge ${badgeC}"><span class="badge-dot"></span>${lead.status || 'New'}</span></td>
-        <td><div class="src-cell">${icon} ${lead.source || '—'}</div></td>
-        <td>${assignedHtml}</td>
-        <td><span class="date-text">${lead.no_whatsapp || '—'}</span></td>
-      </tr>`;
-  }).join('');
 
-  tbody.innerHTML = rows;
-
-  // Pagination
-  const start = (data.page - 1) * data.per_page + 1;
-  const end   = Math.min(data.page * data.per_page, data.total);
-  document.getElementById('page-info').textContent = `Showing ${start}–${end} of ${data.total}`;
-  renderPagination(data.page, data.pages);
-}
-
-function renderPagination(current, total) {
-  const container = document.getElementById('page-btns');
-  if (total <= 1) { container.innerHTML = ''; return; }
-
-  let html = '';
-  if (current > 1) html += `<div class="page-btn prev" onclick="goPage(${current-1})">← Prev</div>`;
-
-  const pages = [];
-  pages.push(1);
-  if (current > 3) pages.push('...');
-  for (let i = Math.max(2, current-1); i <= Math.min(total-1, current+1); i++) pages.push(i);
-  if (current < total - 2) pages.push('...');
-  if (total > 1) pages.push(total);
-
-  pages.forEach(p => {
-    if (p === '...') {
-      html += `<div class="page-btn" style="border:none;background:transparent;color:var(--text-3)">...</div>`;
-    } else {
-      html += `<div class="page-btn ${p === current ? 'active' : ''}" onclick="goPage(${p})">${p}</div>`;
-    }
-  });
-
-  if (current < total) html += `<div class="page-btn next" onclick="goPage(${current+1})">Next →</div>`;
-  container.innerHTML = html;
-}
-
-// ────────────────────────────────────────────
-//  POPULATE TAB COUNTS
-// ────────────────────────────────────────────
-function updateTabCounts(stats) {
-  const sc = stats.status_counts || {};
-  const total = stats.total_leads || 0;
-
-  document.getElementById('tab-ct-all').textContent = total;
-
-  const statuses = ['New','Contacted','Qualified','Proposal','Closed Won','Closed Lost'];
-  statuses.forEach(s => {
-    const el = document.getElementById(`tab-ct-${s}`);
-    if (el) el.textContent = sc[s] || 0;
-  });
-}
-
-// ────────────────────────────────────────────
-//  EVENTS
-// ────────────────────────────────────────────
-function switchTab(el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  currentStatus = el.dataset.status;
-  currentPage = 1;
-  loadLeads();
-}
-
-function goPage(p) {
-  currentPage = p;
-  loadLeads();
-}
-
-function onSearch() {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    currentPage = 1;
-    loadLeads();
-  }, 400);
-}
-
-function toggleAll(master) {
-  document.querySelectorAll('.row-check').forEach(c => c.checked = master.checked);
-}
-
-async function loadLeads() {
-  const search = document.getElementById('search-input').value;
-  document.getElementById('leads-tbody').innerHTML =
-    `<tr class="loading-row"><td colspan="6"><span class="spinner"></span> Memuat...</td></tr>`;
-  const data = await fetchLeads(currentStatus, search, currentPage);
-  if (data) renderLeads(data);
-}
 
 async function refreshDashboard() {
   toast('Memperbarui data...');
@@ -730,6 +525,67 @@ async function refreshDashboard() {
 // ────────────────────────────────────────────
 //  LOAD ALL DATA
 // ────────────────────────────────────────────
+
+    const FUNNEL_COLORS = {
+      'New':         '#2563eb',
+      'Contacted':   '#f59e0b',
+      'Qualified':   '#10b981',
+      'Proposal':    '#8b5cf6',
+      'Closed Won':  '#059669',
+      'Closed Lost': '#ef4444',
+    };
+
+    function buildFunnelBars(statusCounts) {
+      const container = document.getElementById('funnel-bars');
+      const order = ['New','Contacted','Qualified','Proposal','Closed Won','Closed Lost'];
+      const max = Math.max(...order.map(s => statusCounts[s] || 0), 1);
+
+      container.innerHTML = order.map(stage => {
+        const count = statusCounts[stage] || 0;
+        const pct   = Math.round((count / max) * 100);
+        const color = FUNNEL_COLORS[stage] || '#94a3b8';
+        return `
+          <div class="bar-item">
+            <div class="bar-label" title="${stage}">${stage}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
+            </div>
+            <div class="bar-count">${count}</div>
+          </div>`;
+      }).join('');
+    }
+
+    async function buildSalesBars() {
+      const container = document.getElementById('sales-bars');
+      try {
+        const res  = await fetch('/api/sales/');
+        const data = await res.json();
+        const sales = data.sales || [];
+
+        if (!sales.length) {
+          container.innerHTML = `<div style="font-size:12px;color:var(--text-3)">Belum ada data sales</div>`;
+          return;
+        }
+
+        const max = Math.max(...sales.map(s => s.lead_aktif || 0), 1);
+        const SALES_COLORS = ['#2563eb','#7c3aed','#059669','#dc2626','#ea580c','#0284c7'];
+
+        container.innerHTML = sales.map((s, i) => {
+          const pct   = Math.round(((s.lead_aktif || 0) / max) * 100);
+          const color = SALES_COLORS[i % SALES_COLORS.length];
+          return `
+            <div class="bar-item">
+              <div class="bar-label" title="${s.nama}">${s.nama}</div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
+              </div>
+              <div class="bar-count">${s.lead_aktif || 0}</div>
+            </div>`;
+        }).join('');
+      } catch (_) {
+        container.innerHTML = `<div style="font-size:12px;color:var(--text-3)">Gagal memuat data sales</div>`;
+      }
+    }
 async function loadAll() {
   const [dash, stats] = await Promise.all([fetchDashboard(), fetchDistribusiStats()]);
 
@@ -774,19 +630,18 @@ async function loadAll() {
   }
 
   if (stats) {
-    updateTabCounts(stats);
-    // User mini KPIs
     const sc = stats.status_counts || {};
     document.getElementById('u-new').textContent       = sc['New'] || 0;
     document.getElementById('u-contacted').textContent = sc['Contacted'] || 0;
     document.getElementById('u-qualified').textContent = sc['Qualified'] || 0;
     document.getElementById('u-unassigned').textContent = stats.pending || 0;
+
+    // Funnel bar chart
+    buildFunnelBars(sc);
   }
 
-  // Load leads table (admin only)
-  if (currentRole === 'admin') {
-    await loadLeads();
-  }
+  // Performa sales bar chart
+  await buildSalesBars();
 }
 
 // ────────────────────────────────────────────
