@@ -577,6 +577,8 @@ def api_distribusi_leads(request):
             "assigned_to":   assignment.id_user.nama       if assignment and assignment.id_user else None,
             "assigned_id":   assignment.id_user.id_user    if assignment and assignment.id_user else None,
             "prioritas":     cf_by_name.get("prioritas"),
+            "produk":        cf_by_name.get("produk"),      
+            "catatan":       cf_by_name.get("catatan"),     
             "custom_fields": cf_by_id,
         })
 

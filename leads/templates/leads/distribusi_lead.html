@@ -2681,8 +2681,12 @@
       });
 
       // Kolom kustom — ambil dari lead.custom_fields[col.id] jika ada
+      const BUILTIN_NAMES = ['produk', 'prioritas', 'catatan'];
       colState.custom.forEach(col => {
-        const val = (lead.custom_fields || {})[col.id] || '—';
+        const isBuiltin = BUILTIN_NAMES.includes(col.name.toLowerCase());
+        const val = isBuiltin
+          ? (lead[col.name.toLowerCase()] || '—')
+          : ((lead.custom_fields || {})[col.id] || '—');
         if (col.type === 'dropdown') {
           row += `<td><span style="font-size:12px;color:var(--text-secondary)">${val}</span></td>`;
         } else if (col.type === 'date') {
