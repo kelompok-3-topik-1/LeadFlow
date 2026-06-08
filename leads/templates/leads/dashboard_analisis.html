@@ -229,7 +229,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
   <main class="main" id="main-area" style="min-width:0;flex:1;">
 
     <!-- ════ ADMIN DASHBOARD ════ -->
-    <div id="dash-admin" style="display:none;flex-direction:column;flex:1;">
+    <div id="dash-admin">
       <div class="role-bar admin-bar">🛡️ Mode Admin — Dashboard detail lead & analisis penuh</div>
       <div class="topbar">
         <div class="topbar-left">
@@ -348,7 +348,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
     </div>
 
     <!-- ════ USER DASHBOARD ════ -->
-    <div id="dash-user" style="display:none;flex-direction:column;flex:1;width:100%;min-width:0;">
+    <div id="dash-user">
       <div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
       <div class="topbar">
         <div class="topbar-left">
@@ -752,9 +752,11 @@ function initApp() {
 
   // ✅ TAMBAHKAN INI — tampilkan dashboard sesuai role
   if (currentRole === 'admin') {
-    document.getElementById('dash-admin').style.display = 'flex';
+    document.getElementById('dash-admin').style.cssText = 'display:flex !important;flex-direction:column;flex:1;width:100%;';
+    document.getElementById('dash-user').style.cssText = 'display:none !important;';
   } else {
-    document.getElementById('dash-user').style.display = 'flex';
+    document.getElementById('dash-user').style.cssText = 'display:flex !important;flex-direction:column;flex:1;width:100%;';
+    document.getElementById('dash-admin').style.cssText = 'display:none !important;';
   }
 
   loadAll();
