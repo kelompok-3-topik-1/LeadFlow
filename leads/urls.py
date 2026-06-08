@@ -28,7 +28,7 @@ from .views import (
     api_campaign_list,
     api_campaign_detail,
     api_delete_tag,
-    api_import_sheet,
+    api_import_csv,
 )
 
 urlpatterns = [
@@ -60,7 +60,7 @@ urlpatterns = [
     path('api/columns/<int:col_id>/', column_detail, name='column_detail'),
     path('api/leads/<str:lead_id>/custom_fields/', lead_custom_fields, name='lead_custom_fields'),
     path('api/campaigns/', api_campaign_list, name='api_campaign_list'),
-    path('api/leads/import-sheet/', api_import_sheet, name='api_import_sheet'),
+    path('api/leads/import-csv/', api_import_csv, name='api_import_csv'),
     path('api/campaigns/<str:id_campaign>/', api_campaign_detail, name='api_campaign_detail'),
     path('api/tags/<str:tag_id>/delete/', api_delete_tag, name='api_delete_tag'),
 ]
