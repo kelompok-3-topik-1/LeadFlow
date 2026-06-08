@@ -393,18 +393,19 @@ def api_update_lead_status(request):
     if prioritas:
         set_cf_value(lead, "prioritas", prioritas)
 
-    # Update tags
+    # Update tags — hapus semua tag lama lalu tambah yang baru
+    LeadsTag.objects.filter(id_leads=lead).delete()
+
     for label in tags:
         tag, created = Tag.objects.get_or_create(
             label_tag=label,
             defaults={"id_tag": generate_id(Tag, "id_tag", "TAG")}
         )
-        if not LeadsTag.objects.filter(id_leads=lead, id_tag=tag).exists():
-            LeadsTag.objects.create(
-                id       = generate_id(LeadsTag, "id", "LDT"),
-                id_leads = lead,
-                id_tag   = tag,
-            )
+        LeadsTag.objects.create(
+            id       = generate_id(LeadsTag, "id", "LDT"),
+            id_leads = lead,
+            id_tag   = tag,
+        )
 
     # Simpan catatan update sebagai custom field bawaan "update_notes"
     # Simpan catatan — update field "catatan" (terhubung dengan distribusi lead)
@@ -732,6 +733,18 @@ def api_tags_list(request):
     tags = Tag.objects.all().values("id_tag", "label_tag")
     return JsonResponse({"tags": list(tags)})
 
+@csrf_exempt
+def api_delete_tag(request, tag_id):
+    """DELETE /api/tags/<tag_id>/ — hapus tag dari database"""
+    if request.method != "DELETE":
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+    try:
+        tag = Tag.objects.get(id_tag=tag_id)
+        LeadsTag.objects.filter(id_tag=tag).delete()
+        tag.delete()
+        return JsonResponse({"ok": True, "message": f"Tag '{tag.label_tag}' dihapus"})
+    except Tag.DoesNotExist:
+        return JsonResponse({"error": "Tag tidak ditemukan"}, status=404)
 
 # ─────────────────────────────────────────────────────────────
 #  API Lead Detail (GET / PATCH / DELETE)

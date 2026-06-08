@@ -611,16 +611,30 @@ function renderTagGrid(existingTags) {
   const grid   = document.getElementById('tag-grid');
   const addBtn = document.getElementById('add-tag-btn');
 
-  // Hapus semua pill lama (kecuali tombol add)
   grid.querySelectorAll('.tag-pill:not(.add-new)').forEach(el => el.remove());
 
-  // Render tag dari DB
   allTags.forEach(tag => {
     const pill = document.createElement('div');
     pill.className = 'tag-pill';
-    pill.textContent = tag.label_tag;
+    pill.style.cssText = 'display:flex;align-items:center;gap:6px;padding-right:8px;';
     if (existingTags.includes(tag.label_tag)) pill.classList.add('selected');
-    pill.onclick = function() { toggleTag(this); };
+
+    const label = document.createElement('span');
+    label.textContent = tag.label_tag;
+    label.onclick = function() { toggleTag(pill); };
+    label.style.cursor = 'pointer';
+
+    const delBtn = document.createElement('span');
+    delBtn.textContent = '×';
+    delBtn.title = 'Hapus tag dari sistem';
+    delBtn.style.cssText = 'font-size:13px;color:#ef4444;cursor:pointer;font-weight:800;margin-left:2px;line-height:1;';
+    delBtn.onclick = function(e) {
+      e.stopPropagation();
+      deleteTag(tag.id_tag, tag.label_tag, pill);
+    };
+
+    pill.appendChild(label);
+    pill.appendChild(delBtn);
     grid.insertBefore(pill, addBtn);
   });
 }
@@ -660,6 +674,26 @@ function addNewTag() {
     if (e.key === 'Escape') { inp.remove(); addBtn.style.display = ''; }
   });
   inp.addEventListener('blur', commitTag);
+}
+
+async function deleteTag(tagId, tagLabel, pillEl) {
+  if (!confirm(`Hapus tag "${tagLabel}" dari seluruh sistem?`)) return;
+  try {
+    const res = await fetch(`/api/tags/${tagId}/delete/`, {
+      method: 'DELETE',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    });
+    const data = await res.json();
+    if (res.ok) {
+      pillEl.remove();
+      allTags = allTags.filter(t => t.id_tag !== tagId);
+      showToast(`✅ Tag "${tagLabel}" dihapus dari sistem`);
+    } else {
+      showToast(`❌ ${data.error}`, true);
+    }
+  } catch (_) {
+    showToast('❌ Error koneksi', true);
+  }
 }
 
 // ─────────────────────────────────────────────

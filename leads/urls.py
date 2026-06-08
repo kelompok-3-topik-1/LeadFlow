@@ -26,7 +26,8 @@ from .views import (
     column_detail,
     lead_custom_fields,
     api_campaign_list,
-    api_campaign_detail
+    api_campaign_detail,
+    api_delete_tag
 )
 
 urlpatterns = [
@@ -58,5 +59,6 @@ urlpatterns = [
     path('api/columns/<int:col_id>/', column_detail, name='column_detail'),
     path('api/leads/<str:lead_id>/custom_fields/', lead_custom_fields, name='lead_custom_fields'),
     path('api/campaigns/', api_campaign_list, name='api_campaign_list'),
-    path('api/campaigns/<str:id_campaign>/', api_campaign_detail, name='api_campaign_detail')
+    path('api/campaigns/<str:id_campaign>/', api_campaign_detail, name='api_campaign_detail'),
+    path('api/tags/<str:tag_id>/delete/', api_delete_tag, name='api_delete_tag')
 ]
