@@ -98,6 +98,7 @@ def register_view(request):
         asal_perusahaan  = request.POST.get("asal_perusahaan")
         password         = request.POST['password']
         confirm_password = request.POST['confirm_password']
+        role             = request.POST.get('role', role) 
 
         if password == confirm_password:
             if User.objects.filter(email=email).exists():
@@ -419,7 +420,7 @@ def api_dashboard(request):
     from django.db.models import Sum
 
     total_leads = Leads.objects.count()
-    assigned    = Assignment.objects.count()
+    assigned = Assignment.objects.values('id_lead').distinct().count()
     unassigned  = total_leads - assigned
 
     closed_won_count = CampaignLeads.objects.filter(funnel_position="Closed Won").count()
