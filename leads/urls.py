@@ -58,9 +58,9 @@ urlpatterns = [
     path('api/leads/<str:id>/', lead_detail, name='lead_detail'),
     path('api/columns/', columns_list, name='columns_list'),
     path('api/columns/<int:col_id>/', column_detail, name='column_detail'),
+    path('api/leads/import-csv/', api_import_csv, name='api_import_csv'),
     path('api/leads/<str:lead_id>/custom_fields/', lead_custom_fields, name='lead_custom_fields'),
     path('api/campaigns/', api_campaign_list, name='api_campaign_list'),
-    path('api/leads/import-csv/', api_import_csv, name='api_import_csv'),
     path('api/campaigns/<str:id_campaign>/', api_campaign_detail, name='api_campaign_detail'),
     path('api/tags/<str:tag_id>/delete/', api_delete_tag, name='api_delete_tag'),
 ]
