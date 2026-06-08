@@ -398,20 +398,9 @@ def api_update_lead_status(request):
             )
 
     # Simpan catatan update sebagai custom field bawaan "update_notes"
+    # Simpan catatan — update field "catatan" (terhubung dengan distribusi lead)
     if notes:
-        col = get_builtin_col("update_notes")
-        CustomFields.objects.create(
-            id      = generate_id(CustomFields, "id", "CFD"),
-            id_lead = lead,
-            id_col  = col,
-            value   = notes,
-        )
-        CustomFields.objects.create(
-            id     = generate_id(CustomFields, "id", "CFD"),
-            id_lead= lead,
-            id_col = col,
-            value  = notes,
-        )
+        set_cf_value(lead, "catatan", notes)
 
     return JsonResponse({
         "message":   "Status, prioritas, dan tag berhasil diperbarui",
@@ -720,9 +709,10 @@ def api_kanban_leads(request):
             "source":      campaign_lead.source if campaign_lead else None,
             "status":      funnel,
             "prioritas":   prioritas,
+            "catatan":     get_cf_value(lead, "catatan"),
             "tags":        lead_tags,
             "assigned_to": assignment.id_user.nama    if assignment and assignment.id_user else None,
-            "assigned_id": assignment.id_user.id_user if assignment and assignment.id_user else None,
+            "assigned_id": assignment.id_user.id_user if assignment and assignment.id_user else None
         })
 
     result = [{"column": col, "leads": columns[col]} for col in FUNNEL_ORDER]

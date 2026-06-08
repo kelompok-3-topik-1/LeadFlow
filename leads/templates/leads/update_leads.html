@@ -547,7 +547,7 @@ function openModal(lead) {
   // Isi tag grid dari DB, tandai yang sudah dimiliki lead ini
   renderTagGrid(lead.tags || []);
 
-  document.getElementById('modal-notes').value = '';
+  document.getElementById('modal-notes').value = lead.catatan || '';
   document.getElementById('btn-save').disabled = false;
 
   document.getElementById('modal-overlay').classList.add('show');
@@ -703,8 +703,9 @@ async function saveUpdate() {
       throw new Error(data.error || 'Gagal menyimpan');
     }
 
+    const namaLead = currentLead.nama;
     closeModal();
-    showToast(`✅ ${currentLead.nama} → ${status} (${prioritas}) berhasil disimpan`);
+    showToast(`✅ ${namaLead} → ${status} (${prioritas}) berhasil disimpan`);
     loadKanban(); // refresh board
 
   } catch (e) {
