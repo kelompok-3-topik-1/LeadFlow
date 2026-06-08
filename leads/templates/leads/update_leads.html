@@ -317,10 +317,8 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 
     <div class="sec-label">Prioritas lead</div>
     <div class="priority-selector" id="priority-selector">
-      <button class="pri-opt opt-veryhigh" data-pri="Sangat Tinggi" onclick="selectPriority(this)">🔴 Sangat Tinggi</button>
-      <button class="pri-opt opt-high"     data-pri="Tinggi"        onclick="selectPriority(this)">🟠 Tinggi</button>
+      <button class="pri-opt opt-high"     data-pri="Tinggi"        onclick="selectPriority(this)">🔴 Tinggi</button>
       <button class="pri-opt opt-medium"   data-pri="Sedang"        onclick="selectPriority(this)">🟡 Sedang</button>
-      <button class="pri-opt opt-normal"   data-pri="Normal"        onclick="selectPriority(this)">⚪ Normal</button>
       <button class="pri-opt opt-low"      data-pri="Rendah"        onclick="selectPriority(this)">🟢 Rendah</button>
     </div>
 
@@ -478,10 +476,8 @@ function renderCard(lead) {
 
   // Prioritas → badge (hanya tampil jika ada nilai)
   const priMap = {
-    'Sangat Tinggi': { cls: 'p-veryhigh', label: '🔴 Sangat Tinggi' },
-    'Tinggi':        { cls: 'p-high',     label: '🟠 Tinggi' },
+    'Tinggi':        { cls: 'p-high',     label: '🔴 Tinggi' },
     'Sedang':        { cls: 'p-medium',   label: '🟡 Sedang' },
-    'Normal':        { cls: 'p-normal',   label: '⚪ Normal' },
     'Rendah':        { cls: 'p-low',      label: '🟢 Rendah' },
   };
   const priEntry  = lead.prioritas ? priMap[lead.prioritas] : null;
