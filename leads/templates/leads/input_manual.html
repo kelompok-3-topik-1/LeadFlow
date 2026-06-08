@@ -491,6 +491,13 @@ body {
           </select>
         </div>
 
+        <div class="form-group full">
+          <label class="form-label">Campaign</label>
+          <select class="form-select" id="f-campaign">
+            <option value="">— Tidak terhubung campaign —</option>
+          </select>
+        </div>
+
         <!-- Priority -->
         <div class="form-group full">
           <label class="form-label">Prioritas</label>
@@ -599,6 +606,7 @@ function getCookie(name) {
   document.getElementById('sb-role').textContent     = (userRole || 'admin').toUpperCase();
 
   loadSalesList();
+  loadCampaignList();
   loadTagSuggestions();
 })();
 
@@ -619,6 +627,22 @@ async function loadSalesList() {
     });
   } catch (e) {
     console.warn('Gagal memuat daftar sales:', e);
+  }
+}
+
+async function loadCampaignList() {
+  try {
+    const res  = await fetch('/api/campaigns/');
+    const data = await res.json();
+    const sel  = document.getElementById('f-campaign');
+    (data.campaigns || []).forEach(c => {
+      const opt       = document.createElement('option');
+      opt.value       = c.id_campaign;
+      opt.textContent = c.nama_camp + (c.source ? ` — ${c.source}` : '');
+      sel.appendChild(opt);
+    });
+  } catch (e) {
+    console.warn('Gagal memuat campaigns:', e);
   }
 }
 
@@ -804,6 +828,7 @@ async function saveForm() {
     prioritas:   document.getElementById('f-prioritas').value,
     catatan:     document.getElementById('f-catatan').value.trim(),
     status:      'New',
+    id_campaign: document.getElementById('f-campaign').value || null,
   };
 
   try {

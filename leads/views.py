@@ -244,11 +244,19 @@ def api_create_lead(request):
         no_whatsapp  = data.get("no_whatsapp"),
     )
 
+    camp_obj = None
+    if data.get("id_campaign"):
+        try:
+            camp_obj = Campaign.objects.get(id_campaign=data["id_campaign"])
+        except Campaign.DoesNotExist:
+            pass
+
     CampaignLeads.objects.create(
-        id             = generate_id(CampaignLeads, "id", "PIP"),
-        id_lead        = lead,
-        funnel_position= data.get("status", "New"),
-        source         = data.get("source"),
+        id              = generate_id(CampaignLeads, "id", "PIP"),
+        id_lead         = lead,
+        funnel_position = data.get("status", "New"),
+        source          = data.get("source"),
+        id_camp         = camp_obj,   # ← tambahan
     )
 
     # Simpan field bawaan melalui helper
