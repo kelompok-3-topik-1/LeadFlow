@@ -51,6 +51,7 @@ urlpatterns = [
     path('api/dashboard/', api_dashboard, name='api_dashboard'),
     path('api/kanban/leads/', api_kanban_leads, name='api_kanban_leads'),
     path('api/tags/', api_tags_list, name='api_tags_list'),
+    path('api/leads/import-csv/', api_import_csv, name='api_import_csv'),
 
     path('api/distribusi/stats/', api_distribusi_stats, name='api_distribusi_stats'),
     path('api/distribusi/leads/', api_distribusi_leads, name='api_distribusi_leads'),
@@ -58,7 +59,6 @@ urlpatterns = [
     path('api/leads/<str:id>/', lead_detail, name='lead_detail'),
     path('api/columns/', columns_list, name='columns_list'),
     path('api/columns/<int:col_id>/', column_detail, name='column_detail'),
-    path('api/leads/import-csv/', api_import_csv, name='api_import_csv'),
     path('api/leads/<str:lead_id>/custom_fields/', lead_custom_fields, name='lead_custom_fields'),
     path('api/campaigns/', api_campaign_list, name='api_campaign_list'),
     path('api/campaigns/<str:id_campaign>/', api_campaign_detail, name='api_campaign_detail'),
