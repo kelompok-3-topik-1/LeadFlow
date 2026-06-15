@@ -616,6 +616,7 @@ function renderTagGrid(existingTags) {
   allTags.forEach(tag => {
     const pill = document.createElement('div');
     pill.className = 'tag-pill';
+    pill.dataset.label = tag.label_tag;  // ← tambah ini
     pill.style.cssText = 'display:flex;align-items:center;gap:6px;padding-right:8px;';
     if (existingTags.includes(tag.label_tag)) pill.classList.add('selected');
 
@@ -661,6 +662,7 @@ function addNewTag() {
     if (val) {
       const pill = document.createElement('div');
       pill.className = 'tag-pill selected';
+      pill.dataset.label = val;  // ← tambah ini
       pill.textContent = val;
       pill.onclick = function() { toggleTag(this); };
       grid.insertBefore(pill, inp);
@@ -707,7 +709,8 @@ async function saveUpdate() {
   const notes     = document.getElementById('modal-notes').value.trim();
   const tags      = [];
   document.querySelectorAll('#tag-grid .tag-pill.selected').forEach(el => {
-    tags.push(el.textContent.trim());
+    const label = el.dataset.label || el.textContent.trim();
+    if (label) tags.push(label);
   });
 
   const btn = document.getElementById('btn-save');
