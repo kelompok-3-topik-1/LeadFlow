@@ -1,146 +1,342 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'leads/login.css' %}">
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Login Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — LeadFlow</title>
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'DM Sans', sans-serif;
     background: #EBEFFF;
     display: flex;
     height: 100vh;
+    overflow: hidden;
 }
 
-/* RIGHT PANEL */
-.right-panel {
-    width: 35%;
-    background: #AFB3FF;
-    position: relative;
-}
-
-/* LEFT CONTENT */
+/* ── LEFT FORM PANEL ── */
 .container {
     width: 65%;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 32px;
 }
 
 .login-box {
     width: 400px;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* INPUT */
-label {
-    display: block;
-    margin: 10px 0 5px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
+/* ── ROLE TOGGLE PILL ── */
+.role-toggle {
+    display: flex;
+    background: #dde0ff;
     border-radius: 50px;
-    border: 1px solid #656ED3;
-    outline: none;
+    padding: 4px;
+    margin-bottom: 28px;
+    position: relative;
 }
 
-/* BUTTON */
-button {
+.role-toggle input[type="radio"] {
+    display: none;
+    width: auto;
+    padding: 0;
+    border: none;
+}
+
+.role-toggle label {
+    flex: 1;
+    text-align: center;
+    padding: 9px 0;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #656ED3;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    margin: 0;
+    z-index: 1;
+    position: relative;
+    user-select: none;
+    letter-spacing: 0.02em;
+}
+
+.role-toggle input[type="radio"]:checked + label {
+    background: #656ED3;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(101, 110, 211, 0.35);
+}
+
+/* ── HEADING ── */
+.login-heading {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.login-heading h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2d3170;
+    margin-bottom: 4px;
+}
+
+.login-heading p {
+    font-size: 13px;
+    color: #8b90c8;
+}
+
+/* ── ROLE BADGE (under heading) ── */
+.role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin: 0 auto 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+.role-badge.admin { background: #e0e2ff; color: #4349b8; }
+.role-badge.sales { background: #d1fae5; color: #065f46; }
+
+/* ── FORM FIELDS ── */
+.field-group {
+    margin-bottom: 14px;
+}
+
+.field-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #656ED3;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.field-group input {
     width: 100%;
-    padding: 10px;
-    margin-top: 20px;
+    padding: 11px 16px;
+    border-radius: 50px;
+    border: 1.5px solid #c5c8f0;
+    outline: none;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+    color: #2d3170;
+    transition: border-color 0.18s;
+}
+.field-group input:focus {
+    border-color: #656ED3;
+    box-shadow: 0 0 0 3px rgba(101,110,211,0.12);
+}
+.field-group input::placeholder { color: #b0b4d8; }
+
+/* ── ERROR ── */
+.error-msg {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #b91c1c;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* ── SUBMIT BUTTON ── */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
     border-radius: 50px;
     border: none;
     background: #656ED3;
-    color: #AFB3FF;
-    font-weight: bold;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    transition: all 0.18s;
 }
+.btn-login:hover {
+    background: #4f58c2;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(101,110,211,0.35);
+}
+.btn-login:active { transform: translateY(0); }
 
-/* FOOTER */
+/* ── FOOTER ── */
 .footer {
     text-align: center;
     margin-top: 20px;
+    font-size: 13px;
+    color: #8b90c8;
 }
-
-.social {
-    margin-top: 10px;
-}
-
-.social span {
-    margin: 0 5px;
+.footer a {
     color: #656ED3;
-    font-weight: bold;
+    font-weight: 600;
+    text-decoration: none;
+}
+.footer a:hover { text-decoration: underline; }
+
+.dots {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+.dots span {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #c5c8f0;
+    display: inline-block;
+}
+.dots span.active { background: #656ED3; }
+
+/* ── RIGHT DECORATION PANEL ── */
+.right-panel {
+    width: 35%;
+    background: #AFB3FF;
+    position: relative;
+    overflow: hidden;
 }
 
-/* DECORATION */
 .shape1 {
     position: absolute;
-    width: 500px;
-    height: 120px;
+    width: 500px; height: 120px;
     background: #838CF1;
     border-radius: 100px;
     transform: rotate(-40deg);
-    bottom: 50px;
-    left: -200px;
+    bottom: 50px; left: -200px;
 }
-
 .shape2 {
     position: absolute;
-    width: 500px;
-    height: 120px;
+    width: 500px; height: 120px;
     background: #AFB3FF;
     border-radius: 100px;
     transform: rotate(-40deg);
-    bottom: 30px;
-    left: -180px;
+    bottom: 30px; left: -180px;
+}
+.shape3 {
+    position: absolute;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 30px solid rgba(255,255,255,0.18);
+    top: -60px; right: -60px;
+}
+.shape4 {
+    position: absolute;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    border: 20px solid rgba(255,255,255,0.12);
+    top: 120px; left: 20px;
+}
+
+.panel-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    z-index: 2;
+}
+.panel-text .logo {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+}
+.panel-text .tagline {
+    font-size: 13px;
+    opacity: 0.8;
+    line-height: 1.5;
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
     <div class="login-box">
-        <h2>Welcome Back!</h2>
 
-        <form method="POST">
+        <!-- Role Toggle Pill -->
+        <div class="role-toggle">
+            <input type="radio" name="role_ui" id="role-admin" value="admin" checked onchange="switchRole('admin')">
+            <label for="role-admin">🛡️ Admin</label>
+            <input type="radio" name="role_ui" id="role-sales" value="sales" onchange="switchRole('sales')">
+            <label for="role-sales">👤 Sales</label>
+        </div>
+
+        <!-- Heading -->
+        <div class="login-heading">
+            <h2>Welcome Back!</h2>
+            <p id="role-sub">Masuk sebagai Administrator</p>
+        </div>
+
+        {% if error %}
+        <div class="error-msg">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form method="POST" id="login-form">
             {% csrf_token %}
+            <!-- Role dikirim ke backend -->
+            <input type="hidden" name="role" id="hidden-role" value="admin">
 
-            <label>Email:</label>
-            <input type="text" name="email" placeholder="Enter username" required>
+            <div class="field-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="nama@perusahaan.com" required>
+            </div>
 
-            <label>Password:</label>
-            <input type="password" name="password" placeholder="Enter password" required>
+            <div class="field-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
 
-            <button type="submit">Login</button>
+            <button type="submit" class="btn-login" id="btn-submit">Masuk sebagai Admin</button>
         </form>
 
         <div class="footer">
-            <p>Belum punya akun? 
-                <a href="{% url 'register' %}">Register</a>
+            <p>Belum punya akun?
+                <a href="{% url 'register' %}" id="register-link">Daftar di sini</a>
             </p>
-            <div class="social">
-                <span>●</span>
-                <span>●</span>
-                <span>●</span>
+            <div class="dots">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
     </div>
 </div>
 
 <div class="right-panel">
+    <div class="shape3"></div>
+    <div class="shape4"></div>
     <div class="shape1"></div>
     <div class="shape2"></div>
+    <div class="panel-text">
+        <div class="logo">LeadFlow</div>
+        <div class="tagline">Kelola lead Anda<br>lebih cerdas & efisien</div>
+    </div>
 </div>
 
+<script>
+function switchRole(role) {
+    const isAdmin = role === 'admin';
+    document.getElementById('hidden-role').value = role;
+    document.getElementById('role-sub').textContent = isAdmin
+        ? 'Masuk sebagai Administrator'
+        : 'Masuk sebagai Sales';
+    document.getElementById('btn-submit').textContent = isAdmin
+        ? 'Masuk sebagai Admin'
+        : 'Masuk sebagai Sales';
+}
+</script>
 </body>
 </html>

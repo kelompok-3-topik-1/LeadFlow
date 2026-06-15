@@ -1,156 +1,377 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'leads/register.css' %}">
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Register Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — LeadFlow</title>
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'DM Sans', sans-serif;
     background: #EBEFFF;
     display: flex;
     height: 100vh;
-}
-
-/* LEFT PANEL (DECORATION) */
-.left-panel {
-    width: 50%;
-    position: relative;
     overflow: hidden;
 }
 
-/* SHAPES */
-.shape1 {
-    position: absolute;
-    width: 500px;
-    height: 300px;
+/* ── LEFT DECORATION PANEL ── */
+.left-panel {
+    width: 35%;
+    position: relative;
+    overflow: hidden;
     background: #656ED3;
-    border-radius: 100px;
-    transform: rotate(-90deg);
-    top: -100px;
-    left: 50px;
 }
 
+.shape1 {
+    position: absolute;
+    width: 500px; height: 300px;
+    background: #4f58c2;
+    border-radius: 100px;
+    transform: rotate(-90deg);
+    top: -100px; left: 50px;
+}
 .shape2 {
     position: absolute;
-    width: 500px;
-    height: 300px;
+    width: 500px; height: 300px;
     background: #AFB3FF;
     border-radius: 100px;
     transform: rotate(-90deg);
-    top: -50px;
-    left: 100px;
+    top: -50px; left: 100px;
+}
+.shape3 {
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 24px solid rgba(255,255,255,0.15);
+    bottom: 60px; right: -40px;
+}
+.shape4 {
+    position: absolute;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    border: 16px solid rgba(255,255,255,0.1);
+    bottom: 200px; left: 20px;
 }
 
-/* RIGHT FORM */
+.panel-text {
+    position: absolute;
+    bottom: 48px;
+    left: 0; right: 0;
+    text-align: center;
+    color: #fff;
+    z-index: 2;
+    padding: 0 24px;
+}
+.panel-text .logo {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+.panel-text .tagline {
+    font-size: 12px;
+    opacity: 0.75;
+    line-height: 1.55;
+}
+
+/* ── RIGHT FORM AREA ── */
 .container {
-    width: 50%;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 32px;
+    overflow-y: auto;
 }
 
 .register-box {
     width: 400px;
+    padding: 8px 0;
 }
 
-h2 {
+/* ── ROLE TOGGLE PILL ── */
+.role-toggle {
+    display: flex;
+    background: #dde0ff;
+    border-radius: 50px;
+    padding: 4px;
+    margin-bottom: 24px;
+}
+
+.role-toggle input[type="radio"] {
+    display: none;
+    width: auto;
+    padding: 0;
+    border: none;
+}
+
+.role-toggle label {
+    flex: 1;
+    text-align: center;
+    padding: 9px 0;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #656ED3;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    margin: 0;
+    user-select: none;
+    letter-spacing: 0.02em;
+}
+
+.role-toggle input[type="radio"]:checked + label {
+    background: #656ED3;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(101,110,211,0.35);
+}
+
+/* ── HEADING ── */
+.register-heading {
     text-align: center;
     margin-bottom: 20px;
 }
+.register-heading h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2d3170;
+    margin-bottom: 4px;
+}
+.register-heading p {
+    font-size: 13px;
+    color: #8b90c8;
+    line-height: 1.4;
+}
 
-/* INPUT */
-label {
+/* ── ERROR / SUCCESS ── */
+.error-msg {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #b91c1c;
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+/* ── FIELDS ── */
+.field-group {
+    margin-bottom: 12px;
+}
+
+.field-group label {
     display: block;
-    margin: 10px 0 5px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #656ED3;
+    margin-bottom: 5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
-input {
+.field-group input {
     width: 100%;
-    padding: 10px;
+    padding: 10px 16px;
     border-radius: 50px;
-    border: 1px solid #656ED3;
+    border: 1.5px solid #c5c8f0;
     outline: none;
+    font-size: 13px;
+    font-family: inherit;
+    background: #fff;
+    color: #2d3170;
+    transition: border-color 0.18s;
 }
+.field-group input:focus {
+    border-color: #656ED3;
+    box-shadow: 0 0 0 3px rgba(101,110,211,0.12);
+}
+.field-group input::placeholder { color: #b0b4d8; }
 
-/* BUTTON */
-button {
+/* ── ROLE INFO BOX ── */
+.role-info {
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    transition: all 0.2s;
+}
+.role-info.admin { background: #ede9fe; color: #4c1d95; border: 1px solid #c4b5fd; }
+.role-info.sales { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.role-info strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+/* ── BUTTON ── */
+.btn-register {
     width: 100%;
-    padding: 10px;
-    margin-top: 20px;
+    padding: 12px;
+    margin-top: 6px;
     border-radius: 50px;
     border: none;
     background: #656ED3;
     color: #fff;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    transition: all 0.18s;
+}
+.btn-register:hover {
+    background: #4f58c2;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(101,110,211,0.35);
 }
 
-/* FOOTER */
+/* ── FOOTER ── */
 .footer {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #8b90c8;
 }
-
-.social {
-    margin-top: 10px;
-}
-
-.social span {
-    margin: 0 5px;
+.footer a {
     color: #656ED3;
-    font-weight: bold;
+    font-weight: 600;
+    text-decoration: none;
 }
+.footer a:hover { text-decoration: underline; }
+
+.dots {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+.dots span {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #c5c8f0;
+    display: inline-block;
+}
+.dots span.active { background: #656ED3; }
 </style>
 </head>
-
 <body>
 
+<!-- LEFT DECORATION -->
 <div class="left-panel">
     <div class="shape1"></div>
     <div class="shape2"></div>
-</div>
-
-<div class="container">
-    <div class="register-box">
-        <h2>Please Fill out form to Register!</h2>
-
-        <form method="POST">
-            {% csrf_token %}
-
-            <label>Full Name:</label>
-            <input type="text" name="nama" placeholder="Enter full name">
-
-            <label>Email:</label>
-            <input type="email" name="email" placeholder="Enter email">
-
-            <label>Asal Perusahaan:</label>
-            <input type="text" name="asal_perusahaan" placeholder="Enter asal perusahaan">
-
-            <label>Password:</label>
-            <input type="password" name="password" placeholder="Enter password">
-
-            <label>Confirm Password:</label>
-            <input type="password" name="confirm_password" placeholder="Confirm password">
-
-            <button type="submit">Register</button>
-        </form>
-
-        <div class="footer">
-            <p>Sudah punya akun? 
-                <a href="{% url 'login' %}">Login</a>
-            </p>
-            <div class="social">
-                <span>●</span>
-                <span>●</span>
-                <span>●</span>
-            </div>
-        </div>
+    <div class="shape3"></div>
+    <div class="shape4"></div>
+    <div class="panel-text">
+        <div class="logo">LeadFlow</div>
+        <div class="tagline">Platform manajemen lead<br>untuk tim sales modern</div>
     </div>
 </div>
 
+<!-- RIGHT FORM -->
+<div class="container">
+    <div class="register-box">
+
+        <!-- Role Selector Pill -->
+        <div class="role-toggle">
+            <input type="radio" name="role_ui" id="reg-admin" value="admin" checked onchange="switchRole('admin')">
+            <label for="reg-admin">🛡️ Daftar sebagai Admin</label>
+            <input type="radio" name="role_ui" id="reg-sales" value="sales" onchange="switchRole('sales')">
+            <label for="reg-sales">👤 Daftar sebagai Sales</label>
+        </div>
+
+        <!-- Heading -->
+        <div class="register-heading">
+            <h2 id="reg-title">Buat Akun Admin</h2>
+            <p id="reg-sub">Kelola tim sales dan semua lead dari satu dashboard</p>
+        </div>
+
+        <!-- Role Info Box -->
+        <div class="role-info admin" id="role-info-box">
+            <strong>🛡️ Akun Admin</strong>
+            Dapat mengakses semua fitur: distribusi lead, analisis, pengaturan tim, dan input lead.
+        </div>
+
+        {% if error %}
+        <div class="error-msg">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form method="POST" id="register-form">
+            {% csrf_token %}
+            <!-- Role dikirim ke backend -->
+            <input type="hidden" name="role" id="hidden-role" value="admin">
+
+            <div class="field-group">
+                <label>Nama Lengkap</label>
+                <input type="text" name="nama" placeholder="Masukkan nama lengkap" required>
+            </div>
+
+            <div class="field-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="nama@perusahaan.com" required>
+            </div>
+
+            <div class="field-group">
+                <label>Asal Perusahaan</label>
+                <input type="text" name="asal_perusahaan" placeholder="Nama perusahaan Anda">
+            </div>
+
+            <div class="field-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Min. 8 karakter" required>
+            </div>
+
+            <div class="field-group">
+                <label>Konfirmasi Password</label>
+                <input type="password" name="confirm_password" placeholder="Ulangi password" required>
+            </div>
+
+            <button type="submit" class="btn-register" id="btn-submit">Buat Akun Admin</button>
+        </form>
+
+        <div class="footer">
+            <p>Sudah punya akun?
+                <a href="{% url 'login' %}">Masuk di sini</a>
+            </p>
+            <div class="dots">
+                <span></span>
+                <span class="active"></span>
+                <span></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const ROLE_CONFIG = {
+    admin: {
+        title:   'Buat Akun Admin',
+        sub:     'Kelola tim sales dan semua lead dari satu dashboard',
+        info:    '<strong>🛡️ Akun Admin</strong>Dapat mengakses semua fitur: distribusi lead, analisis, pengaturan tim, dan input lead.',
+        infoClass: 'admin',
+        btnText: 'Buat Akun Admin',
+    },
+    sales: {
+        title:   'Buat Akun Sales',
+        sub:     'Lihat lead yang di-assign dan update status follow-up Anda',
+        info:    '<strong>👤 Akun Sales</strong>Dapat melihat lead yang di-assign, update status, dan menggunakan fitur segmentasi.',
+        infoClass: 'sales',
+        btnText: 'Buat Akun Sales',
+    },
+};
+
+function switchRole(role) {
+    const cfg = ROLE_CONFIG[role];
+    document.getElementById('hidden-role').value       = role;
+    document.getElementById('reg-title').textContent   = cfg.title;
+    document.getElementById('reg-sub').textContent     = cfg.sub;
+    document.getElementById('btn-submit').textContent  = cfg.btnText;
+
+    const infoBox = document.getElementById('role-info-box');
+    infoBox.innerHTML   = cfg.info;
+    infoBox.className   = 'role-info ' + cfg.infoClass;
+}
+</script>
 </body>
 </html>

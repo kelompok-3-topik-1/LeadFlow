@@ -126,26 +126,19 @@
 
   .nav-icon { font-size: 16px; width: 20px; text-align: center; }
 
-  .sidebar-bottom {
-    margin-top: auto;
-    padding: 16px 18px;
+  .sb-bottom {
+    margin-top: auto; padding: 14px 16px;
     border-top: 1px solid var(--border);
   }
 
   .logout-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--red);
-    cursor: pointer;
-    padding: 8px;
-    border-radius: var(--radius-sm);
-    transition: background 0.15s;
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 600; color: var(--red);
+    cursor: pointer; padding: 7px 9px; border-radius: var(--r-sm);
+    transition: background .13s;
   }
-  .logout-btn:hover { background: var(--red-light); }
-
+  .logout-btn:hover { background: #fee2e2; }
+  
   /* ── MAIN CONTENT ── */
   .main {
     flex: 1;
@@ -554,147 +547,6 @@
   }
 
   /* ════════════════════════════════
-     INPUT MANUAL PAGE
-  ════════════════════════════════ */
-  #page-input .topbar {
-    background: #1e293b;
-    border-bottom-color: #334155;
-  }
-  #page-input .topbar-title { color: white; }
-  #page-input .topbar-count { color: #64748b; }
-  #page-input .back-btn {
-    display: flex; align-items: center; gap: 6px;
-    color: #94a3b8;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
-    border: 1px solid #334155;
-    transition: all 0.15s;
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-  }
-  #page-input .back-btn:hover { border-color: #94a3b8; color: white; }
-
-  #page-input .active-label {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--purple);
-    letter-spacing: 0.02em;
-  }
-
-  .form-overlay {
-    flex: 1;
-    background: rgba(15, 23, 42, 0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-
-  .form-card {
-    background: #1e293b;
-    border-radius: var(--radius-lg);
-    padding: 32px;
-    width: 100%;
-    max-width: 580px;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid #334155;
-    animation: slideUp 0.3s ease;
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .form-section-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 18px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #334155;
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-
-  .form-group { display: flex; flex-direction: column; gap: 5px; }
-  .form-group.full { grid-column: 1 / -1; }
-
-  .form-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #94a3b8;
-    letter-spacing: 0.04em;
-  }
-  .form-label span { color: var(--red); }
-
-  .form-input, .form-select, .form-textarea {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: var(--radius-sm);
-    padding: 9px 12px;
-    font-size: 13px;
-    color: white;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-    transition: border-color 0.15s;
-    width: 100%;
-  }
-  .form-input::placeholder, .form-textarea::placeholder { color: #475569; }
-  .form-input:focus, .form-select:focus, .form-textarea:focus {
-    border-color: #60a5fa;
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-  }
-  .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
-  .form-select option { background: #1e293b; }
-  .form-textarea { resize: vertical; min-height: 90px; }
-
-  .form-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid #334155;
-  }
-
-  .btn-reset {
-    padding: 8px 20px;
-    background: transparent;
-    border: 1px solid #475569;
-    border-radius: var(--radius-sm);
-    color: #94a3b8;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.15s;
-  }
-  .btn-reset:hover { border-color: #94a3b8; color: white; }
-
-  .btn-save {
-    padding: 8px 20px;
-    background: var(--accent);
-    border: none;
-    border-radius: var(--radius-sm);
-    color: white;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.15s;
-  }
-  .btn-save:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
-
-  /* ════════════════════════════════
      ASSIGN MODAL
   ════════════════════════════════ */
   .modal-overlay {
@@ -900,41 +752,764 @@
 
   /* dots divider */
   .dots { color: var(--text-muted); letter-spacing: 2px; }
+
+  /* ── INPUT LEAD DROPDOWN ── */
+  .input-dropdown-wrap { position: relative; }
+
+  .input-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(37,99,235,0.13);
+    min-width: 190px;
+    z-index: 500;
+    overflow: hidden;
+  }
+  .input-dropdown-menu.open { display: block; }
+
+  .input-dropdown-menu button,
+  .input-dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.12s;
+  }
+  .input-dropdown-menu button:hover,
+  .input-dropdown-menu a:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .dropdown-divider { height: 1px; background: var(--border); margin: 0; }
+
+
+  .delete-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.80);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .delete-modal-overlay.show { display: flex; }
+
+  .delete-dialog {
+    background: #d9d9d9;
+    border-radius: 16px;
+    width: 380px;
+    max-width: 95vw;
+    padding: 36px 28px 28px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    animation: slideUp 0.25s ease;
+  }
+
+  .delete-question-mark {
+    color: #e22f2f;
+    font-size: 86px;
+    line-height: 0.85;
+    font-weight: 900;
+    margin-bottom: 18px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .delete-dialog p {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 24px;
+  }
+
+  .delete-dialog-actions {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .btn-delete-no {
+    min-width: 70px;
+    padding: 7px 20px;
+    border-radius: 5px;
+    background: #fff;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.13s;
+  }
+  .btn-delete-no:hover { background: #e5e5e5; }
+
+  .btn-delete-yes {
+    min-width: 70px;
+    padding: 7px 20px;
+    border-radius: 5px;
+    background: #d82222;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.13s;
+  }
+  .btn-delete-yes:hover { background: #b91c1c; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ════════════════════════════════
+     EDIT LEAD MODAL
+  ════════════════════════════════ */
+  .edit-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.80);
+    z-index: 1500;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .edit-modal-overlay.show { display: flex; }
+
+  .edit-modal {
+    background: #1e293b;
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    width: 560px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.25s ease;
+  }
+
+  .edit-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .edit-modal-sub {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  .edit-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .edit-form-full {
+    grid-column: span 2;
+  }
+
+  .edit-field label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .edit-field input,
+  .edit-field select,
+  .edit-field textarea {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: var(--radius-sm);
+    color: #e2e8f0;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+  }
+  .edit-field input:focus,
+  .edit-field select:focus,
+  .edit-field textarea:focus { border-color: var(--accent); }
+
+  .edit-field textarea {
+    height: 80px;
+    resize: vertical;
+  }
+
+  .edit-field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+  }
+
+  .edit-section-label {
+    grid-column: span 2;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 6px;
+    border-top: 1px solid #334155;
+    margin-top: 4px;
+  }
+
+  /* ── PRIORITY BADGE ── */
+  .pri-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .pri-high      { background: #fee2e2; color: #b91c1c; }
+  .pri-veryhigh  { background: #fce7f3; color: #9d174d; }
+  .pri-medium    { background: #fef3c7; color: #b45309; }
+  .pri-normal    { background: #f1f5f9; color: #475569; }
+  .pri-low       { background: #dcfce7; color: #166534; }
+  /* ════════════════════════════════
+     COLUMNS PANEL (slide-in dari kanan)
+  ════════════════════════════════ */
+  .columns-panel-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.50);
+    z-index: 1200;
+    animation: fadeIn 0.2s ease;
+  }
+  .columns-panel-overlay.show { display: block; }
+
+  .columns-panel {
+    position: fixed;
+    top: 0; right: 0;
+    width: 360px;
+    height: 100vh;
+    background: #fff;
+    border-left: 1px solid var(--border);
+    box-shadow: -8px 0 32px rgba(0,0,0,0.12);
+    z-index: 1201;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+  }
+  .columns-panel-overlay.show .columns-panel {
+    transform: translateX(0);
+  }
+
+  .cp-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .cp-head-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .cp-head-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .cp-close {
+    width: 28px; height: 28px;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 15px; color: var(--text-muted);
+    transition: all 0.12s;
+  }
+  .cp-close:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+  .cp-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cp-section-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 0 4px;
+  }
+
+  /* Kolom bawaan — toggle visibility */
+  .cp-col-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    transition: border-color 0.12s;
+  }
+  .cp-col-row:hover { border-color: var(--accent); }
+
+  .cp-col-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+  }
+
+  .cp-col-name {
+    flex: 1;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .cp-col-type {
+    font-size: 10px;
+    color: var(--text-muted);
+    background: var(--border);
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* Toggle switch */
+  .cp-toggle {
+    position: relative;
+    width: 32px; height: 18px;
+    flex-shrink: 0;
+  }
+  .cp-toggle input { opacity: 0; width: 0; height: 0; }
+  .cp-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+  .cp-slider::before {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    left: 3px; top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.18s;
+  }
+  .cp-toggle input:checked + .cp-slider { background: var(--accent); }
+  .cp-toggle input:checked + .cp-slider::before { transform: translateX(14px); }
+
+  /* Kolom kustom — drag handle + delete */
+  .cp-custom-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--accent-light);
+    border-color: #bfdbfe;
+    transition: border-color 0.12s;
+    cursor: grab;
+  }
+  .cp-custom-row:hover { border-color: var(--accent); }
+  .cp-custom-row.dragging { opacity: 0.5; cursor: grabbing; }
+
+  .cp-drag-handle {
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: grab;
+    flex-shrink: 0;
+  }
+
+  .cp-custom-del {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    background: transparent;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: all 0.12s;
+    padding: 0;
+  }
+  .cp-custom-del:hover { background: var(--red-light); color: var(--red); }
+
+  .cp-foot {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .btn-add-col {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-add-col:hover { border-color: var(--accent); background: var(--accent-light); }
+
+  /* ════════════════════════════════
+     ADD COLUMN MODAL
+  ════════════════════════════════ */
+  .addcol-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.70);
+    z-index: 1300;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.18s ease;
+  }
+  .addcol-overlay.show { display: flex; }
+
+  .addcol-modal {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 28px 28px 24px;
+    width: 420px;
+    max-width: 95vw;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.22s ease;
+  }
+
+  .addcol-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .addcol-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+  }
+
+  .addcol-field {
+    margin-bottom: 16px;
+  }
+  .addcol-field label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .addcol-field input,
+  .addcol-field select {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+  }
+  .addcol-field input:focus,
+  .addcol-field select:focus { border-color: var(--accent); background: #fff; }
+
+  /* Type picker cards */
+  .type-picker {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .type-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--bg);
+  }
+  .type-card:hover { border-color: var(--accent); background: var(--accent-light); }
+  .type-card.selected { border-color: var(--accent); background: var(--accent-light); }
+  .type-card-icon { font-size: 20px; margin-bottom: 5px; }
+  .type-card-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); }
+  .type-card.selected .type-card-label { color: var(--accent); }
+
+  /* Dropdown options builder */
+  .dropdown-options-builder {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .dropdown-options-builder.show { display: flex; }
+
+  .dob-option-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dob-option-row input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    background: var(--bg);
+    outline: none;
+  }
+  .dob-option-row input:focus { border-color: var(--accent); background: #fff; }
+
+  .dob-del {
+    width: 24px; height: 24px;
+    border: none;
+    background: var(--red-light);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--red); font-size: 13px;
+    flex-shrink: 0; padding: 0;
+  }
+  .btn-add-option {
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.12s;
+    align-self: flex-start;
+  }
+  .btn-add-option:hover { border-color: var(--accent); background: var(--accent-light); }
+
+  .addcol-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Badge tipe di custom col header */
+  .th-custom {
+    white-space: nowrap;
+    position: relative;
+  }
+  .th-custom-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+    /* ════════════════════════════════
+    FILTER PANEL DROPDOWN
+  ════════════════════════════════ */
+  .filter-wrap { position: relative; }
+
+  .filter-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 300px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    z-index: 600;
+    padding: 16px;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .filter-panel.open { display: flex; }
+
+  .filter-panel-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-group label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .filter-group select {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    background: var(--bg);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .filter-group select:focus { border-color: var(--accent); background: #fff; }
+
+  .filter-panel-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    gap: 8px;
+  }
+
+  .btn-filter-reset {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    padding: 4px 0;
+    transition: color 0.13s;
+  }
+  .btn-filter-reset:hover { color: var(--red); }
+
+  .btn-filter-apply {
+    flex: 1;
+    padding: 7px 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.13s;
+  }
+  .btn-filter-apply:hover { background: #1d4ed8; }
+
+  .filter-active-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    margin-left: 2px;
+  }
 </style>
 </head>
 <body>
 
 <!-- ═══════════════ SIDEBAR ═══════════════ -->
+  <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-profile">
     <div class="avatar">👤</div>
     <div class="profile-info">
-      <div class="name">NAMA</div>
-      <div class="role">ADMIN</div>
+      <div class="name" id="sb-username">LOADING...</div>
+      <div class="role" id="sb-role-text">—</div>
     </div>
   </div>
 
-  <div class="sidebar-label">Main Menu</div>
-
-  <a class="nav-item active" onclick="showPage('lead-list')" id="nav-lead">
-    <span class="nav-icon">📋</span> Distribusi Lead
-  </a>
-  <a class="nav-item" href="{% url 'update_leads' %}">
-      <span class="nav-icon">📅</span> Update dan Segmentasi
-  </a>
-  <a class="nav-item" href="{% url 'dashboard_analisis' %}">
+    <a class="nav-item" href="{% url 'dashboard_analisis' %}">
       <span class="nav-icon">🖥️</span> Analisis Dashboard
-  </a>
-  <a class="nav-item" onclick="showPage('input')" id="nav-input">
-    <span class="nav-icon">📝</span> Input Manual
-  </a>
+    </a>
+    <a class="nav-item active" href="{% url 'distribusi_lead' %}">
+      <span class="nav-icon">📋</span> Distribusi Lead
+    </a>
+    <a class="nav-item" href="{% url 'update_leads' %}">
+      <span class="nav-icon">📅</span> Update dan Segmentasi
+    </a>
+  
 
-  <div class="sidebar-bottom">
-    <div class="logout-btn">
-      <span>🚪</span> Logout Account
+    <div class="sb-bottom">
+      <div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout</div>
     </div>
   </div>
 </aside>
+
 
 <!-- ═══════════════ MAIN ═══════════════ -->
 <main class="main">
@@ -960,9 +1535,25 @@
         </div>
         <div class="icon-btn" title="Pengaturan">⚙️</div>
         <div class="icon-btn" title="Notifikasi">🔔</div>
-        <button class="btn-primary" onclick="openAssignModal()">
-          ＋ Assign Lead
-        </button>
+
+
+        <div class="input-dropdown-wrap" id="inputDropdownWrap" style="display:none;">
+          <button class="btn-primary" id="inputLeadBtn" type="button" aria-haspopup="true" aria-expanded="false">
+            ＋ Input leads
+          </button>
+          <div class="input-dropdown-menu" id="inputDropdown" role="menu">
+            <a href="{% url 'input_manual' %}" role="menuitem">
+              ✏️ Input Manual
+            </a>
+
+            <div class="dropdown-divider"></div>
+            <a href="{% url 'input_otomatis' %}" role="menuitem">
+              📄 Input Otomatis
+            </a>
+          </div>
+        </div>
+
+
       </div>
     </div>
 
@@ -999,11 +1590,69 @@
             <h3>All Leads</h3>
             <p>Sorted by latest activity</p>
           </div>
-          <div class="table-actions">
-            <button class="btn-outline" onclick="exportCSV()">↓ Export</button>
-            <div class="view-toggle">
-              <div class="view-btn active" title="Grid">⊞</div>
-              <div class="view-btn" title="List">≡</div>
+            <div class="table-actions">
+              <button class="btn-outline" id="btn-columns" onclick="openColumnsPanel()">☰ Columns</button>
+              <div class="filter-wrap" id="filterWrap">
+                <button class="btn-outline" id="btn-filter" onclick="toggleFilterPanel(event)">
+                  ⚡ Filter <span id="filter-badge" style="display:none" class="filter-active-badge">0</span>
+                </button>
+                <div class="filter-panel" id="filterPanel">
+                  <div class="filter-panel-title">Filter Lead</div>
+
+                  <div class="filter-group">
+                    <label>Status Assign</label>
+                    <select id="filter-assigned">
+                      <option value="">Semua</option>
+                      <option value="assigned">Sudah di-assign</option>
+                      <option value="unassigned">Belum di-assign</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label>Source</label>
+                    <select id="filter-source">
+                      <option value="">Semua Source</option>
+                      <option value="Instagram">Instagram</option>
+                      <option value="TikTok">TikTok</option>
+                      <option value="Facebook">Facebook</option>
+                      <option value="Website">Website</option>
+                      <option value="WhatsApp">WhatsApp</option>
+                      <option value="Google">Google</option>
+                      <option value="Referral">Referral</option>
+                      <option value="Ads">Ads</option>
+                      <option value="Twitter">Twitter</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label>Prioritas</label>
+                    <select id="filter-prioritas">
+                      <option value="">Semua Prioritas</option>
+                      <option value="Tinggi">Tinggi</option>
+                      <option value="Sedang">Sedang</option>
+                      <option value="Rendah">Rendah</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label>Sales</label>
+                    <select id="filter-sales">
+                      <option value="">Semua Sales</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-panel-footer">
+                    <button class="btn-filter-reset" onclick="resetFilter()">Reset Filter</button>
+                    <button class="btn-filter-apply" onclick="applyFilter()">Terapkan</button>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-outline" onclick="exportCSV()">↓ Export</button>
+              <!-- TAMBAHAN: tombol Auto Assign, hanya muncul untuk admin -->
+              <button class="btn-primary" id="btn-auto-assign" style="display:none" onclick="doAutoAssign()">⚡ Auto Assign</button>
+              <div class="view-toggle">
+                <div class="view-btn active" title="Grid">⊞</div>
+                <div class="view-btn" title="List">≡</div>
             </div>
           </div>
         </div>
@@ -1037,10 +1686,11 @@
         <div class="data-table">
           <table>
             <thead>
-              <tr>
+              <tr id="leads-thead-row">
                 <th style="width:36px"><input type="checkbox" id="check-all" onchange="toggleAllCheck(this)"></th>
                 <th>Nama</th>
                 <th>Status</th>
+                <th>Prioritas</th>
                 <th>Source</th>
                 <th>Assigned</th>
                 <th style="text-align:right">Actions</th>
@@ -1060,94 +1710,6 @@
         <div class="pagination">
           <span class="pagination-info" id="pagination-info">—</span>
           <div class="pagination-btns" id="pagination-btns"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ════ PAGE 2: INPUT MANUAL ════ -->
-  <div class="page" id="page-input">
-    <div class="page-title" style="color:#94a3b8;padding:16px 28px 0;background:#0f172a">Input lead manual</div>
-    <div class="topbar" style="background:#1e293b;border-bottom-color:#334155">
-      <div class="topbar-left" style="gap:14px">
-        <button class="back-btn" onclick="showPage('lead-list')">← kembali</button>
-        <span class="topbar-title" style="color:white">Lead List</span>
-        <span class="topbar-count">— All total leads</span>
-      </div>
-      <div class="topbar-right">
-        <div class="search-box" style="background:#0f172a;border-color:#334155;color:#64748b">
-          <span>🔍</span>
-          <span>Search leads, phone, model...</span>
-        </div>
-        <div class="icon-btn" style="background:#0f172a;border-color:#334155;color:#94a3b8">⚙️</div>
-        <div class="icon-btn" style="background:#0f172a;border-color:#334155;color:#94a3b8">🔔</div>
-        <button class="btn-primary">＋ Assign Lead</button>
-        <span class="active-label">Input manual</span>
-      </div>
-    </div>
-
-    <div class="form-overlay">
-      <div class="form-card">
-        <div class="form-section-title">Informasi Kontak</div>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Nama lengkap <span>*</span></label>
-            <input class="form-input" type="text" placeholder="Masukkan nama..">
-          </div>
-          <div class="form-group">
-            <label class="form-label">No. telepon <span>*</span></label>
-            <input class="form-input" type="tel" placeholder="+62..">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email <span>*</span></label>
-            <input class="form-input" type="email" placeholder="Email@domain.com">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Sumber lead <span>*</span></label>
-            <select class="form-select">
-              <option value="" disabled selected>Pilih sumber..</option>
-              <option>Facebook</option>
-              <option>Instagram</option>
-              <option>Website</option>
-              <option>Twitter</option>
-              <option>Ads</option>
-              <option>Form</option>
-              <option>Referral</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-section-title">Informasi lead</div>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Produk yang diminati <span>*</span></label>
-            <select class="form-select">
-              <option value="" disabled selected>Pilih produk..</option>
-              <option>Produk A</option>
-              <option>Produk B</option>
-              <option>Produk C</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Prioritas <span>*</span></label>
-            <select class="form-select">
-              <option>Normal</option>
-              <option>Tinggi</option>
-              <option>Sangat Tinggi</option>
-            </select>
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Catatan awal</label>
-            <textarea class="form-textarea" placeholder="Informasi tambahan tentang lead ini.."></textarea>
-          </div>
-        </div>
-
-        <div class="form-footer">
-          <button class="btn-reset" onclick="resetForm()">Reset</button>
-          <button class="btn-save" onclick="saveForm()">Simpan lead</button>
         </div>
       </div>
     </div>
@@ -1178,6 +1740,166 @@
 
 </main>
 
+<!-- ═══════════════ COLUMNS PANEL ═══════════════ -->
+<div class="columns-panel-overlay" id="columnsOverlay" onclick="handleColumnsPanelClose(event)">
+  <div class="columns-panel" id="columnsPanel">
+    <div class="cp-head">
+      <div>
+        <div class="cp-head-title">Kelola Kolom</div>
+        <div class="cp-head-sub">Aktifkan, nonaktifkan, atau tambah kolom baru</div>
+      </div>
+      <div class="cp-close" onclick="closeColumnsPanel()">✕</div>
+    </div>
+
+    <div class="cp-body" id="cp-body">
+      <!-- Kolom bawaan -->
+      <div class="cp-section-label">Kolom Bawaan</div>
+      <div id="cp-builtin-list">
+        <!-- diisi JS -->
+      </div>
+
+      <!-- Kolom kustom -->
+      <div class="cp-section-label" id="cp-custom-label" style="display:none">Kolom Kustom</div>
+      <div id="cp-custom-list">
+        <!-- diisi JS -->
+      </div>
+    </div>
+
+    <div class="cp-foot">
+      <button class="btn-add-col" onclick="openAddColModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        Tambah Kolom Baru
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ADD COLUMN MODAL ═══════════════ -->
+<div class="addcol-overlay" id="addColModal" onclick="handleAddColClose(event)">
+  <div class="addcol-modal">
+    <div class="addcol-title">Tambah Kolom Baru</div>
+    <div class="addcol-sub">Kolom ini akan muncul di semua baris lead pada tabel</div>
+
+    <div class="addcol-field">
+      <label>Nama Kolom *</label>
+      <input type="text" id="ac-name" placeholder="cth: Tanggal Follow-up, Kategori...">
+    </div>
+
+    <div class="addcol-field">
+      <label>Tipe Data</label>
+      <div class="type-picker">
+        <div class="type-card selected" data-type="text" onclick="selectColType('text', this)">
+          <div class="type-card-icon">Aa</div>
+          <div class="type-card-label">Text</div>
+        </div>
+        <div class="type-card" data-type="date" onclick="selectColType('date', this)">
+          <div class="type-card-icon">📅</div>
+          <div class="type-card-label">Date</div>
+        </div>
+        <div class="type-card" data-type="dropdown" onclick="selectColType('dropdown', this)">
+          <div class="type-card-icon">☰</div>
+          <div class="type-card-label">Dropdown</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hanya muncul saat type=dropdown -->
+    <div class="addcol-field" id="ac-options-field" style="display:none">
+      <label>Pilihan Dropdown *</label>
+      <div class="dropdown-options-builder show" id="ac-options-builder">
+        <!-- diisi JS -->
+      </div>
+      <button class="btn-add-option" style="margin-top:8px" onclick="addDropdownOption()">+ Tambah pilihan</button>
+    </div>
+
+    <div class="addcol-footer">
+      <button class="btn-cancel" style="border:1px solid var(--border);color:var(--text-secondary);padding:8px 18px;border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px" onclick="closeAddColModal()">Batal</button>
+      <button class="btn-assign" style="background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px" onclick="doAddColumn()">Tambahkan Kolom</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ EDIT LEAD MODAL ═══════════════ -->
+<div class="edit-modal-overlay" id="editLeadModal" onclick="handleEditModalClose(event)">
+  <div class="edit-modal" id="editModalBox">
+    <div class="edit-modal-title">Edit Detail Lead</div>
+    <div class="edit-modal-sub">INFORMASI KONTAK</div>
+
+    <div class="edit-form-grid">
+      <div class="edit-field">
+        <label>Nama Lengkap *</label>
+        <input type="text" id="edit-nama" placeholder="Masukkan nama..">
+      </div>
+      <div class="edit-field">
+        <label>No. WhatsApp *</label>
+        <input type="tel" id="edit-wa" placeholder="+62...">
+      </div>
+      <div class="edit-field">
+        <label>Email *</label>
+        <input type="email" id="edit-email" placeholder="email@gmail.com">
+      </div>
+      <div class="edit-field">
+        <label>Sumber Lead *</label>
+        <select id="edit-source">
+          <option value="">Pilih sumber..</option>
+          <option value="Website">Website</option>
+          <option value="Facebook">Facebook</option>
+          <option value="Instagram">Instagram</option>
+          <option value="TikTok">TikTok</option>
+          <option value="Twitter">Twitter</option>
+          <option value="Ads">Ads</option>
+          <option value="Referral">Referral</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Google">Google</option>
+        </select>
+      </div>
+
+    <div class="edit-section-label">INFORMASI LEAD</div>
+
+      <div class="edit-field edit-form-full">
+        <label>Status</label>
+        <select id="edit-status">
+          <option value="New">New</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Qualified">Qualified</option>
+          <option value="Proposal">Proposal</option>
+          <option value="Closed Won">Closed Won</option>
+          <option value="Closed Lost">Closed Lost</option>
+          <option value="Nurture">Nurture</option>
+        </select>
+      </div>
+
+      <div class="edit-field edit-form-full" id="edit-assign-wrap" style="display:none">
+        <label>Assign ke Sales</label>
+        <select id="edit-assign-sales">
+          <option value="">— Tidak di-assign —</option>
+        </select>
+      </div>
+
+      <div class="edit-field edit-form-full">
+        <label>Campaign</label>
+        <select id="edit-campaign">
+          <option value="">— Tidak ada campaign —</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- Kolom kustom — dirender JS jika ada -->
+    <div id="edit-custom-fields-wrap" style="display:none">
+      <div class="edit-section-label" style="margin-bottom:12px">KOLOM KUSTOM</div>
+      <div class="edit-form-grid" id="edit-custom-fields-grid">
+        <!-- diisi JS -->
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeEditModal()">Batal</button>
+      <button class="btn-assign" onclick="doEditLead()">💾 Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════ ASSIGN MODAL ═══════════════ -->
 <div class="modal-overlay" id="assignModal" onclick="handleModalClose(event)">
   <div class="modal" id="modalBox">
@@ -1198,6 +1920,18 @@
   </div>
 </div>
 
+<!-- ═══════════════ DELETE MODAL ═══════════════ -->
+<div class="delete-modal-overlay" id="deleteModal">
+  <div class="delete-dialog">
+    <div class="delete-question-mark">?</div>
+    <p>Yakin ingin menghapus lead ini?</p>
+    <div class="delete-dialog-actions">
+      <button class="btn-delete-no" onclick="closeDeleteModal()">Tidak</button>
+      <button class="btn-delete-yes" onclick="doDeleteLead()">Ya</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════ TOAST ═══════════════ -->
 <div class="toast" id="toast">
   ✅ <span id="toast-msg">Lead berhasil disimpan!</span>
@@ -1207,6 +1941,8 @@
   // ═══════════════════════════════════════════════
   //  STATE
   // ═══════════════════════════════════════════════
+  let currentRole = 'admin'; // global role variable
+
   let state = {
     currentStatus: 'all',
     currentPage: 1,
@@ -1291,6 +2027,22 @@
     return `<span class="badge ${s.cls}"><span class="badge-dot"></span>${s.label}</span>`;
   }
 
+  // Map prioritas → class & label
+  const PRI_MAP = {
+    'sangat tinggi': { cls: 'pri-veryhigh', label: '🔴 Sangat Tinggi' },
+    'tinggi':        { cls: 'pri-high',     label: '🟠 Tinggi' },
+    'sedang':        { cls: 'pri-medium',   label: '🟡 Sedang' },
+    'normal':        { cls: 'pri-normal',   label: '⚪ Normal' },
+    'rendah':        { cls: 'pri-low',      label: '🟢 Rendah' },
+  };
+  function priorityBadge(prioritas) {
+    if (!prioritas) return `<span style="font-size:12px;color:var(--text-muted)">—</span>`;
+    const key = prioritas.toLowerCase();
+    const p = PRI_MAP[key];
+    if (!p) return `<span style="font-size:12px;color:var(--text-muted)">—</span>`;
+    return `<span class="pri-badge ${p.cls}">${p.label}</span>`;
+  }
+
   // ═══════════════════════════════════════════════
   //  FETCH STATS
   // ═══════════════════════════════════════════════
@@ -1323,13 +2075,17 @@
   // ═══════════════════════════════════════════════
   async function loadLeads() {
     const tbody = document.getElementById('leads-tbody');
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)"><span style="font-size:24px">⏳</span><br>Memuat data...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-muted)"><span style="font-size:24px">⏳</span><br>Memuat data...</td></tr>`;
 
     const params = new URLSearchParams({
-      status:   state.currentStatus === 'all' ? '' : state.currentStatus,
-      search:   state.searchQuery,
-      page:     state.currentPage,
-      per_page: state.perPage,
+      status:    state.currentStatus === 'all' ? '' : state.currentStatus,
+      search:    state.searchQuery,
+      page:      state.currentPage,
+      per_page:  state.perPage,
+      assigned:  filterState.assigned,
+      source:    filterState.source,
+      prioritas: filterState.prioritas,
+      sales:     filterState.sales,
     });
 
     try {
@@ -1345,51 +2101,8 @@
 
     } catch (err) {
       console.error('Gagal memuat leads:', err);
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--red)">⚠️ Gagal memuat data. Periksa koneksi API.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--red)">⚠️ Gagal memuat data. Periksa koneksi API.</td></tr>`;
     }
-  }
-
-  function renderTable(leads) {
-    const tbody = document.getElementById('leads-tbody');
-
-    if (!leads.length) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)"><span style="font-size:32px">🔍</span><br><br>Tidak ada lead ditemukan</td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = leads.map(lead => {
-      const initials   = getInitials(lead.nama);
-      const color      = avatarColor(lead.id_lead);
-      const badge      = statusBadge(lead.status);
-      const srcIcon    = sourceIcon(lead.source);
-      const srcLabel   = lead.source || '—';
-      const assignedEl = lead.assigned_to
-        ? `<span class="assigned-text">${lead.assigned_to}</span>`
-        : `<span class="assigned-empty">Belum di-assign</span>`;
-
-      return `
-        <tr>
-          <td><input type="checkbox" data-id="${lead.id_lead}"></td>
-          <td>
-            <div class="lead-name-cell">
-              <div class="lead-avatar" style="background:${color}">${initials}</div>
-              <div>
-                <div class="lead-name">${lead.nama}</div>
-                <div class="lead-phone">${lead.no_whatsapp || lead.email || '—'}</div>
-              </div>
-            </div>
-          </td>
-          <td>${badge}</td>
-          <td><div class="source-cell">${srcIcon} ${srcLabel}</div></td>
-          <td>${assignedEl}</td>
-          <td>
-            <div class="action-btns" style="justify-content:flex-end">
-              <div class="action-btn" title="Hubungi via WA" onclick="openWA('${lead.no_whatsapp || ''}')">📞</div>
-              <div class="action-btn" title="Assign ke Sales" onclick="openAssignModal('${lead.id_lead}')">✏️</div>
-            </div>
-          </td>
-        </tr>`;
-    }).join('');
   }
 
   function renderPagination(total, pages, currentPage) {
@@ -1575,6 +2288,269 @@
   }
 
   // ═══════════════════════════════════════════════
+  //  EDIT LEAD
+  // ═══════════════════════════════════════════════
+  let editingLeadId = null;
+
+  let cachedCampaigns = []; // cache list campaigns untuk dropdown
+
+  async function loadCampaignCache() {
+    try {
+      const res  = await fetch('/api/campaigns/');
+      const data = await res.json();
+      cachedCampaigns = data.campaigns || [];
+    } catch (_) { cachedCampaigns = []; }
+  }
+
+  async function openEditModal(leadId) {
+    editingLeadId = leadId;
+
+    try {
+      const res  = await fetch(`/api/leads/${leadId}/`);
+      const lead = await res.json();
+
+      document.getElementById('edit-nama').value   = lead.nama || '';
+      document.getElementById('edit-wa').value     = lead.no_whatsapp || '';
+      document.getElementById('edit-email').value  = lead.email || '';
+      document.getElementById('edit-source').value = lead.source || '';
+      document.getElementById('edit-status').value = lead.status || 'New';
+
+      // Load daftar sales jika admin
+      if (currentRole === 'admin') {
+        const assignWrap = document.getElementById('edit-assign-wrap');
+        assignWrap.style.display = '';
+
+        const salesSelect = document.getElementById('edit-assign-sales');
+        salesSelect.innerHTML = '<option value="">— Tidak di-assign —</option>';
+
+        const salesRes  = await fetch('/api/sales/');
+        const salesData = await salesRes.json();
+        (salesData.sales || []).forEach(s => {
+          const opt = document.createElement('option');
+          opt.value       = s.id_user;
+          opt.textContent = `${s.nama} (${s.lead_aktif} lead)`;
+          // Pre-select jika sudah di-assign
+          if (lead.assigned_id && lead.assigned_id === s.id_user) {
+            opt.selected = true;
+          }
+          salesSelect.appendChild(opt);
+        });
+
+        const campSelect = document.getElementById('edit-campaign');
+        campSelect.innerHTML = '<option value="">— Tidak ada campaign —</option>';
+        cachedCampaigns.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value       = c.id_campaign;
+          opt.textContent = c.nama_camp;
+          if (lead.id_campaign === c.id_campaign) opt.selected = true;
+          campSelect.appendChild(opt);
+        });
+      }
+
+    } catch (err) {
+      showToast('Gagal memuat data lead', true); return;
+    }
+
+    renderEditCustomFields(leadId);
+    document.getElementById('editLeadModal').classList.add('show');
+  }
+
+  async function renderEditCustomFields(leadId) {
+    const wrap = document.getElementById('edit-custom-fields-wrap');
+    const grid = document.getElementById('edit-custom-fields-grid');
+
+    if (!colState.custom.length) {
+      wrap.style.display = 'none';
+      return;
+    }
+
+    wrap.style.display = '';
+    grid.innerHTML = '';
+
+    // Ambil data lead dari API detail (sudah ada produk, prioritas, catatan, custom_fields)
+    let leadData = {};
+    let cfById   = {};
+    try {
+      const res  = await fetch(`/api/leads/${leadId}/`);
+      leadData   = await res.json();
+
+      // Ambil juga custom_fields by id dari distribusi leads
+      const res2  = await fetch(`/api/distribusi/leads/?page=1&per_page=10000`);
+      const data2 = await res2.json();
+      const found = (data2.leads || []).find(l => l.id_lead === leadId);
+      if (found) cfById = found.custom_fields || {};
+    } catch (_) {}
+
+    // Nama builtin yang disimpan via set_cf_value
+    const BUILTIN_NAMES = ['produk', 'prioritas', 'catatan'];
+
+    colState.custom.forEach(col => {
+      const isBuiltin = BUILTIN_NAMES.includes(col.name.toLowerCase());
+      // Builtin: ambil dari leadData langsung; custom: ambil dari cfById
+      const currentVal = isBuiltin
+        ? (leadData[col.name.toLowerCase()] || '')
+        : (cfById[col.id] || '');
+
+      let inputHtml = '';
+
+      if (col.type === 'dropdown') {
+        const opts = (col.options || []).map(o =>
+          `<option value="${o}" ${currentVal === o ? 'selected' : ''}>${o}</option>`
+        ).join('');
+        inputHtml = `<select data-cf-id="${col.id}" data-builtin="${isBuiltin}" data-name="${col.name.toLowerCase()}">
+          <option value="">— Pilih —</option>${opts}
+        </select>`;
+      } else if (col.type === 'date') {
+        inputHtml = `<input type="date" data-cf-id="${col.id}" data-builtin="${isBuiltin}" data-name="${col.name.toLowerCase()}" value="${currentVal}">`;
+      } else {
+        inputHtml = `<input type="text" data-cf-id="${col.id}" data-builtin="${isBuiltin}" data-name="${col.name.toLowerCase()}" value="${currentVal}" placeholder="Isi ${col.name}...">`;
+      }
+
+      const fieldEl = document.createElement('div');
+      fieldEl.className = 'edit-field';
+      fieldEl.innerHTML = `<label>${col.name}</label>${inputHtml}`;
+      grid.appendChild(fieldEl);
+  });
+}
+
+  function closeEditModal() {
+    editingLeadId = null;
+    document.getElementById('editLeadModal').classList.remove('show');
+  }
+
+  function handleEditModalClose(e) {
+    if (e.target === document.getElementById('editLeadModal')) closeEditModal();
+  }
+
+  async function doEditLead() {
+    if (!editingLeadId) return;
+
+    const nama   = document.getElementById('edit-nama').value.trim();
+    const no_wa  = document.getElementById('edit-wa').value.trim();
+    const email  = document.getElementById('edit-email').value.trim();
+    const source = document.getElementById('edit-source').value;
+    const status = document.getElementById('edit-status').value;
+
+    if (!nama || !no_wa || !email || !source) {
+      showToast('Lengkapi data yang wajib diisi! (Nama, No WA, Email, Sumber)', true); return;
+    }
+
+    try {
+      const res = await fetch(`/api/leads/${editingLeadId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({
+          nama,
+          no_whatsapp: no_wa,
+          email,
+          source,
+          status,
+          id_campaign: document.getElementById('edit-campaign')?.value || null,
+        }),
+        
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        // Simpan assign sales jika admin dan ada perubahan
+        if (currentRole === 'admin') {
+          const salesId = document.getElementById('edit-assign-sales')?.value;
+          if (salesId) {
+            await fetch('/api/assign/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+              body: JSON.stringify({ id_lead: editingLeadId, id_user: salesId }),
+            });
+          }
+        }
+
+        // Simpan custom fields — pisahkan builtin dan custom
+    const cfInputs = document.querySelectorAll('#edit-custom-fields-grid [data-cf-id]');
+      if (cfInputs.length) {
+        const builtinPayload = {};
+        const customPayload  = {};
+
+        cfInputs.forEach(el => {
+          if (el.dataset.builtin === 'true') {
+            builtinPayload[el.dataset.name] = el.value;
+          } else {
+            customPayload[el.dataset.cfId] = el.value;
+          }
+        });
+
+        // Simpan builtin (produk, prioritas, catatan) via PATCH lead_detail
+        if (Object.keys(builtinPayload).length) {
+          await fetch(`/api/leads/${editingLeadId}/`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify(builtinPayload),
+          });
+        }
+
+        // Simpan custom columns via custom_fields endpoint
+        if (Object.keys(customPayload).length) {
+          await fetch(`/api/leads/${editingLeadId}/custom_fields/`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify(customPayload),
+          });
+        }
+      }
+
+      closeEditModal();
+        showToast('✅ Lead berhasil diperbarui!');
+        loadLeads();
+        loadStats();
+      } else {
+        showToast(data.error || 'Gagal memperbarui lead', true);
+      }
+    } catch (err) {
+      showToast('Error koneksi ke server', true);
+    }
+  }
+  // ═══════════════════════════════════════════════
+  //  HAPUS LEAD
+  // ═══════════════════════════════════════════════
+  let pendingDeleteLeadId = null;
+
+  function confirmDeleteLead(leadId) {
+    pendingDeleteLeadId = leadId;
+    document.getElementById('deleteModal').classList.add('show');
+  }
+
+  function closeDeleteModal() {
+    pendingDeleteLeadId = null;
+    document.getElementById('deleteModal').classList.remove('show');
+  }
+
+  async function doDeleteLead() {
+    if (!pendingDeleteLeadId) return;
+    const id = pendingDeleteLeadId;
+    closeDeleteModal();
+
+    try {
+      const res = await fetch(`/api/leads/${id}/`, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+      });
+
+      if (res.ok || res.status === 204) {
+        showToast('✅ Lead berhasil dihapus!');
+        loadLeads();
+        loadStats();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showToast(data.error || 'Gagal menghapus lead', true);
+      }
+    } catch (err) {
+      showToast('Error koneksi ke server', true);
+    }
+  }
+
+  // ═══════════════════════════════════════════════
   //  EXPORT CSV
   // ═══════════════════════════════════════════════
   async function exportCSV() {
@@ -1632,9 +2608,507 @@
   //  INIT
   // ═══════════════════════════════════════════════
   document.addEventListener('DOMContentLoaded', () => {
-    loadStats();
-    loadLeads();
+    initApp();
   });
+
+// ═══════════════════════════════════════════════
+  //  COLUMNS MANAGER
+  // ═══════════════════════════════════════════════
+
+  // Kolom bawaan — key = field di objek lead, bisa di-toggle
+  const BUILTIN_COLS = [
+    { key: 'nama',         label: 'Nama',      icon: '👤', alwaysOn: true },
+    { key: 'status',       label: 'Status',    icon: '🏷️', alwaysOn: false },
+    { key: 'source',       label: 'Source',    icon: '📌', alwaysOn: false },
+    { key: 'assigned_to',  label: 'Assigned',  icon: '👥', alwaysOn: false },
+    { key: 'id_campaign',  label: 'Campaign',  icon: '📣', alwaysOn: false },
+  ];
+
+  // State kolom: mana yang aktif
+  let colState = {
+     builtin: { nama: true, status: true, source: true, assigned_to: true, id_campaign: false },
+    custom: [],   // [{ id, name, type, options:[] }]
+  };
+
+  let selectedColType = 'text';
+
+  // ── Load dari API saat init ──
+  async function loadColumnConfig() {
+    try {
+      const res  = await fetch('/api/columns/');
+      const data = await res.json();
+      if (data.builtin)  colState.builtin = { ...colState.builtin, ...data.builtin };
+      if (data.custom)   colState.custom  = data.custom;
+    } catch (_) { /* pakai default jika API belum ada */ }
+    renderTableHeader();
+  }
+
+  // ── Render header tabel sesuai colState ──
+  function renderTableHeader() {
+    const tr = document.getElementById('leads-thead-row');
+    // Kolom tetap: checkbox
+    let html = `<th style="width:36px"><input type="checkbox" id="check-all" onchange="toggleAllCheck(this)"></th>`;
+
+    BUILTIN_COLS.forEach(col => {
+      if (colState.builtin[col.key]) {
+        const isRight = col.key === 'actions' ? ' style="text-align:right"' : '';
+        html += `<th${isRight}>${col.label}</th>`;
+      }
+    });
+
+    // Kolom kustom
+    colState.custom.forEach(col => {
+      const typeIcon = col.type === 'date' ? '📅' : col.type === 'dropdown' ? '☰' : 'Aa';
+      html += `<th class="th-custom">${col.name}<span class="th-custom-badge">${typeIcon}</span></th>`;
+    });
+
+    html += `<th style="text-align:right">Actions</th>`;
+    tr.innerHTML = html;
+
+    // Re-bind check-all
+    document.getElementById('check-all').onchange = function(){ toggleAllCheck(this); };
+  }
+
+  // ── Hitung berapa kolom aktif (untuk colspan empty state) ──
+  function countActiveCols() {
+    const builtinCount = BUILTIN_COLS.filter(c => colState.builtin[c.key]).length;
+    return 1 + builtinCount + colState.custom.length + 1; // checkbox + builtin + custom + actions
+  }
+
+  // ── renderTable — override agar pakai colState ──
+  function renderTable(leads) {
+    const tbody = document.getElementById('leads-tbody');
+    const colCount = countActiveCols();
+
+    if (!leads.length) {
+      tbody.innerHTML = `<tr><td colspan="${colCount}" style="text-align:center;padding:40px;color:var(--text-muted)"><span style="font-size:32px">🔍</span><br><br>Tidak ada lead ditemukan</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = leads.map(lead => {
+      const initials   = getInitials(lead.nama);
+      const color      = avatarColor(lead.id_lead);
+      let row = `<tr>`;
+      row += `<td><input type="checkbox" data-id="${lead.id_lead}"></td>`;
+
+      BUILTIN_COLS.forEach(col => {
+        if (!colState.builtin[col.key]) return;
+        if (col.key === 'nama') {
+          row += `<td><div class="lead-name-cell">
+            <div class="lead-avatar" style="background:${color}">${initials}</div>
+            <div>
+              <div class="lead-name">${lead.nama}</div>
+              <div class="lead-phone">${lead.no_whatsapp || lead.email || '—'}</div>
+            </div>
+          </div></td>`;
+        } else if (col.key === 'status') {
+          row += `<td>${statusBadge(lead.status)}</td>`;
+        } else if (col.key === 'prioritas') {
+          row += `<td>${priorityBadge(lead.prioritas)}</td>`;
+        } else if (col.key === 'source') {
+          const srcIcon  = sourceIcon(lead.source);
+          const srcLabel = lead.source || '—';
+          row += `<td><div class="source-cell">${srcIcon} ${srcLabel}</div></td>`;
+        } else if (col.key === 'assigned_to') {
+          const assignedEl = lead.assigned_to
+            ? `<span class="assigned-text">${lead.assigned_to}</span>`
+            : `<span class="assigned-empty">Belum di-assign</span>`;
+          row += `<td>${assignedEl}</td>`;
+        } else if (col.key === 'id_campaign') {
+          const campEl = lead.nama_campaign
+            ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#1d4ed8;background:#eff6ff;padding:3px 8px;border-radius:12px;white-space:nowrap;">📣 ${lead.nama_campaign}</span>`
+            : `<span style="font-size:11px;color:var(--text-muted);font-style:italic">—</span>`;
+          row += `<td>${campEl}</td>`;
+        }
+      });
+
+      // Kolom kustom — ambil dari lead.custom_fields[col.id] jika ada
+      const BUILTIN_NAMES = ['produk', 'prioritas', 'catatan'];
+      colState.custom.forEach(col => {
+        const isBuiltin = BUILTIN_NAMES.includes(col.name.toLowerCase());
+        const val = isBuiltin
+          ? (lead[col.name.toLowerCase()] || '—')
+          : ((lead.custom_fields || {})[col.id] || '—');
+        if (col.type === 'dropdown') {
+          row += `<td><span style="font-size:12px;color:var(--text-secondary)">${val}</span></td>`;
+        } else if (col.type === 'date') {
+          row += `<td><span style="font-size:12px;color:var(--text-secondary);font-family:'DM Mono',monospace">${val}</span></td>`;
+        } else {
+          row += `<td><span style="font-size:12px;color:var(--text-primary)">${val}</span></td>`;
+        }
+      });
+
+      row += `<td>
+        <div class="action-btns" style="justify-content:flex-end">
+          <div class="action-btn" title="Edit lead" onclick="openEditModal('${lead.id_lead}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </div>
+          <div class="action-btn" title="Hapus lead" onclick="confirmDeleteLead('${lead.id_lead}')" style="color:var(--red)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M3 6h18M8 6V4h8v2M7 6l1 16h8l1-16"/><path d="M10 11v6M14 11v6"/></svg>
+          </div>
+        </div>
+      </td></tr>`;
+      return row;
+    }).join('');
+  }
+
+  // ── Open / Close Panel ──
+  function openColumnsPanel() {
+    renderColumnsPanel();
+    document.getElementById('columnsOverlay').classList.add('show');
+  }
+
+  function closeColumnsPanel() {
+    document.getElementById('columnsOverlay').classList.remove('show');
+  }
+
+  function handleColumnsPanelClose(e) {
+    if (e.target === document.getElementById('columnsOverlay')) closeColumnsPanel();
+  }
+
+  // ── Render isi panel ──
+  function renderColumnsPanel() {
+    // Builtin
+    const builtinList = document.getElementById('cp-builtin-list');
+    builtinList.innerHTML = BUILTIN_COLS.map(col => {
+      const checked = colState.builtin[col.key] ? 'checked' : '';
+      const disabled = col.alwaysOn ? 'disabled' : '';
+      return `
+        <div class="cp-col-row">
+          <span class="cp-col-icon">${col.icon}</span>
+          <span class="cp-col-name">${col.label}</span>
+          <span class="cp-col-type">bawaan</span>
+          <label class="cp-toggle" title="${col.alwaysOn ? 'Kolom wajib' : ''}">
+            <input type="checkbox" ${checked} ${disabled} onchange="toggleBuiltinCol('${col.key}', this.checked)">
+            <span class="cp-slider"></span>
+          </label>
+        </div>`;
+    }).join('');
+
+    // Custom
+    const customList  = document.getElementById('cp-custom-list');
+    const customLabel = document.getElementById('cp-custom-label');
+
+    if (!colState.custom.length) {
+      customLabel.style.display = 'none';
+      customList.innerHTML = '';
+      return;
+    }
+
+    customLabel.style.display = '';
+    customList.innerHTML = colState.custom.map((col, idx) => {
+      const typeIcon  = col.type === 'date' ? '📅' : col.type === 'dropdown' ? '☰' : 'Aa';
+      const typeLabel = col.type;
+      const optInfo   = col.type === 'dropdown' && col.options?.length
+        ? `<span style="font-size:10px;color:var(--text-muted);margin-left:4px">(${col.options.length} opsi)</span>` : '';
+      return `
+        <div class="cp-custom-row" draggable="true" data-idx="${idx}">
+          <span class="cp-drag-handle">⋮⋮</span>
+          <span class="cp-col-icon">${typeIcon}</span>
+          <span class="cp-col-name">${col.name}${optInfo}</span>
+          <span class="cp-col-type">${typeLabel}</span>
+          <button class="cp-custom-del" title="Hapus kolom" onclick="deleteCustomCol('${col.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Toggle kolom bawaan ──
+  async function toggleBuiltinCol(key, visible) {
+    colState.builtin[key] = visible;
+    renderTableHeader();
+    loadLeads();
+    try {
+      await fetch('/api/columns/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ action: 'toggle_builtin', key, visible }),
+      });
+    } catch (_) {}
+  }
+
+  // ── Hapus kolom kustom ──
+  async function deleteCustomCol(colId) {
+    if (!confirm('Hapus kolom ini? Data kolom pada semua lead akan ikut dihapus.')) return;
+    try {
+      const res = await fetch(`/api/columns/${colId}/`, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+      });
+      if (res.ok || res.status === 204) {
+        colState.custom = colState.custom.filter(c => c.id !== colId);
+        renderTableHeader();
+        renderColumnsPanel();
+        loadLeads();
+        showToast('Kolom dihapus');
+      } else {
+        showToast('Gagal menghapus kolom', true);
+      }
+    } catch (_) {
+      showToast('Error koneksi', true);
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  //  ADD COLUMN MODAL
+  // ═══════════════════════════════════════════════
+  function openAddColModal() {
+    selectedColType = 'text';
+    document.getElementById('ac-name').value = '';
+    document.getElementById('ac-options-field').style.display = 'none';
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    document.querySelector('.type-card[data-type="text"]').classList.add('selected');
+    initDropdownOptions();
+    document.getElementById('addColModal').classList.add('show');
+  }
+
+  function closeAddColModal() {
+    document.getElementById('addColModal').classList.remove('show');
+  }
+
+  function handleAddColClose(e) {
+    if (e.target === document.getElementById('addColModal')) closeAddColModal();
+  }
+
+  function selectColType(type, el) {
+    selectedColType = type;
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('ac-options-field').style.display = type === 'dropdown' ? '' : 'none';
+  }
+
+  function initDropdownOptions() {
+    const builder = document.getElementById('ac-options-builder');
+    builder.innerHTML = '';
+    addDropdownOption('');
+    addDropdownOption('');
+  }
+
+  function addDropdownOption(val = '') {
+    const builder = document.getElementById('ac-options-builder');
+    const row = document.createElement('div');
+    row.className = 'dob-option-row';
+    row.innerHTML = `
+      <input type="text" placeholder="Nama opsi..." value="${val}">
+      <button class="dob-del" onclick="this.parentElement.remove()" title="Hapus">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>`;
+    builder.appendChild(row);
+  }
+
+  async function doAddColumn() {
+    const name = document.getElementById('ac-name').value.trim();
+    if (!name) { showToast('Nama kolom wajib diisi!', true); return; }
+
+    let options = [];
+    if (selectedColType === 'dropdown') {
+      options = [...document.querySelectorAll('#ac-options-builder input')]
+        .map(i => i.value.trim()).filter(Boolean);
+      if (options.length < 1) { showToast('Tambahkan minimal 1 pilihan dropdown!', true); return; }
+    }
+
+    try {
+      const res = await fetch('/api/columns/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ action: 'add_custom', name, type: selectedColType, options }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        colState.custom.push(data.column);
+        closeAddColModal();
+        renderTableHeader();
+        renderColumnsPanel();
+        loadLeads();
+        showToast(`✅ Kolom "${name}" berhasil ditambahkan!`);
+      } else {
+        showToast(data.error || 'Gagal menambahkan kolom', true);
+      }
+    } catch (_) {
+      showToast('Error koneksi ke server', true);
+    }
+  }
+
+// ────────────────────────────────────────────
+//  INIT: deteksi role dari session Django
+// ────────────────────────────────────────────
+function initApp() {
+  // Nilai ini langsung dirender oleh Django — jangan bandingkan dengan string literal
+  const userName = "{{ request.session.user_name|default:'User' }}";
+  const userRole = "{{ request.session.user_role|default:'sales' }}";
+  // Default role sengaja 'sales' (bukan 'admin') agar
+  // jika session tidak tersedia, akses dibatasi secara aman.
+
+  // Set currentRole dari session Django
+  currentRole = userRole;
+
+  // Update sidebar profile
+  document.getElementById('sb-username').textContent = userName;
+  document.getElementById('sb-role-text').textContent = userRole.toUpperCase();
+
+   // Tampilkan / sembunyikan menu Input — hanya admin
+  const navInput= document.getElementById('inputDropdownWrap');
+  if (navInput) {
+    navInput.style.display = (currentRole === 'admin') ? 'flex' : 'none';
+  }
+
+  // Tampilkan dashboard admin/user jika elemen ada
+  const dashAdmin = document.getElementById('dash-admin');
+  const dashUser  = document.getElementById('dash-user');
+  if (dashAdmin) dashAdmin.style.display = (currentRole === 'admin') ? 'flex' : 'none';
+  if (dashUser)  dashUser.style.display  = (currentRole === 'admin') ? 'none' : 'flex';
+
+  // Tampilkan tombol Auto Assign hanya untuk admin
+  const btnAutoAssign = document.getElementById('btn-auto-assign');
+  if (btnAutoAssign) {
+    btnAutoAssign.style.display = (currentRole === 'admin') ? 'flex' : 'none';
+  }
+
+  loadStats();
+  loadCampaignCache();   // ← tambahkan ini
+  loadColumnConfig();
+  loadLeads();
+}
+
+  // ═══════════════════════════════════════════════
+  //  INPUT LEAD DROPDOWN
+  // ═══════════════════════════════════════════════
+  (function() {
+    const btn      = document.getElementById('inputLeadBtn');
+    const dropdown = document.getElementById('inputDropdown');
+    if (!btn || !dropdown) return;
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+    });
+    document.addEventListener('click', () => {
+      dropdown.classList.remove('open');
+      btn.setAttribute('aria-expanded', false);
+    });
+    dropdown.addEventListener('click', (e) => e.stopPropagation());
+  })();
+
+  function closeInputDropdown() {
+    const dropdown = document.getElementById('inputDropdown');
+    const btn      = document.getElementById('inputLeadBtn');
+    if (dropdown) dropdown.classList.remove('open');
+    if (btn) btn.setAttribute('aria-expanded', false);
+  }
+
+  // ═══════════════════════════════════════════════
+//  FILTER PANEL
+// ═══════════════════════════════════════════════
+let filterState = {
+  assigned:  '',
+  source:    '',
+  prioritas: '',
+  sales:     '',
+};
+
+function toggleFilterPanel(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('filterPanel');
+  const isOpen = panel.classList.toggle('open');
+  if (isOpen) loadSalesFilterOptions();
+}
+
+async function loadSalesFilterOptions() {
+  const sel = document.getElementById('filter-sales');
+  if (sel.options.length > 1) return; // sudah diisi
+  try {
+    const res  = await fetch('/api/sales/');
+    const data = await res.json();
+    (data.sales || []).forEach(s => {
+      const opt = document.createElement('option');
+      opt.value       = s.id_user;
+      opt.textContent = s.nama;
+      if (filterState.sales === s.id_user) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  } catch (_) {}
+}
+
+function applyFilter() {
+  filterState.assigned  = document.getElementById('filter-assigned').value;
+  filterState.source    = document.getElementById('filter-source').value;
+  filterState.prioritas = document.getElementById('filter-prioritas').value;
+  filterState.sales     = document.getElementById('filter-sales').value;
+
+  // Hitung berapa filter aktif
+  const activeCount = [filterState.assigned, filterState.source, filterState.prioritas, filterState.sales]
+    .filter(Boolean).length;
+
+  const badge = document.getElementById('filter-badge');
+  if (activeCount > 0) {
+    badge.style.display = 'inline-flex';
+    badge.textContent   = activeCount;
+  } else {
+    badge.style.display = 'none';
+  }
+
+  document.getElementById('filterPanel').classList.remove('open');
+  state.currentPage = 1;
+  loadLeads();
+}
+
+function resetFilter() {
+  filterState = { assigned: '', source: '', prioritas: '', sales: '' };
+  document.getElementById('filter-assigned').value  = '';
+  document.getElementById('filter-source').value    = '';
+  document.getElementById('filter-prioritas').value = '';
+  document.getElementById('filter-sales').value     = '';
+  document.getElementById('filter-badge').style.display = 'none';
+  state.currentPage = 1;
+  loadLeads();
+  document.getElementById('filterPanel').classList.remove('open');
+}
+
+// Tutup panel jika klik di luar
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('filterWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('filterPanel')?.classList.remove('open');
+  }
+});
+
+function doLogout() {
+  window.location.href = "{% url 'login' %}";
+}
+
+// ═══════════════════════════════════════════════
+//  AUTO ASSIGN
+// ═══════════════════════════════════════════════
+async function doAutoAssign() {
+  const btn = document.getElementById('btn-auto-assign');
+  btn.disabled = true;
+  btn.textContent = '⏳ Memproses...';
+
+  try {
+    const res  = await fetch('/api/auto-assign/', {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      showToast(`✅ ${data.message}`);
+      loadLeads();
+      loadStats();
+    } else {
+      showToast(data.error || 'Gagal auto assign', true);
+    }
+  } catch (err) {
+    showToast('Error koneksi ke server', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚡ Auto Assign';
+  }
+}
+
 
 </script>
 </body>

@@ -1,5 +1,7 @@
+from django import views
 from django.urls import path
 from .views import (
+    api_tags_list,
     login_view,
     register_view,
     home,
@@ -10,12 +12,23 @@ from .views import (
     api_login,
     api_create_lead,
     api_assign_lead,
+    api_auto_assign,
     api_update_lead_status,
     api_dashboard,
     api_distribusi_stats,
     api_distribusi_leads,
     api_sales_list,
-    input_manual_page 
+    api_kanban_leads,
+    input_manual_page,
+    input_otomatis_page,
+    lead_detail,
+    columns_list,
+    column_detail,
+    lead_custom_fields,
+    api_campaign_list,
+    api_campaign_detail,
+    api_delete_tag,
+    api_import_csv,
 )
 
 urlpatterns = [
@@ -28,14 +41,26 @@ urlpatterns = [
     path('distribusi/', distribusi_lead_page, name='distribusi_lead'),
     path('update-leads/', update_leads_page, name='update_leads'),
     path('input-manual/', input_manual_page, name='input_manual'),
+    path('input-otomatis/', input_otomatis_page, name='input_otomatis'),
 
     path('api/login/', api_login, name='api_login'),
     path('api/leads/', api_create_lead, name='api_create_lead'),
     path('api/assign/', api_assign_lead, name='api_assign_lead'),
+    path('api/auto-assign/', api_auto_assign, name='api_auto_assign'),
     path('api/leads/update-status/', api_update_lead_status, name='api_update_lead_status'),
     path('api/dashboard/', api_dashboard, name='api_dashboard'),
+    path('api/kanban/leads/', api_kanban_leads, name='api_kanban_leads'),
+    path('api/tags/', api_tags_list, name='api_tags_list'),
+    path('api/leads/import-csv/', api_import_csv, name='api_import_csv'),
 
     path('api/distribusi/stats/', api_distribusi_stats, name='api_distribusi_stats'),
     path('api/distribusi/leads/', api_distribusi_leads, name='api_distribusi_leads'),
     path('api/sales/', api_sales_list, name='api_sales_list'),
+    path('api/leads/<str:id>/', lead_detail, name='lead_detail'),
+    path('api/columns/', columns_list, name='columns_list'),
+    path('api/columns/<int:col_id>/', column_detail, name='column_detail'),
+    path('api/leads/<str:lead_id>/custom_fields/', lead_custom_fields, name='lead_custom_fields'),
+    path('api/campaigns/', api_campaign_list, name='api_campaign_list'),
+    path('api/campaigns/<str:id_campaign>/', api_campaign_detail, name='api_campaign_detail'),
+    path('api/tags/<str:tag_id>/delete/', api_delete_tag, name='api_delete_tag'),
 ]
