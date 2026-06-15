@@ -1478,6 +1478,21 @@
     font-weight: 700;
     margin-left: 2px;
   }
+
+  .btn-assigned-you {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 13px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all .15s; white-space: nowrap;
+  }
+  .btn-assigned-you:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .btn-assigned-you.active { background: var(--accent); color: white; border-color: var(--accent); }
+    
 </style>
 </head>
 <body>
@@ -1648,6 +1663,9 @@
                 </div>
               </div>
               <button class="btn-outline" onclick="exportCSV()">↓ Export</button>
+              <button class="btn-assigned-you" id="btn-assigned-you" onclick="toggleAssignedToMe()">
+                👤 Assigned to You
+              </button>
               <!-- TAMBAHAN: tombol Auto Assign, hanya muncul untuk admin -->
               <button class="btn-primary" id="btn-auto-assign" style="display:none" onclick="doAutoAssign()">⚡ Auto Assign</button>
               <div class="view-toggle">
@@ -3062,6 +3080,12 @@ function resetFilter() {
   document.getElementById('filter-prioritas').value = '';
   document.getElementById('filter-sales').value     = '';
   document.getElementById('filter-badge').style.display = 'none';
+
+  assignedToMeActive = false;
+  prevFilterSales    = '';
+  const btnAty = document.getElementById('btn-assigned-you');
+  if (btnAty) { btnAty.classList.remove('active'); btnAty.innerHTML = '👤 Assigned to You'; }
+
   state.currentPage = 1;
   loadLeads();
   document.getElementById('filterPanel').classList.remove('open');
@@ -3109,6 +3133,49 @@ async function doAutoAssign() {
   }
 }
 
+// ═══════════════════════════════════════════════
+//  ASSIGNED TO YOU — filter shortcut
+// ═══════════════════════════════════════════════
+let assignedToMeActive = false;
+let prevFilterSales    = '';   // simpan nilai filter sales sebelumnya
+
+function toggleAssignedToMe() {
+  const btn        = document.getElementById('btn-assigned-you');
+  const currentUserId = "{{ request.session.user_id|default:'' }}";
+
+  if (!assignedToMeActive) {
+    // Aktifkan filter
+    prevFilterSales      = filterState.sales;   // simpan filter sales yang mungkin sedang aktif
+    filterState.sales    = currentUserId;
+    assignedToMeActive   = true;
+    btn.classList.add('active');
+    btn.textContent      = '✕ Clear Filter';
+  } else {
+    // Nonaktifkan filter
+    filterState.sales    = prevFilterSales;      // kembalikan ke nilai sebelumnya
+    assignedToMeActive   = false;
+    btn.classList.remove('active');
+    btn.innerHTML        = '👤 Assigned to You';
+  }
+
+  // Sinkronkan dropdown filter sales di panel agar konsisten
+  const salesDropdown = document.getElementById('filter-sales');
+  if (salesDropdown) salesDropdown.value = filterState.sales;
+
+  // Update badge filter aktif
+  const activeCount = [filterState.assigned, filterState.source, filterState.prioritas, filterState.sales]
+    .filter(Boolean).length;
+  const badge = document.getElementById('filter-badge');
+  if (activeCount > 0) {
+    badge.style.display = 'inline-flex';
+    badge.textContent   = activeCount;
+  } else {
+    badge.style.display = 'none';
+  }
+
+  state.currentPage = 1;
+  loadLeads();
+}
 
 </script>
 </body>
