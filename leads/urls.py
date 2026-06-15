@@ -12,11 +12,10 @@ from .views import (
     api_assign_lead,
     api_update_lead_status,
     api_dashboard,
-    # TAMBAHAN BARU:
     api_distribusi_stats,
     api_distribusi_leads,
     api_sales_list,
-    input_manual_page
+    input_manual_page 
 )
 
 urlpatterns = [
