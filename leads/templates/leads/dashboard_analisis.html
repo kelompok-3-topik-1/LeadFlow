@@ -94,10 +94,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 
 /* ══ USER DASHBOARD ══ */
 #dash-admin {
+  display: none;
   width: 100%;
+  flex-direction: column;
+  flex: 1;
 }
 #dash-user {
+  display: none;
   width: 100%;
+  flex-direction: column;
   flex: 1;
 }
 .user-content {
@@ -345,38 +350,51 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
     </div>
 
     <!-- ════ USER DASHBOARD ════ -->
-    <div id="dash-user">
-      <div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
-      <div class="topbar">
-        <div class="topbar-left">
-          <span class="topbar-title">Dashboard Ringkas</span>
-          <span class="badge-user">Sales</span>
-        </div>
-        <div class="topbar-right">
-          <div class="icon-btn" onclick="refreshDashboard()" title="Refresh">🔄</div>
-          <div class="icon-btn">🔔</div>
+    <!-- ════ USER DASHBOARD ════ -->
+<div id="dash-user">
+  <div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-title">Dashboard Ringkas</span>
+      <span class="badge-user">Sales</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn" onclick="refreshDashboard()" title="Refresh">🔄</div>
+      <div class="icon-btn">🔔</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Stat Cards -->
+    <div class="stat-row">
+      <div class="stat-card blue">
+        <div class="stat-icon blue">👥</div>
+        <div>
+          <div class="stat-value" id="u-total">—</div>
+          <div class="stat-label">Total Leads</div>
         </div>
       </div>
-       
-      <div class="user-content">
-        <div class="kpi-grid">
-          <div class="kpi-card pink">
-            <div class="kpi-header">
-              <div class="kpi-title">Total Leads</div>
-              <div class="kpi-trend-icon">📈</div>
-            </div>
-            <div class="kpi-value" id="u-total">—</div>
-          </div>
-          <div class="kpi-card lavender">
-            <div class="kpi-header">
-              <div class="kpi-title">Lead Assigned</div>
-              <div class="kpi-trend-icon">📊</div>
-            </div>
-            <div class="kpi-value" id="u-assigned">—</div>
-          </div>
+      <div class="stat-card green">
+        <div class="stat-icon green">✅</div>
+        <div>
+          <div class="stat-value" id="u-assigned">—</div>
+          <div class="stat-label">Lead Assigned</div>
         </div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-icon amber">⏳</div>
+        <div>
+          <div class="stat-value" id="u-unassigned">—</div>
+          <div class="stat-label">Belum Di-assign</div>
+        </div>
+      </div>
+    </div>
 
-        <div class="kpi-extra-cards">
+    <!-- Mini KPI -->
+    <div class="bar-chart-row">
+      <div class="bar-chart-card">
+        <div class="bar-chart-title">📊 Status Lead Saya</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px;">
           <div class="mini-kpi">
             <div class="mini-kpi-val" style="color:#2563eb" id="u-new">—</div>
             <div class="mini-kpi-label">New</div>
@@ -389,21 +407,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
             <div class="mini-kpi-val" style="color:#10b981" id="u-qualified">—</div>
             <div class="mini-kpi-label">Qualified</div>
           </div>
-          <div class="mini-kpi">
-            <div class="mini-kpi-val" style="color:#ef4444" id="u-unassigned">—</div>
-            <div class="mini-kpi-label">Belum Assign</div>
-          </div>
-        </div>
-        
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);width:100%;">
-          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">ℹ️ Informasi Akses</div>
-          <div style="font-size:13px;color:var(--text-2);line-height:1.65;">Dashboard ini menampilkan ringkasan metrik kampanye. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.</div>
         </div>
       </div>
-      
-    </div>
 
-  </main>
+      <div class="bar-chart-card">
+        <div class="bar-chart-title">ℹ️ Informasi Akses</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.65;margin-top:4px;">
+          Dashboard ini menampilkan ringkasan metrik kampanye Anda. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
