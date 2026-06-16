@@ -8,26 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
---bg: #f0f4f8;
---sidebar-bg: #ffffff;
---card: #ffffff;
---border: #e2e8f0;
---text: #1a202c;
---text-2: #64748b;
---text-3: #94a3b8;
---accent: #2563eb;
---accent-light: #eff6ff;
---green: #10b981;
---green-light: #d1fae5;
---yellow: #f59e0b;
---yellow-light: #fef3c7;
---red: #ef4444;
---red-light: #fee2e2;
---navy: #0f1f3d;
---radius: 12px;
---radius-sm: 7px;
---shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
---shadow-md: 0 4px 24px rgba(0,0,0,0.10);
+  --bg: #f0f4f8;
+  --sidebar-bg: #ffffff;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #1a202c;
+  --text-2: #64748b;
+  --text-3: #94a3b8;
+  --accent: #2563eb;
+  --accent-light: #eff6ff;
+  --green: #10b981;
+  --green-light: #d1fae5;
+  --yellow: #f59e0b;
+  --yellow-light: #fef3c7;
+  --red: #ef4444;
+  --red-light: #fee2e2;
+  --navy: #0f1f3d;
+  --radius: 12px;
+  --radius-sm: 7px;
+  --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.10);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -49,7 +49,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .logout-btn:hover{background:var(--red-light);}
 
 /* ── MAIN ── */
-.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.main{flex:1;min-width:0;overflow-y:auto;display:flex;flex-direction:column;width:100%;}
 
 /* ── TOPBAR ── */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 26px;background:var(--card);border-bottom:1px solid var(--border);gap:14px;flex-shrink:0;}
@@ -91,70 +91,41 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .pie-wrap{display:flex;justify-content:center;}
 .pie-svg{width:180px;height:180px;}
 
-/* INFO CARD */
-.info-card{background:var(--navy);border-radius:var(--radius);padding:28px 30px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow-md);position:relative;overflow:hidden;}
-.info-card::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(37,99,235,.12);}
-.info-card::after{content:'';position:absolute;bottom:-60px;left:-20px;width:150px;height:150px;border-radius:50%;background:rgba(96,165,250,.07);}
-.info-tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:12px;}
-.info-title{font-size:20px;font-weight:800;color:white;margin-bottom:14px;letter-spacing:-.01em;}
-.info-body{font-size:12.5px;color:#94a3b8;line-height:1.7;position:relative;z-index:1;}
-
-/* ── ALL LEADS TABLE ── */
-.table-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
-.table-head-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
-.table-head-bar h3{font-size:14px;font-weight:700;}
-.table-head-bar p{font-size:11px;color:var(--text-3);margin-top:1px;}
-.table-head-right{display:flex;align-items:center;gap:8px;}
-.search-mini{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 11px;font-size:12px;color:var(--text-3);}
-.search-mini input{border:none;background:transparent;outline:none;font-size:12px;color:var(--text);font-family:'DM Sans',sans-serif;width:130px;}
-.search-mini input::placeholder{color:var(--text-3);}
-.tabs{display:flex;align-items:center;gap:3px;padding:10px 18px;border-bottom:1px solid var(--border);}
-.tab{display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid transparent;color:var(--text-2);transition:all .12s;}
-.tab:hover{background:var(--bg);}
-.tab.active{background:var(--accent);color:white;font-weight:600;}
-.tab-ct{background:rgba(255,255,255,.25);border-radius:10px;padding:1px 5px;font-size:10px;font-family:'DM Mono',monospace;}
-.tab:not(.active) .tab-ct{background:var(--border);color:var(--text-3);}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead th{padding:9px 16px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);background:var(--bg);border-bottom:1px solid var(--border);}
-tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
-tbody tr:hover{background:var(--bg);}
-tbody tr:last-child{border-bottom:none;}
-td{padding:11px 16px;vertical-align:middle;}
-.lead-cell{display:flex;align-items:center;gap:9px;}
-.lead-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;}
-.lead-name{font-weight:600;font-size:13px;}
-.lead-phone{font-size:11px;color:var(--text-3);font-family:'DM Mono',monospace;}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
-.badge-dot{width:5px;height:5px;border-radius:50%;}
-.badge.new{background:var(--accent-light);color:var(--accent);}
-.badge.new .badge-dot{background:var(--accent);}
-.badge.contacted{background:var(--yellow-light);color:#b45309;}
-.badge.contacted .badge-dot{background:var(--yellow);}
-.badge.qualified{background:var(--green-light);color:#065f46;}
-.badge.qualified .badge-dot{background:var(--green);}
-.badge.proposal{background:#ede9fe;color:#5b21b6;}
-.badge.proposal .badge-dot{background:#8b5cf6;}
-.badge.closed-won{background:#d1fae5;color:#065f46;}
-.badge.closed-won .badge-dot{background:#10b981;}
-.badge.closed-lost, .badge.lost{background:var(--red-light);color:#991b1b;}
-.badge.closed-lost .badge-dot, .badge.lost .badge-dot{background:var(--red);}
-.src-cell{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-2);}
-.assign-text{font-size:12px;color:var(--text-2);font-weight:500;}
-.assign-empty{font-size:12px;color:var(--text-3);font-style:italic;}
-.date-text{font-size:12px;color:var(--text-2);}
-.pagination{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;border-top:1px solid var(--border);}
-.page-info{font-size:12px;color:var(--text-3);}
-.page-btns{display:flex;gap:4px;}
-.page-btn{width:28px;height:28px;border-radius:var(--radius-sm);background:transparent;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:500;color:var(--text-2);font-family:'DM Sans',sans-serif;transition:all .12s;}
-.page-btn:hover{border-color:var(--accent);color:var(--accent);}
-.page-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
-.page-btn.next{padding:0 10px;width:auto;}
-.page-btn.prev{padding:0 10px;width:auto;}
 
 /* ══ USER DASHBOARD ══ */
-.user-content{padding:20px 26px;flex:1;display:flex;flex-direction:column;gap:18px;}
-.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:680px;margin:0 auto;width:100%;}
-.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;width:100%;}
+/* ══ USER DASHBOARD ══ */
+#dash-admin {
+  width: 100%;
+}
+#dash-user {
+  width: 100%;
+  flex: 1;
+}
+.user-content {
+  padding: 20px 26px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  width: 100%;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 680px;
+}
+.kpi-extra-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 680px;
+}
+.user-content{padding:20px 26px;flex:1;display:flex;flex-direction:column;gap:18px;width: 100%;}
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:680px;width:100%;}
 .kpi-card{border-radius:var(--radius);padding:28px 26px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-md);transition:all .2s;cursor:default;}
 .kpi-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.12);}
 .kpi-card.pink{background:#f3d0d7;border:none;}
@@ -164,8 +135,7 @@ td{padding:11px 16px;vertical-align:middle;}
 .kpi-trend-icon{font-size:20px;}
 .kpi-value{font-size:42px;font-weight:800;color:#1a202c;font-family:'DM Mono',monospace;line-height:1;}
 .kpi-footer{display:flex;align-items:center;gap:7px;}
-.kpi-extra-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:680px;margin:0 auto;width:100%;}
-.kpi-extra-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;}
+.kpi-extra-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:680px;width:100%;}
 .mini-kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);text-align:center;}
 .mini-kpi-val{font-size:20px;font-weight:800;color:var(--text);font-family:'DM Mono',monospace;}
 .mini-kpi-label{font-size:10px;color:var(--text-3);font-weight:500;margin-top:4px;letter-spacing:.03em;}
@@ -182,231 +152,261 @@ td{padding:11px 16px;vertical-align:middle;}
 /* Toast notification */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a202c;color:white;padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;}
 .toast.show{opacity:1;}
+
+/* ── BAR CHARTS ── */
+.bar-chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.bar-chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.bar-chart-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+.bar-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.bar-label { font-size: 11px; font-weight: 600; color: var(--text-2); width: 90px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { flex: 1; background: var(--bg); border-radius: 20px; height: 10px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 20px; transition: width 0.5s ease; }
+.bar-count { font-size: 11px; font-weight: 700; color: var(--text-2); font-family: 'DM Mono', monospace; width: 28px; text-align: right; flex-shrink: 0; }
+
+
+/* ── CAMPAIGN TABLE ── */
+.campaign-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.campaign-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.campaign-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.btn-add-campaign { display: flex; align-items: center; gap: 6px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background .15s; }
+.btn-add-campaign:hover { background: #1d4ed8; }
+.campaign-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.campaign-table th { text-align: left; padding: 8px 10px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border); }
+.campaign-table td { padding: 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: middle; }
+.campaign-table tr:last-child td { border-bottom: none; }
+.campaign-table tr:hover td { background: var(--accent-light); }
+.btn-del-campaign { background: none; border: none; color: var(--red); cursor: pointer; font-size: 14px; padding: 4px 8px; border-radius: var(--radius-sm); transition: background .15s; }
+.btn-del-campaign:hover { background: var(--red-light); }
+
+/* ── MODAL CAMPAIGN ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000; display: none; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: var(--card); border-radius: var(--radius); padding: 28px; width: 440px; max-width: 95vw; box-shadow: var(--shadow-md); }
+.modal-title { font-size: 15px; font-weight: 700; margin-bottom: 18px; }
+.modal-field { margin-bottom: 14px; }
+.modal-field label { display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .06em; }
+.modal-field input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; transition: border .15s; }
+.modal-field input:focus { border-color: var(--accent); }
+.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+.btn-cancel { padding: 8px 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: none; font-size: 13px; cursor: pointer; }
+.btn-save { padding: 8px 18px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-save:hover { background: #1d4ed8; }
+
 </style>
 </head>
 <body>
 
 <!-- ═══ APP SHELL ═══ -->
-<div id="app-shell" style="width:100%;display:flex;flex-direction:row;">
+<div id="app-shell" style="width:100%;display:flex;flex-direction:row;overflow:hidden;height:100vh;">
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-<div class="sb-profile">
-<div class="sb-avatar">👤</div>
-<div>
-<div class="sb-name" id="sb-username">LOADING...</div>
-<div class="sb-role" id="sb-role-text">—</div>
-</div>
-</div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-profile">
+      <div class="sb-avatar">👤</div>
+      <div>
+        <div class="sb-name" id="sb-username">LOADING...</div>
+        <div class="sb-role" id="sb-role-text">—</div>
+      </div>
+    </div>
 
-<a class="nav-item" href="{% url 'distribusi_lead' %}">
-<span class="nav-icon">📋</span> Distribusi Lead
-</a>
-<a class="nav-item" href="{% url 'update_leads' %}">
-<span class="nav-icon">📅</span> Update dan Segmentasi
-</a>
-<a class="nav-item active" href="{% url 'dashboard_analisis' %}">
-<span class="nav-icon">🖥️</span> Analisis Dashboard
-</a>
+    <a class="nav-item active" href="{% url 'dashboard_analisis' %}">
+      <span class="nav-icon">🖥️</span> Analisis Dashboard
+    </a>
+    <a class="nav-item" href="{% url 'distribusi_lead' %}">
+      <span class="nav-icon">📋</span> Distribusi Lead
+    </a>
+    <a class="nav-item" href="{% url 'update_leads' %}">
+      <span class="nav-icon">📅</span> Update dan Segmentasi
+    </a>
 
-<div class="sb-bottom">
-<div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout</div>
-</div>
-</aside>
+    <div class="sb-bottom">
+      <div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout</div>
+    </div>
+  </aside>
 
-<!-- MAIN -->
-<main class="main" id="main-area">
+  <!-- MAIN -->
+  <main class="main" id="main-area" style="min-width:0;flex:1;">
 
-<!-- ════ ADMIN DASHBOARD ════ -->
-<div id="dash-admin" style="display:none;flex-direction:column;flex:1;">
-<div class="role-bar admin-bar">🛡️ Mode Admin — Dashboard detail lead & analisis penuh</div>
-<div class="topbar">
-<div class="topbar-left">
-<span class="topbar-title">Analisis Dashboard</span>
-<span class="badge-admin">Admin Only</span>
-</div>
-<div class="topbar-right">
-<div class="icon-btn" onclick="refreshDashboard()" title="Refresh data">🔄</div>
-<div class="icon-btn">🔔</div>
-</div>
-</div>
+    <!-- ════ ADMIN DASHBOARD ════ -->
+    <div id="dash-admin">
+      <div class="role-bar admin-bar">🛡️ Mode Admin — Dashboard detail lead & analisis penuh</div>
+      <div class="topbar">
+        <div class="topbar-left">
+          <span class="topbar-title">Analisis Dashboard</span>
+          <span class="badge-admin">Admin Only</span>
+        </div>
+        <div class="topbar-right">
+          <div class="icon-btn" onclick="refreshDashboard()" title="Refresh data">🔄</div>
+          <div class="icon-btn">🔔</div>
+        </div>
+      </div>
 
-<div class="content">
-<!-- Stats -->
-<div class="stat-row">
-<div class="stat-card blue">
-<div class="stat-icon blue">👥</div>
-<div>
-<div class="stat-value" id="stat-total">—</div>
-<div class="stat-label">Total Leads</div>
-</div>
-</div>
-<div class="stat-card green">
-<div class="stat-icon green">✅</div>
-<div>
-<div class="stat-value" id="stat-assigned">—</div>
-<div class="stat-label">Lead Assigned</div>
-</div>
-</div>
-<div class="stat-card amber">
-<div class="stat-icon amber">⏳</div>
-<div>
-<div class="stat-value" id="stat-unassigned">—</div>
-<div class="stat-label">Lead Belum Assign</div>
-</div>
-</div>
-</div>
+      <div class="content">
+        <!-- Stats -->
+        <div class="stat-row">
+          <div class="stat-card blue">
+            <div class="stat-icon blue">👥</div>
+            <div>
+              <div class="stat-value" id="stat-total">—</div>
+              <div class="stat-label">Total Leads</div>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon green">🎯</div>
+            <div>
+              <div class="stat-value" id="stat-conversion">—</div>
+              <div class="stat-label">Conversion Rate (Closed Won)</div>
+            </div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-icon amber">💰</div>
+            <div>
+              <div class="stat-value" id="stat-cpl">—</div>
+              <div class="stat-label">Cost per Lead</div>
+            </div>
+          </div>
+        </div>
 
-<!-- Middle Row -->
-<div class="middle-row">
-<!-- Dynamic Pie Chart -->
-<div class="chart-card">
-<div class="chart-card-title">Lead per Sumber</div>
-<div class="chart-legend" id="pie-legend">
-<span style="font-size:12px;color:var(--text-3)">Memuat data...</span>
-</div>
-<div class="pie-wrap">
-<svg class="pie-svg" id="pie-svg" viewBox="0 0 180 180">
-<circle cx="90" cy="90" r="60" fill="#e2e8f0"/>
-<text x="90" y="95" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="DM Sans">Memuat...</text>
-</svg>
-</div>
-<div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="pie-summary">—</div>
-</div>
+        <!-- Middle Row -->
+        <div class="middle-row">
+          <!-- Dynamic Pie Chart -->
+          <div class="chart-card">
+            <div class="chart-card-title">Lead per Sumber</div>
+            <div class="chart-legend" id="pie-legend">
+              <span style="font-size:12px;color:var(--text-3)">Memuat data...</span>
+            </div>
+            <div class="pie-wrap">
+              <svg class="pie-svg" id="pie-svg" viewBox="0 0 180 180">
+                <circle cx="90" cy="90" r="60" fill="#e2e8f0"/>
+                <text x="90" y="95" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="DM Sans">Memuat...</text>
+              </svg>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="pie-summary">—</div>
+          </div>
+          
+          <!-- produk info card-->
+           <div class="chart-card">
+            <div class="chart-card-title">Campaign Terpopuler</div>
+            <div class="chart-legend" id="produk-legend">
+              <span style="font-size:12px;color:var(--text-3)">Memuat data...</span>
+            </div>
+            <div class="pie-wrap">
+              <svg class="pie-svg" id="produk-svg" viewBox="0 0 180 180">
+                <circle cx="90" cy="90" r="60" fill="#e2e8f0"/>
+                <text x="90" y="95" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="DM Sans">Memuat...</text>
+              </svg>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="produk-summary">—</div>
+          </div>
 
-<!-- Info Card -->
-<div class="info-card">
-<div class="info-tag">✦ Tentang Sistem</div>
-<div class="info-title">what is LEADFLOW?</div>
-<div class="info-body">
-Sistem Manajemen Lead dan Funnel Digital Marketing membantu brand atau tim marketing dalam memantau perjalanan calon pelanggan dari tahap awal hingga konversi. Dengan sistem ini, data lead dapat dikelola secara terstruktur, sehingga memudahkan analisis perilaku pelanggan dan membantu pengambilan keputusan strategi pemasaran yang lebih efektif.
-</div>
-</div>
-</div>
+        </div>
+        
+          <!-- Bar Charts Row -->
+          <div class="bar-chart-row">
+            <!-- Funnel Chart -->
+            <div class="bar-chart-card">
+              <div class="bar-chart-title">📊 Lead per Funnel Stage</div>
+              <div id="funnel-bars">
+                <div style="font-size:12px;color:var(--text-3)">Memuat data...</div>
+              </div>
+            </div>
+            <!-- Performa Sales -->
+            <div class="bar-chart-card">
+              <div class="bar-chart-title">👥 Performa Sales</div>
+              <div id="sales-bars">
+                <div style="font-size:12px;color:var(--text-3)">Memuat data...</div>
+              </div>
+            </div>
+          </div>
 
-<!-- All Leads Table -->
-<div class="table-section">
-<div class="table-head-bar">
-<div>
-<h3>All Leads</h3>
-<p id="table-subtitle">Sorted by latest activity</p>
-</div>
-<div class="table-head-right">
-<div class="search-mini">🔍 <input type="text" id="search-input" placeholder="Cari nama / No. HP.." oninput="onSearch()"></div>
-</div>
-</div>
+          <!-- Campaign Table (admin only) -->
+          <div class="campaign-section" id="campaign-section">
+            <div class="campaign-header">
+              <div class="campaign-title">📣 Daftar Campaign</div>
+              <button class="btn-add-campaign" onclick="openAddCampaign()">＋ Tambah Campaign</button>
+            </div>
+            <table class="campaign-table">
+              <thead>
+                <tr>
+                  <th>Nama Campaign</th>
+                  <th>Sumber</th>
+                  <th>Biaya Produksi</th>
+                  <th>Mulai</th>
+                  <th>Selesai</th>
+                  <th>Total Leads</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="campaign-tbody">
+                <tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:24px;">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+         </div>
+      </div>
+    </div>
 
-<!-- Status Tabs -->
-<div class="tabs" id="status-tabs">
-<div class="tab active" data-status="all" onclick="switchTab(this)">
-All <span class="tab-ct" id="tab-ct-all">—</span>
-</div>
-<div class="tab" data-status="New" onclick="switchTab(this)">
-New <span class="tab-ct" id="tab-ct-New">—</span>
-</div>
-<div class="tab" data-status="Contacted" onclick="switchTab(this)">
-Contacted <span class="tab-ct" id="tab-ct-Contacted">—</span>
-</div>
-<div class="tab" data-status="Qualified" onclick="switchTab(this)">
-Qualified <span class="tab-ct" id="tab-ct-Qualified">—</span>
-</div>
-<div class="tab" data-status="Proposal" onclick="switchTab(this)">
-Proposal <span class="tab-ct" id="tab-ct-Proposal">—</span>
-</div>
-<div class="tab" data-status="Closed Won" onclick="switchTab(this)">
-Closed Won <span class="tab-ct" id="tab-ct-Closed Won">—</span>
-</div>
-<div class="tab" data-status="Closed Lost" onclick="switchTab(this)">
-Closed Lost <span class="tab-ct" id="tab-ct-Closed Lost">—</span>
-</div>
-</div>
+    <!-- ════ USER DASHBOARD ════ -->
+    <div id="dash-user" width="100%">
+      <div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
+      <div class="topbar">
+        <div class="topbar-left">
+          <span class="topbar-title">Dashboard Ringkas</span>
+          <span class="badge-user">Sales</span>
+        </div>
+        <div class="topbar-right">
+          <div class="icon-btn" onclick="refreshDashboard()" title="Refresh">🔄</div>
+          <div class="icon-btn">🔔</div>
+        </div>
+      </div>
+       
+      <div class="user-content" width="100%">
+        <div class="kpi-grid">
+          <div class="kpi-card pink">
+            <div class="kpi-header">
+              <div class="kpi-title">Total Leads</div>
+              <div class="kpi-trend-icon">📈</div>
+            </div>
+            <div class="kpi-value" id="u-total">—</div>
+          </div>
+          <div class="kpi-card lavender">
+            <div class="kpi-header">
+              <div class="kpi-title">Lead Assigned</div>
+              <div class="kpi-trend-icon">📊</div>
+            </div>
+            <div class="kpi-value" id="u-assigned">—</div>
+          </div>
+        </div>
 
-<table>
-<thead>
-<tr>
-<th style="width:36px"><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th>
-<th>Nama</th>
-<th>Status</th>
-<th>Source</th>
-<th>Assigned</th>
-<th>No. WA</th>
-</tr>
-</thead>
-<tbody id="leads-tbody">
-<tr class="loading-row">
-<td colspan="6"><span class="spinner"></span> Memuat data lead...</td>
-</tr>
-</tbody>
-</table>
-
-<div class="pagination">
-<span class="page-info" id="page-info">—</span>
-<div class="page-btns" id="page-btns"></div>
-</div>
-</div>
-</div>
-</div>
-
-<!-- ════ USER DASHBOARD ════ -->
-<div id="dash-user" style="display:none;flex-direction:column;flex:1;">
-<div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
-<div class="topbar">
-<div class="topbar-left">
-<span class="topbar-title">Dashboard Ringkas</span>
-<span class="badge-user">Sales</span>
-</div>
-<div class="topbar-right">
-<div class="icon-btn" onclick="refreshDashboard()" title="Refresh">🔄</div>
-<div class="icon-btn">🔔</div>
-</div>
-</div>
-
-<div class="user-content">
-<div class="kpi-grid">
-<div class="kpi-card pink">
-<div class="kpi-header">
-<div class="kpi-title">Total Leads</div>
-<div class="kpi-trend-icon">📈</div>
-</div>
-<div class="kpi-value" id="u-total">—</div>
-</div>
-<div class="kpi-card lavender">
-<div class="kpi-header">
-<div class="kpi-title">Lead Assigned</div>
-<div class="kpi-trend-icon">📊</div>
-</div>
-<div class="kpi-value" id="u-assigned">—</div>
-</div>
-</div>
-
-<div class="kpi-extra-cards">
-<div class="mini-kpi">
-<div class="mini-kpi-val" style="color:#2563eb" id="u-new">—</div>
-<div class="mini-kpi-label">New</div>
-</div>
-<div class="mini-kpi">
-<div class="mini-kpi-val" style="color:#f59e0b" id="u-contacted">—</div>
-<div class="mini-kpi-label">Contacted</div>
-</div>
-<div class="mini-kpi">
-<div class="mini-kpi-val" style="color:#10b981" id="u-qualified">—</div>
-<div class="mini-kpi-label">Qualified</div>
-</div>
-<div class="mini-kpi">
-<div class="mini-kpi-val" style="color:#ef4444" id="u-unassigned">—</div>
-<div class="mini-kpi-label">Belum Assign</div>
-</div>
-</div>
-
+        <div class="kpi-extra-cards">
+          <div class="mini-kpi">
+            <div class="mini-kpi-val" style="color:#2563eb" id="u-new">—</div>
+            <div class="mini-kpi-label">New</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-kpi-val" style="color:#f59e0b" id="u-contacted">—</div>
+            <div class="mini-kpi-label">Contacted</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-kpi-val" style="color:#10b981" id="u-qualified">—</div>
+            <div class="mini-kpi-label">Qualified</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-kpi-val" style="color:#ef4444" id="u-unassigned">—</div>
+            <div class="mini-kpi-label">Belum Assign</div>
+          </div>
+        </div>
+        
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);max-width:680px;margin:0 auto;width:100%;">
-          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);width:100%;">
-<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">ℹ️ Informasi Akses</div>
-<div style="font-size:13px;color:var(--text-2);line-height:1.65;">Dashboard ini menampilkan ringkasan metrik kampanye. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.</div>
-</div>
-</div>
-</div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">ℹ️ Informasi Akses</div>
+          <div style="font-size:13px;color:var(--text-2);line-height:1.65;">Dashboard ini menampilkan ringkasan metrik kampanye. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.</div>
+        </div>
+      </div>
+      
+    </div>
 
-</main>
+  </main>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -421,86 +421,86 @@ let currentRole = 'sales';
 
 // ── Init: baca session dari server ──
 const SESSION_USER = {
-id: "{{ request.session.user_id|default:'' }}",
-nama: "{{ request.session.user_name|default:'' }}",
+  id: "{{ request.session.user_id|default:'' }}",
+  nama: "{{ request.session.user_name|default:'' }}",
 };
 
 // ────────────────────────────────────────────
 //  HELPERS
 // ────────────────────────────────────────────
 function toast(msg, dur = 2500) {
-const t = document.getElementById('toast');
-t.textContent = msg;
-t.classList.add('show');
-setTimeout(() => t.classList.remove('show'), dur);
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
 }
 
 function avatarColor(name) {
-const colors = ['#059669','#7c3aed','#ea580c','#0284c7','#dc2626','#d97706','#0891b2','#6d28d9'];
-let h = 0;
-for (let c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
-return colors[h % colors.length];
+  const colors = ['#059669','#7c3aed','#ea580c','#0284c7','#dc2626','#d97706','#0891b2','#6d28d9'];
+  let h = 0;
+  for (let c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
+  return colors[h % colors.length];
 }
 
 function initials(name) {
-return name.trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  return name.trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
 }
 
 function sourceIcon(src) {
-if (!src) return '❓';
-const s = src.toLowerCase();
-if (s.includes('instagram')) return '📸';
-if (s.includes('tiktok'))    return '🎵';
-if (s.includes('facebook'))  return '📘';
-if (s.includes('twitter'))   return '🐦';
-if (s.includes('form'))      return '📋';
-if (s.includes('ads'))       return '🔴';
-if (s.includes('website') || s.includes('web')) return '🌐';
-return '📌';
+  if (!src) return '❓';
+  const s = src.toLowerCase();
+  if (s.includes('instagram')) return '📸';
+  if (s.includes('tiktok'))    return '🎵';
+  if (s.includes('facebook'))  return '📘';
+  if (s.includes('twitter'))   return '🐦';
+  if (s.includes('form'))      return '📋';
+  if (s.includes('ads'))       return '🔴';
+  if (s.includes('website') || s.includes('web')) return '🌐';
+  return '📌';
 }
 
 function statusBadgeClass(status) {
-if (!status) return 'new';
-const s = status.toLowerCase().replace(/\s/g, '-');
-return s; // matches CSS: .badge.new, .badge.contacted, etc.
+  if (!status) return 'new';
+  const s = status.toLowerCase().replace(/\s/g, '-');
+  return s; // matches CSS: .badge.new, .badge.contacted, etc.
 }
 
 // ────────────────────────────────────────────
 //  API CALLS
 // ────────────────────────────────────────────
 async function fetchDashboard() {
-try {
-const res = await fetch('/api/dashboard/');
-return await res.json();
-} catch (e) {
-toast('Gagal memuat data dashboard');
-return null;
-}
+  try {
+    const res = await fetch('/api/dashboard/');
+    return await res.json();
+  } catch (e) {
+    toast('Gagal memuat data dashboard');
+    return null;
+  }
 }
 
 async function fetchLeads(status, search, page) {
-const params = new URLSearchParams({
-status: status === 'all' ? '' : status,
-search: search || '',
-page,
-per_page: perPage,
-});
-try {
-const res = await fetch(`/api/distribusi/leads/?${params}`);
-return await res.json();
-} catch (e) {
-toast('Gagal memuat data leads');
-return null;
-}
+  const params = new URLSearchParams({
+    status: status === 'all' ? '' : status,
+    search: search || '',
+    page,
+    per_page: perPage,
+  });
+  try {
+    const res = await fetch(`/api/distribusi/leads/?${params}`);
+    return await res.json();
+  } catch (e) {
+    toast('Gagal memuat data leads');
+    return null;
+  }
 }
 
 async function fetchDistribusiStats() {
-try {
-const res = await fetch('/api/distribusi/stats/');
-return await res.json();
-} catch (e) {
-return null;
-}
+  try {
+    const res = await fetch('/api/distribusi/stats/');
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
 }
 
 // ────────────────────────────────────────────
@@ -509,258 +509,408 @@ return null;
 const PIE_COLORS = ['#22c55e','#3b82f6','#f97316','#ec4899','#a855f7','#06b6d4','#f59e0b','#ef4444'];
 
 function buildPie(sourceCounts) {
-// sourceCounts = [{source, total}, ...]
-const total = sourceCounts.reduce((s, r) => s + r.total, 0);
-if (!total) return;
+  // sourceCounts = [{source, total}, ...]
+  const total = sourceCounts.reduce((s, r) => s + r.total, 0);
+  if (!total) return;
 
-const svg = document.getElementById('pie-svg');
-const legend = document.getElementById('pie-legend');
-const cx = 90, cy = 90, r = 72;
+  const svg = document.getElementById('pie-svg');
+  const legend = document.getElementById('pie-legend');
+  const cx = 90, cy = 90, r = 72;
 
-let html = '';
-let legendHtml = '';
-let startAngle = -Math.PI / 2; // start top
+  let html = '';
+  let legendHtml = '';
+  let startAngle = -Math.PI / 2; // start top
 
-sourceCounts.forEach((row, i) => {
-const pct = row.total / total;
-const angle = pct * 2 * Math.PI;
-const endAngle = startAngle + angle;
-const x1 = cx + r * Math.cos(startAngle);
-const y1 = cy + r * Math.sin(startAngle);
-const x2 = cx + r * Math.cos(endAngle);
-const y2 = cy + r * Math.sin(endAngle);
-const large = angle > Math.PI ? 1 : 0;
-const color = PIE_COLORS[i % PIE_COLORS.length];
+  sourceCounts.forEach((row, i) => {
+    const pct = row.total / total;
+    const angle = pct * 2 * Math.PI;
+    const endAngle = startAngle + angle;
+    const x1 = cx + r * Math.cos(startAngle);
+    const y1 = cy + r * Math.sin(startAngle);
+    const x2 = cx + r * Math.cos(endAngle);
+    const y2 = cy + r * Math.sin(endAngle);
+    const large = angle > Math.PI ? 1 : 0;
+    const color = PIE_COLORS[i % PIE_COLORS.length];
 
-html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${color}"/>`;
+    html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${color}"/>`;
 
-// label inside slice
-const midA = startAngle + angle / 2;
-const lx = cx + (r * 0.6) * Math.cos(midA);
-const ly = cy + (r * 0.6) * Math.sin(midA);
-const pctStr = Math.round(pct * 100) + '%';
-if (pct > 0.05) {
-html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${row.source || 'Lainnya'}</text>`;
-html += `<text x="${lx}" y="${ly + 9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
+    // label inside slice
+    const midA = startAngle + angle / 2;
+    const lx = cx + (r * 0.6) * Math.cos(midA);
+    const ly = cy + (r * 0.6) * Math.sin(midA);
+    const pctStr = Math.round(pct * 100) + '%';
+    if (pct > 0.05) {
+      html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${row.source || 'Lainnya'}</text>`;
+      html += `<text x="${lx}" y="${ly + 9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
+    }
+
+    legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${row.source || 'Lainnya'} ${pctStr}</div>`;
+    startAngle = endAngle;
+  });
+
+  svg.innerHTML = html;
+  legend.innerHTML = legendHtml;
+  document.getElementById('pie-summary').textContent = `Total ${total} leads dari ${sourceCounts.length} sumber`;
 }
 
-legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${row.source || 'Lainnya'} ${pctStr}</div>`;
-startAngle = endAngle;
-});
+function buildProduk(sourceCounts) {
+    const total = sourceCounts.reduce((s, r) => s + r.total, 0);
+    if (!total) return;
 
-svg.innerHTML = html;
-legend.innerHTML = legendHtml;
-document.getElementById('pie-summary').textContent = `Total ${total} leads dari ${sourceCounts.length} sumber`;
+    const svg = document.getElementById('produk-svg');     // ← fix ID
+    const legend = document.getElementById('produk-legend'); // ← fix ID
+    const cx = 90, cy = 90, r = 72;
+
+    let html = '';
+    let legendHtml = '';
+    let startAngle = -Math.PI / 2;
+
+    sourceCounts.forEach((row, i) => {
+        const pct = row.total / total;
+        const angle = pct * 2 * Math.PI;
+        const endAngle = startAngle + angle;
+        const x1 = cx + r * Math.cos(startAngle);
+        const y1 = cy + r * Math.sin(startAngle);
+        const x2 = cx + r * Math.cos(endAngle);
+        const y2 = cy + r * Math.sin(endAngle);
+        const large = angle > Math.PI ? 1 : 0;
+        const color = PIE_COLORS[i % PIE_COLORS.length];
+
+        html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${color}"/>`;
+
+        const midA = startAngle + angle / 2;
+        const lx = cx + (r * 0.6) * Math.cos(midA);
+        const ly = cy + (r * 0.6) * Math.sin(midA);
+        const pctStr = Math.round(pct * 100) + '%';
+        if (pct > 0.05) {
+            html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${row.nama_camp || 'Lainnya'}</text>`;
+            html += `<text x="${lx}" y="${ly + 9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
+        }
+
+        legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${row.nama_camp || 'Lainnya'} — ${row.total} leads (${pctStr})</div>`;
+        startAngle = endAngle;
+    });
+
+    svg.innerHTML = html;
+    legend.innerHTML = legendHtml;
+    document.getElementById('produk-summary').textContent = 
+        `Total ${total} leads dari ${sourceCounts.length} campaign`;  // ← fix ID
 }
 
-// ────────────────────────────────────────────
-//  RENDER LEADS TABLE
-// ────────────────────────────────────────────
-function renderLeads(data) {
-const tbody = document.getElementById('leads-tbody');
-if (!data || !data.leads || data.leads.length === 0) {
-tbody.innerHTML = `<tr class="loading-row"><td colspan="6">Tidak ada data lead ditemukan.</td></tr>`;
-document.getElementById('page-info').textContent = '0 leads';
-document.getElementById('page-btns').innerHTML = '';
-return;
-}
 
-const rows = data.leads.map(lead => {
-const color = avatarColor(lead.nama || '');
-const init  = initials(lead.nama || '?');
-const badgeC = statusBadgeClass(lead.status);
-const icon  = sourceIcon(lead.source);
-const assignedHtml = lead.assigned_to
-? `<span class="assign-text">${lead.assigned_to}</span>`
-: `<span class="assign-empty">Unassigned</span>`;
 
-return `
-     <tr>
-       <td><input type="checkbox" class="row-check" data-id="${lead.id_lead}"></td>
-       <td>
-         <div class="lead-cell">
-           <div class="lead-av" style="background:${color}">${init}</div>
-           <div>
-             <div class="lead-name">${lead.nama}</div>
-             <div class="lead-phone">${lead.email || '—'}</div>
-           </div>
-         </div>
-       </td>
-       <td><span class="badge ${badgeC}"><span class="badge-dot"></span>${lead.status || 'New'}</span></td>
-       <td><div class="src-cell">${icon} ${lead.source || '—'}</div></td>
-       <td>${assignedHtml}</td>
-       <td><span class="date-text">${lead.no_whatsapp || '—'}</span></td>
-     </tr>`;
-}).join('');
 
-tbody.innerHTML = rows;
-
-// Pagination
-const start = (data.page - 1) * data.per_page + 1;
-const end   = Math.min(data.page * data.per_page, data.total);
-document.getElementById('page-info').textContent = `Showing ${start}–${end} of ${data.total}`;
-renderPagination(data.page, data.pages);
-}
-
-function renderPagination(current, total) {
-const container = document.getElementById('page-btns');
-if (total <= 1) { container.innerHTML = ''; return; }
-
-let html = '';
-if (current > 1) html += `<div class="page-btn prev" onclick="goPage(${current-1})">← Prev</div>`;
-
-const pages = [];
-pages.push(1);
-if (current > 3) pages.push('...');
-for (let i = Math.max(2, current-1); i <= Math.min(total-1, current+1); i++) pages.push(i);
-if (current < total - 2) pages.push('...');
-if (total > 1) pages.push(total);
-
-pages.forEach(p => {
-if (p === '...') {
-html += `<div class="page-btn" style="border:none;background:transparent;color:var(--text-3)">...</div>`;
-} else {
-html += `<div class="page-btn ${p === current ? 'active' : ''}" onclick="goPage(${p})">${p}</div>`;
-}
-});
-
-if (current < total) html += `<div class="page-btn next" onclick="goPage(${current+1})">Next →</div>`;
-container.innerHTML = html;
-}
-
-// ────────────────────────────────────────────
-//  POPULATE TAB COUNTS
-// ────────────────────────────────────────────
-function updateTabCounts(stats) {
-const sc = stats.status_counts || {};
-const total = stats.total_leads || 0;
-
-document.getElementById('tab-ct-all').textContent = total;
-
-const statuses = ['New','Contacted','Qualified','Proposal','Closed Won','Closed Lost'];
-statuses.forEach(s => {
-const el = document.getElementById(`tab-ct-${s}`);
-if (el) el.textContent = sc[s] || 0;
-});
-}
-
-// ────────────────────────────────────────────
-//  EVENTS
-// ────────────────────────────────────────────
-function switchTab(el) {
-document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-el.classList.add('active');
-currentStatus = el.dataset.status;
-currentPage = 1;
-loadLeads();
-}
-
-function goPage(p) {
-currentPage = p;
-loadLeads();
-}
-
-function onSearch() {
-clearTimeout(searchTimeout);
-searchTimeout = setTimeout(() => {
-currentPage = 1;
-loadLeads();
-}, 400);
-}
-
-function toggleAll(master) {
-document.querySelectorAll('.row-check').forEach(c => c.checked = master.checked);
-}
-
-async function loadLeads() {
-const search = document.getElementById('search-input').value;
-document.getElementById('leads-tbody').innerHTML =
-`<tr class="loading-row"><td colspan="6"><span class="spinner"></span> Memuat...</td></tr>`;
-const data = await fetchLeads(currentStatus, search, currentPage);
-if (data) renderLeads(data);
-}
 
 async function refreshDashboard() {
-toast('Memperbarui data...');
-await loadAll();
+  toast('Memperbarui data...');
+  await loadAll();
 }
 
 // ────────────────────────────────────────────
 //  LOAD ALL DATA
 // ────────────────────────────────────────────
+
+    const FUNNEL_COLORS = {
+      'New':         '#2563eb',
+      'Contacted':   '#f59e0b',
+      'Qualified':   '#10b981',
+      'Proposal':    '#8b5cf6',
+      'Closed Won':  '#059669',
+      'Closed Lost': '#ef4444',
+    };
+
+    function buildFunnelBars(statusCounts) {
+      const container = document.getElementById('funnel-bars');
+      const order = ['New','Contacted','Qualified','Proposal','Closed Won','Closed Lost'];
+      const max = Math.max(...order.map(s => statusCounts[s] || 0), 1);
+
+      container.innerHTML = order.map(stage => {
+        const count = statusCounts[stage] || 0;
+        const pct   = Math.round((count / max) * 100);
+        const color = FUNNEL_COLORS[stage] || '#94a3b8';
+        return `
+          <div class="bar-item">
+            <div class="bar-label" title="${stage}">${stage}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
+            </div>
+            <div class="bar-count">${count}</div>
+          </div>`;
+      }).join('');
+    }
+
+    async function buildSalesBars() {
+      const container = document.getElementById('sales-bars');
+      try {
+        const res  = await fetch('/api/sales/');
+        const data = await res.json();
+        const sales = data.sales || [];
+
+        if (!sales.length) {
+          container.innerHTML = `<div style="font-size:12px;color:var(--text-3)">Belum ada data sales</div>`;
+          return;
+        }
+
+        const max = Math.max(...sales.map(s => s.lead_aktif || 0), 1);
+        const SALES_COLORS = ['#2563eb','#7c3aed','#059669','#dc2626','#ea580c','#0284c7'];
+
+        container.innerHTML = sales.map((s, i) => {
+          const pct   = Math.round(((s.lead_aktif || 0) / max) * 100);
+          const color = SALES_COLORS[i % SALES_COLORS.length];
+          return `
+            <div class="bar-item">
+              <div class="bar-label" title="${s.nama}">${s.nama}</div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
+              </div>
+              <div class="bar-count">${s.lead_aktif || 0}</div>
+            </div>`;
+        }).join('');
+      } catch (_) {
+        container.innerHTML = `<div style="font-size:12px;color:var(--text-3)">Gagal memuat data sales</div>`;
+      }
+    }
 async function loadAll() {
-const [dash, stats] = await Promise.all([fetchDashboard(), fetchDistribusiStats()]);
+  const [dash, stats] = await Promise.all([fetchDashboard(), fetchDistribusiStats()]);
 
-if (dash) {
-// Admin stat cards
-document.getElementById('stat-total').textContent     = dash.total_leads ?? '—';
-document.getElementById('stat-assigned').textContent  = dash.assigned ?? '—';
-document.getElementById('stat-unassigned').textContent = dash.unassigned ?? '—';
+  if (dash) {
+    // Admin stat cards
+    document.getElementById('stat-total').textContent      = dash.total_leads ?? '—';
+    document.getElementById('stat-conversion').textContent = (dash.conversion_rate != null) ? dash.conversion_rate + '%' : '—';
 
-// User dashboard
-document.getElementById('u-total').textContent    = dash.total_leads ?? '—';
-document.getElementById('u-assigned').textContent = dash.assigned ?? '—';
+    // Format cost per lead ke Rupiah singkat, e.g. "Rp 25K" atau "Rp 1,2M"
+    if (dash.cost_per_lead != null) {
+      const cpl = dash.cost_per_lead;
+      let label;
+      if (cpl >= 1_000_000) {
+        label = 'Rp ' + (cpl / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+      } else if (cpl >= 1_000) {
+        label = 'Rp ' + (cpl / 1_000).toFixed(0) + 'K';
+      } else {
+        label = 'Rp ' + cpl;
+      }
+      document.getElementById('stat-cpl').textContent = label;
+    } else {
+      document.getElementById('stat-cpl').textContent = '—';
+    }
 
-// Pie chart from source_counts
-if (dash.source_counts && dash.source_counts.length) {
-buildPie(dash.source_counts.map(r => ({ source: r.source, total: r.total })));
-}
-}
+    // User dashboard
+    document.getElementById('u-total').textContent    = dash.total_leads ?? '—';
+    document.getElementById('u-assigned').textContent = dash.assigned ?? '—';
 
-if (stats) {
-updateTabCounts(stats);
-// User mini KPIs
-const sc = stats.status_counts || {};
-document.getElementById('u-new').textContent       = sc['New'] || 0;
-document.getElementById('u-contacted').textContent = sc['Contacted'] || 0;
-document.getElementById('u-qualified').textContent = sc['Qualified'] || 0;
-document.getElementById('u-unassigned').textContent = stats.pending || 0;
-}
+    // Pie chart from source_counts
+    if (dash.source_counts && dash.source_counts.length) {
+      buildPie(dash.source_counts.map(r => ({ source: r.source, total: r.total })));
+    }
 
-// Load leads table (admin only)
-if (currentRole === 'admin') {
-await loadLeads();
-}
+      // Produk terpopuler
+    // Campaign terpopuler
+    if (dash.campaign_counts && dash.campaign_counts.length) {
+      buildProduk(dash.campaign_counts.map(r => ({
+        nama_camp: r.id_camp__nama_camp || 'Tanpa Campaign',
+        total: r.total
+      })));
+    }
+
+  }
+
+  if (stats) {
+    const sc = stats.status_counts || {};
+    document.getElementById('u-new').textContent       = sc['New'] || 0;
+    document.getElementById('u-contacted').textContent = sc['Contacted'] || 0;
+    document.getElementById('u-qualified').textContent = sc['Qualified'] || 0;
+    document.getElementById('u-unassigned').textContent = stats.pending || 0;
+
+    // Funnel bar chart
+    buildFunnelBars(sc);
+  }
+
+  // Load tabel campaign (admin only)
+  if (currentRole === 'admin') loadCampaigns();
+
+  // Performa sales bar chart
+  await buildSalesBars();
 }
 
 // ────────────────────────────────────────────
 //  INIT: deteksi role dari session Django
 // ────────────────────────────────────────────
 function initApp() {
-// Ambil dari session yang dirender oleh Django template
-const userId   = "{{ request.session.user_id|default:'' }}";
-const userName = "{{ request.session.user_name|default:'' }}";
-const userRole = "{{ request.session.user_role|default:'' }}";  // tambahkan ini di views.py jika belum
+  const userId   = "{{ request.session.user_id|default:'' }}";
+  const userName = "{{ request.session.user_name|default:'' }}";
+  const userRole = "{{ request.session.user_role|default:'' }}";
 
-if (!userId) {
-// Belum login → redirect ke halaman login
-window.location.href = "{% url 'login' %}";
-return;
-}
+  if (!userId) {
+    window.location.href = "{% url 'login' %}";
+    return;
+  }
 
-currentRole = userRole || 'admin'; // fallback admin jika role belum disimpan di session
+  currentRole = userRole || 'admin';
 
-// Update sidebar profile
-document.getElementById('sb-username').textContent = userName || 'User';
-document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
+  document.getElementById('sb-username').textContent = userName || 'User';
+  document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
 
-// Tampilkan dashboard sesuai role
-if (currentRole === 'admin') {
-document.getElementById('dash-admin').style.display = 'flex';
-document.getElementById('dash-user').style.display  = 'none';
-} else {
-document.getElementById('dash-admin').style.display = 'none';
-document.getElementById('dash-user').style.display  = 'flex';
-}
+  // ✅ TAMBAHKAN INI — tampilkan dashboard sesuai role
+  if (currentRole === 'admin') {
+    document.getElementById('dash-admin').style.cssText = 'display:flex !important;flex-direction:column;flex:1;width:100%;';
+    document.getElementById('dash-user').style.cssText = 'display:none !important;';
+  } else {
+    document.getElementById('dash-user').style.cssText = 'display:flex !important;flex-direction:column;flex:1;width:100%;';
+    document.getElementById('dash-admin').style.cssText = 'display:none !important;';
+  }
 
-loadAll();
+  loadAll();
 }
 
 function doLogout() {
-window.location.href = "{% url 'login' %}";
+  window.location.href = "{% url 'login' %}";
 }
+
+// ────────────────────────────────────────────
+//  CAMPAIGN TABLE
+// ────────────────────────────────────────────
+async function loadCampaigns() {
+  try {
+    const res  = await fetch('/api/campaigns/');
+    const data = await res.json();
+    renderCampaignTable(data.campaigns || []);
+  } catch (_) {
+    document.getElementById('campaign-tbody').innerHTML =
+      '<tr><td colspan="7" style="text-align:center;color:var(--text-3)">Gagal memuat data campaign</td></tr>';
+  }
+}
+
+function renderCampaignTable(campaigns) {
+  const tbody = document.getElementById('campaign-tbody');
+  if (!campaigns.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:24px;">Belum ada campaign</td></tr>';
+    return;
+  }
+  tbody.innerHTML = campaigns.map(c => {
+    const cost = c.production_cost
+      ? 'Rp ' + Number(c.production_cost).toLocaleString('id-ID')
+      : '—';
+    return `
+      <tr>
+        <td style="font-weight:600;color:var(--text)">${c.nama_camp}</td>
+        <td>${c.source || '—'}</td>
+        <td style="font-family:'DM Mono',monospace">${cost}</td>
+        <td>${c.start_date || '—'}</td>
+        <td>${c.end_date   || '—'}</td>
+        <td style="font-weight:700;color:var(--accent);font-family:'DM Mono',monospace">${c.total_leads}</td>
+        <td><button class="btn-del-campaign" onclick="deleteCampaign('${c.id_campaign}','${c.nama_camp}')" title="Hapus">🗑️</button></td>
+      </tr>`;
+  }).join('');
+}
+
+function openAddCampaign() {
+  document.getElementById('inp-nama-camp').value  = '';
+  document.getElementById('inp-source-camp').value = '';
+  document.getElementById('inp-cost-camp').value  = '';
+  document.getElementById('inp-start-camp').value = '';
+  document.getElementById('inp-end-camp').value   = '';
+  document.getElementById('modal-campaign').classList.add('show');
+}
+
+function closeAddCampaign() {
+  document.getElementById('modal-campaign').classList.remove('show');
+}
+
+    async function doAddCampaign() {
+      const nama = document.getElementById('inp-nama-camp').value.trim();
+      if (!nama) { toast('Nama campaign wajib diisi'); return; }
+
+      const payload = {
+        nama_camp:       nama,
+        source:          document.getElementById('inp-source-camp').value.trim(),
+        production_cost: document.getElementById('inp-cost-camp').value || null,
+        start_date:      document.getElementById('inp-start-camp').value || null,
+        end_date:        document.getElementById('inp-end-camp').value   || null,
+      };
+
+      try {
+        const res = await fetch('/api/campaigns/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          toast('✅ Campaign berhasil ditambahkan!');
+          closeAddCampaign();
+          loadCampaigns();
+          loadAll(); // refresh pie chart
+        } else {
+          toast(data.error || 'Gagal menambahkan campaign');
+        }
+      } catch (_) {
+        toast('Error koneksi ke server');
+      }
+    }
+
+    async function deleteCampaign(id, nama) {
+      if (!confirm(`Hapus campaign "${nama}"? Data leads yang terhubung tidak ikut terhapus.`)) return;
+      try {
+        const res = await fetch(`/api/campaigns/${id}/`, {
+          method: 'DELETE',
+          headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        });
+        if (res.ok) {
+          toast('🗑️ Campaign berhasil dihapus');
+          loadCampaigns();
+          loadAll();
+        } else {
+          toast('Gagal menghapus campaign');
+        }
+      } catch (_) {
+        toast('Error koneksi ke server');
+      }
+    }
+
+    function getCookie(name) {
+      const val = `; ${document.cookie}`;
+      const parts = val.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return '';
+    }
+
 
 // ── Run ──
 document.addEventListener('DOMContentLoaded', initApp);
 </script>
+
+    <!-- Modal Tambah Campaign -->
+    <div class="modal-overlay" id="modal-campaign">
+      <div class="modal-box">
+        <div class="modal-title">➕ Tambah Campaign Baru</div>
+        <div class="modal-field">
+          <label>Nama Campaign *</label>
+          <input type="text" id="inp-nama-camp" placeholder="Contoh: Ramadan Ads 2025">
+        </div>
+        <div class="modal-field">
+          <label>Sumber</label>
+          <input type="text" id="inp-source-camp" placeholder="Contoh: Instagram, TikTok">
+        </div>
+        <div class="modal-field">
+          <label>Biaya Produksi (Rp)</label>
+          <input type="number" id="inp-cost-camp" placeholder="Contoh: 5000000">
+        </div>
+        <div class="modal-row">
+          <div class="modal-field">
+            <label>Tanggal Mulai</label>
+            <input type="date" id="inp-start-camp">
+          </div>
+          <div class="modal-field">
+            <label>Tanggal Selesai</label>
+            <input type="date" id="inp-end-camp">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeAddCampaign()">Batal</button>
+          <button class="btn-save" onclick="doAddCampaign()">Simpan</button>
+        </div>
+      </div>
+    </div>
+
 </body>
+</html>
