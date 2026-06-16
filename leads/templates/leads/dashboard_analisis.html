@@ -30,177 +30,170 @@
   --shadow-md: 0 4px 24px rgba(0,0,0,0.10);
 }
 
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── APP SHELL ── */
+#app-shell {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
 
 /* ── SIDEBAR ── */
-.sidebar{width:196px;min-width:196px;background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:22px 0;height:100vh;}
-.sb-profile{display:flex;align-items:center;gap:10px;padding:0 16px 20px;border-bottom:1px solid var(--border);margin-bottom:16px;}
-.sb-avatar{width:36px;height:36px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
-.sb-name{font-size:12px;font-weight:700;color:var(--accent);}
-.sb-role{font-size:10px;color:var(--text-3);font-weight:500;letter-spacing:.07em;}
-.sb-label{font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--text-3);padding:0 16px;margin-bottom:6px;text-transform:uppercase;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:13px;font-weight:500;color:var(--text-2);cursor:pointer;border-left:3px solid transparent;transition:all .15s;text-decoration:none;}
-.nav-item:hover{background:var(--accent-light);color:var(--accent);}
-.nav-item.active{background:var(--accent-light);color:var(--accent);border-left-color:var(--accent);font-weight:600;}
-.nav-icon{font-size:15px;width:18px;text-align:center;}
-.sb-bottom{margin-top:auto;padding:14px 16px;border-top:1px solid var(--border);}
-.logout-btn{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--red);cursor:pointer;padding:7px;border-radius:var(--radius-sm);transition:background .15s;}
-.logout-btn:hover{background:var(--red-light);}
-
-/* ── MAIN ── */
-.main{flex:1;min-width:0;overflow-y:auto;display:flex;flex-direction:column;width:100%;}
-
-/* ── TOPBAR ── */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 26px;background:var(--card);border-bottom:1px solid var(--border);gap:14px;flex-shrink:0;}
-.topbar-left{display:flex;align-items:center;gap:10px;}
-.topbar-title{font-size:15px;font-weight:700;color:var(--text);}
-.badge-admin{font-size:11px;font-weight:600;color:#dc2626;background:#fee2e2;padding:3px 8px;border-radius:20px;}
-.badge-user{font-size:11px;font-weight:600;color:#059669;background:#d1fae5;padding:3px 8px;border-radius:20px;}
-.topbar-right{display:flex;align-items:center;gap:8px;}
-.icon-btn{width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--text-2);transition:all .15s;}
-.icon-btn:hover{background:var(--accent-light);border-color:var(--accent);}
-
-/* ── CONTENT ── */
-.content{padding:20px 26px;flex:1;display:flex;flex-direction:column;gap:18px;}
-
-/* ── STAT CARDS ROW ── */
-.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:all .2s;}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.stat-card.blue::before{background:linear-gradient(90deg,#2563eb,#60a5fa);}
-.stat-card.green::before{background:linear-gradient(90deg,#10b981,#34d399);}
-.stat-card.amber::before{background:linear-gradient(90deg,#f59e0b,#fbbf24);}
-.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
-.stat-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
-.stat-icon.blue{background:var(--accent-light);}
-.stat-icon.green{background:var(--green-light);}
-.stat-icon.amber{background:var(--yellow-light);}
-.stat-value{font-size:26px;font-weight:800;color:var(--text);font-family:'DM Mono',monospace;line-height:1;margin-bottom:3px;}
-.stat-label{font-size:11px;color:var(--text-3);font-weight:500;}
-
-/* ── MIDDLE ROW ── */
-.middle-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-
-/* PIE CHART CARD */
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
-.chart-card-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;}
-.chart-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-bottom:14px;}
-.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-2);font-weight:500;}
-.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.pie-wrap{display:flex;justify-content:center;}
-.pie-svg{width:180px;height:180px;}
-
-
-/* ══ USER DASHBOARD ══ */
-#dash-admin {
-  display: none;
-  width: 100%;
-  flex-direction: column;
-  flex: 1;
-}
-#dash-user {
-  display: none;
-  width: 100%;
-  flex-direction: column;
-  flex: 1;
-}
-.user-content {
-  padding: 20px 26px;
-  flex: 1;
+.sidebar {
+  width: 196px;
+  min-width: 196px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 18px;
-  width: 100%;
+  padding: 22px 0;
+  height: 100vh;
+  flex-shrink: 0;
 }
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  width: 100%;
+.sb-profile { display:flex; align-items:center; gap:10px; padding:0 16px 20px; border-bottom:1px solid var(--border); margin-bottom:16px; }
+.sb-avatar { width:36px; height:36px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.sb-name { font-size:12px; font-weight:700; color:var(--accent); }
+.sb-role { font-size:10px; color:var(--text-3); font-weight:500; letter-spacing:.07em; }
+.nav-item { display:flex; align-items:center; gap:9px; padding:9px 16px; font-size:13px; font-weight:500; color:var(--text-2); cursor:pointer; border-left:3px solid transparent; transition:all .15s; text-decoration:none; }
+.nav-item:hover { background:var(--accent-light); color:var(--accent); }
+.nav-item.active { background:var(--accent-light); color:var(--accent); border-left-color:var(--accent); font-weight:600; }
+.nav-icon { font-size:15px; width:18px; text-align:center; }
+.sb-bottom { margin-top:auto; padding:14px 16px; border-top:1px solid var(--border); }
+.logout-btn { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:500; color:var(--red); cursor:pointer; padding:7px; border-radius:var(--radius-sm); transition:background .15s; }
+.logout-btn:hover { background:var(--red-light); }
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-.kpi-extra-cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+
+/* ── DASH PANELS ── */
+#dash-admin,
+#dash-user {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
   width: 100%;
+  overflow-y: auto;
 }
-.user-content{padding:20px 26px;flex:1;display:flex;flex-direction:column;gap:18px;width: 100%;}
-.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;width:100%;}
-.kpi-card{border-radius:var(--radius);padding:28px 26px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-md);transition:all .2s;cursor:default;}
-.kpi-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.12);}
-.kpi-card.pink{background:#f3d0d7;border:none;}
-.kpi-card.lavender{background:#d8d0f5;border:none;}
-.kpi-header{display:flex;align-items:center;justify-content:space-between;}
-.kpi-title{font-size:15px;font-weight:700;color:#1a202c;}
-.kpi-trend-icon{font-size:20px;}
-.kpi-value{font-size:42px;font-weight:800;color:#1a202c;font-family:'DM Mono',monospace;line-height:1;}
-.kpi-footer{display:flex;align-items:center;gap:7px;}
-.kpi-extra-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;}
-.mini-kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);text-align:center;}
-.mini-kpi-val{font-size:20px;font-weight:800;color:var(--text);font-family:'DM Mono',monospace;}
-.mini-kpi-label{font-size:10px;color:var(--text-3);font-weight:500;margin-top:4px;letter-spacing:.03em;}
+
+/* ── TOPBAR ── */
+.topbar { display:flex; align-items:center; justify-content:space-between; padding:13px 26px; background:var(--card); border-bottom:1px solid var(--border); gap:14px; flex-shrink:0; }
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.topbar-title { font-size:15px; font-weight:700; color:var(--text); }
+.badge-admin { font-size:11px; font-weight:600; color:#dc2626; background:#fee2e2; padding:3px 8px; border-radius:20px; }
+.badge-user { font-size:11px; font-weight:600; color:#059669; background:#d1fae5; padding:3px 8px; border-radius:20px; }
+.topbar-right { display:flex; align-items:center; gap:8px; }
+.icon-btn { width:32px; height:32px; border-radius:var(--radius-sm); background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; color:var(--text-2); transition:all .15s; }
+.icon-btn:hover { background:var(--accent-light); border-color:var(--accent); }
 
 /* ── ROLE BAR ── */
-.role-bar{display:flex;align-items:center;gap:8px;padding:8px 26px;background:#fef9c3;border-bottom:1px solid #fde68a;font-size:12px;color:#854d0e;font-weight:500;}
-.role-bar.admin-bar{background:#dbeafe;border-bottom-color:#bfdbfe;color:#1e40af;}
+.role-bar { display:flex; align-items:center; gap:8px; padding:8px 26px; background:#fef9c3; border-bottom:1px solid #fde68a; font-size:12px; color:#854d0e; font-weight:500; flex-shrink:0; }
+.role-bar.admin-bar { background:#dbeafe; border-bottom-color:#bfdbfe; color:#1e40af; }
 
-/* Loading spinner */
-.loading-row td{text-align:center;padding:32px;color:var(--text-3);font-size:13px;}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle;}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* ── CONTENT ── */
+.content { padding:20px 26px; display:flex; flex-direction:column; gap:18px; padding-bottom:32px; }
 
-/* Toast notification */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a202c;color:white;padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;}
-.toast.show{opacity:1;}
+/* ── STAT CARDS ROW ── */
+.stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; display:flex; align-items:center; gap:14px; box-shadow:var(--shadow); position:relative; overflow:hidden; transition:all .2s; }
+.stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.stat-card.blue::before { background:linear-gradient(90deg,#2563eb,#60a5fa); }
+.stat-card.green::before { background:linear-gradient(90deg,#10b981,#34d399); }
+.stat-card.amber::before { background:linear-gradient(90deg,#f59e0b,#fbbf24); }
+.stat-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.stat-icon { width:40px; height:40px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; }
+.stat-icon.blue { background:var(--accent-light); }
+.stat-icon.green { background:var(--green-light); }
+.stat-icon.amber { background:var(--yellow-light); }
+.stat-value { font-size:26px; font-weight:800; color:var(--text); font-family:'DM Mono',monospace; line-height:1; margin-bottom:3px; }
+.stat-label { font-size:11px; color:var(--text-3); font-weight:500; }
+
+/* ── MIDDLE ROW ── */
+.middle-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+/* ── PIE CHART ── */
+.chart-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); }
+.chart-card-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:14px; }
+.chart-legend { display:flex; flex-wrap:wrap; gap:8px 16px; margin-bottom:14px; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-2); font-weight:500; }
+.legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.pie-wrap { display:flex; justify-content:center; }
+.pie-svg { width:180px; height:180px; }
 
 /* ── BAR CHARTS ── */
-.bar-chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.bar-chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
-.bar-chart-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
-.bar-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.bar-label { font-size: 11px; font-weight: 600; color: var(--text-2); width: 90px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bar-track { flex: 1; background: var(--bg); border-radius: 20px; height: 10px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 20px; transition: width 0.5s ease; }
-.bar-count { font-size: 11px; font-weight: 700; color: var(--text-2); font-family: 'DM Mono', monospace; width: 28px; text-align: right; flex-shrink: 0; }
+.bar-chart-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.bar-chart-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); }
+.bar-chart-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:16px; }
+.bar-item { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.bar-label { font-size:11px; font-weight:600; color:var(--text-2); width:90px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bar-track { flex:1; background:var(--bg); border-radius:20px; height:10px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:20px; transition:width 0.5s ease; }
+.bar-count { font-size:11px; font-weight:700; color:var(--text-2); font-family:'DM Mono',monospace; width:28px; text-align:right; flex-shrink:0; }
 
+/* ── MINI KPI ── */
+.mini-kpi { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); text-align:center; }
+.mini-kpi-val { font-size:20px; font-weight:800; color:var(--text); font-family:'DM Mono',monospace; }
+.mini-kpi-label { font-size:10px; color:var(--text-3); font-weight:500; margin-top:4px; letter-spacing:.03em; }
 
 /* ── CAMPAIGN TABLE ── */
-.campaign-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
-.campaign-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.campaign-title { font-size: 13px; font-weight: 700; color: var(--text); }
-.btn-add-campaign { display: flex; align-items: center; gap: 6px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background .15s; }
-.btn-add-campaign:hover { background: #1d4ed8; }
-.campaign-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.campaign-table th { text-align: left; padding: 8px 10px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border); }
-.campaign-table td { padding: 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: middle; }
-.campaign-table tr:last-child td { border-bottom: none; }
-.campaign-table tr:hover td { background: var(--accent-light); }
-.btn-del-campaign { background: none; border: none; color: var(--red); cursor: pointer; font-size: 14px; padding: 4px 8px; border-radius: var(--radius-sm); transition: background .15s; }
-.btn-del-campaign:hover { background: var(--red-light); }
+.campaign-section { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); }
+.campaign-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.campaign-title { font-size:13px; font-weight:700; color:var(--text); }
+.btn-add-campaign { display:flex; align-items:center; gap:6px; background:var(--accent); color:white; border:none; border-radius:var(--radius-sm); padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer; transition:background .15s; }
+.btn-add-campaign:hover { background:#1d4ed8; }
+.campaign-table { width:100%; border-collapse:collapse; font-size:12px; }
+.campaign-table th { text-align:left; padding:8px 10px; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); border-bottom:1px solid var(--border); }
+.campaign-table td { padding:10px; border-bottom:1px solid var(--border); color:var(--text-2); vertical-align:middle; }
+.campaign-table tr:last-child td { border-bottom:none; }
+.campaign-table tr:hover td { background:var(--accent-light); }
+.btn-del-campaign { background:none; border:none; color:var(--red); cursor:pointer; font-size:14px; padding:4px 8px; border-radius:var(--radius-sm); transition:background .15s; }
+.btn-del-campaign:hover { background:var(--red-light); }
 
-/* ── MODAL CAMPAIGN ── */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1000; display: none; align-items: center; justify-content: center; }
-.modal-overlay.show { display: flex; }
-.modal-box { background: var(--card); border-radius: var(--radius); padding: 28px; width: 440px; box-shadow: var(--shadow-md); }
-.modal-title { font-size: 15px; font-weight: 700; margin-bottom: 18px; }
-.modal-field { margin-bottom: 14px; }
-.modal-field label { display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .06em; }
-.modal-field input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; transition: border .15s; }
-.modal-field input:focus { border-color: var(--accent); }
-.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-.btn-cancel { padding: 8px 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: none; font-size: 13px; cursor: pointer; }
-.btn-save { padding: 8px 18px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; }
-.btn-save:hover { background: #1d4ed8; }
+/* ── MODAL ── */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; display:none; align-items:center; justify-content:center; }
+.modal-overlay.show { display:flex; }
+.modal-box { background:var(--card); border-radius:var(--radius); padding:28px; width:440px; box-shadow:var(--shadow-md); }
+.modal-title { font-size:15px; font-weight:700; margin-bottom:18px; }
+.modal-field { margin-bottom:14px; }
+.modal-field label { display:block; font-size:11px; font-weight:600; color:var(--text-3); margin-bottom:5px; text-transform:uppercase; letter-spacing:.06em; }
+.modal-field input { width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:13px; font-family:'DM Sans',sans-serif; outline:none; transition:border .15s; }
+.modal-field input:focus { border-color:var(--accent); }
+.modal-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
+.btn-cancel { padding:8px 18px; border:1px solid var(--border); border-radius:var(--radius-sm); background:none; font-size:13px; cursor:pointer; }
+.btn-save { padding:8px 18px; background:var(--accent); color:white; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:600; cursor:pointer; }
+.btn-save:hover { background:#1d4ed8; }
 
+/* ── SPINNER ── */
+.spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; margin-right:8px; vertical-align:middle; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── TOAST ── */
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1a202c; color:white; padding:10px 20px; border-radius:var(--radius-sm); font-size:13px; font-weight:500; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; }
+.toast.show { opacity:1; }
 </style>
 </head>
 <body>
 
-<!-- ═══ APP SHELL ═══ -->
-<div id="app-shell" style="width:100%;display:flex;flex-direction:row;overflow:hidden;height:100vh;">
+<div id="app-shell">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
@@ -223,12 +216,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
     </a>
 
     <div class="sb-bottom">
-      <div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout</div>
+      <div class="logout-btn" onclick="doLogout()"><span>🚪</span> Logout</div>
     </div>
   </aside>
 
   <!-- MAIN -->
-  <main class="main" id="main-area" style="min-width:0;flex:1;">
+  <main class="main" id="main-area">
 
     <!-- ════ ADMIN DASHBOARD ════ -->
     <div id="dash-admin">
@@ -245,7 +238,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
       </div>
 
       <div class="content">
-        <!-- Stats -->
+        <!-- Stat Cards -->
         <div class="stat-row">
           <div class="stat-card blue">
             <div class="stat-icon blue">👥</div>
@@ -270,9 +263,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
           </div>
         </div>
 
-        <!-- Middle Row -->
+        <!-- Pie Charts -->
         <div class="middle-row">
-          <!-- Dynamic Pie Chart -->
           <div class="chart-card">
             <div class="chart-card-title">Lead per Sumber</div>
             <div class="chart-legend" id="pie-legend">
@@ -286,9 +278,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
             </div>
             <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="pie-summary">—</div>
           </div>
-          
-          <!-- produk info card-->
-           <div class="chart-card">
+
+          <div class="chart-card">
             <div class="chart-card-title">Campaign Terpopuler</div>
             <div class="chart-legend" id="produk-legend">
               <span style="font-size:12px;color:var(--text-3)">Memuat data...</span>
@@ -301,139 +292,165 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
             </div>
             <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="produk-summary">—</div>
           </div>
-
         </div>
-        
-          <!-- Bar Charts Row -->
-          <div class="bar-chart-row">
-            <!-- Funnel Chart -->
-            <div class="bar-chart-card">
-              <div class="bar-chart-title">📊 Lead per Funnel Stage</div>
-              <div id="funnel-bars">
-                <div style="font-size:12px;color:var(--text-3)">Memuat data...</div>
-              </div>
-            </div>
-            <!-- Performa Sales -->
-            <div class="bar-chart-card">
-              <div class="bar-chart-title">👥 Performa Sales</div>
-              <div id="sales-bars">
-                <div style="font-size:12px;color:var(--text-3)">Memuat data...</div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Campaign Table (admin only) -->
-          <div class="campaign-section" id="campaign-section">
-            <div class="campaign-header">
-              <div class="campaign-title">📣 Daftar Campaign</div>
-              <button class="btn-add-campaign" onclick="openAddCampaign()">＋ Tambah Campaign</button>
+        <!-- Bar Charts -->
+        <div class="bar-chart-row">
+          <div class="bar-chart-card">
+            <div class="bar-chart-title">📊 Lead per Funnel Stage</div>
+            <div id="funnel-bars">
+              <div style="font-size:12px;color:var(--text-3)">Memuat data...</div>
             </div>
-            <table class="campaign-table">
-              <thead>
-                <tr>
-                  <th>Nama Campaign</th>
-                  <th>Sumber</th>
-                  <th>Biaya Produksi</th>
-                  <th>Mulai</th>
-                  <th>Selesai</th>
-                  <th>Total Leads</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="campaign-tbody">
-                <tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:24px;">Memuat data...</td></tr>
-              </tbody>
-            </table>
           </div>
-         </div>
+          <div class="bar-chart-card">
+            <div class="bar-chart-title">👥 Performa Sales</div>
+            <div id="sales-bars">
+              <div style="font-size:12px;color:var(--text-3)">Memuat data...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campaign Table -->
+        <div class="campaign-section" id="campaign-section">
+          <div class="campaign-header">
+            <div class="campaign-title">📣 Daftar Campaign</div>
+            <button class="btn-add-campaign" onclick="openAddCampaign()">＋ Tambah Campaign</button>
+          </div>
+          <table class="campaign-table">
+            <thead>
+              <tr>
+                <th>Nama Campaign</th>
+                <th>Sumber</th>
+                <th>Biaya Produksi</th>
+                <th>Mulai</th>
+                <th>Selesai</th>
+                <th>Total Leads</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="campaign-tbody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:24px;">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <!-- ════ USER DASHBOARD ════ -->
-    <!-- ════ USER DASHBOARD ════ -->
-<div id="dash-user">
-  <div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
-  <div class="topbar">
-    <div class="topbar-left">
-      <span class="topbar-title">Dashboard Ringkas</span>
-      <span class="badge-user">Sales</span>
-    </div>
-    <div class="topbar-right">
-      <div class="icon-btn" onclick="refreshDashboard()" title="Refresh">🔄</div>
-      <div class="icon-btn">🔔</div>
-    </div>
-  </div>
-
-  <div class="content">
-    <!-- Stat Cards -->
-    <div class="stat-row">
-      <div class="stat-card blue">
-        <div class="stat-icon blue">👥</div>
-        <div>
-          <div class="stat-value" id="u-total">—</div>
-          <div class="stat-label">Total Leads</div>
+    <div id="dash-user">
+      <div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
+      <div class="topbar">
+        <div class="topbar-left">
+          <span class="topbar-title">Dashboard Ringkas</span>
+          <span class="badge-user">Sales</span>
         </div>
-      </div>
-      <div class="stat-card green">
-        <div class="stat-icon green">✅</div>
-        <div>
-          <div class="stat-value" id="u-assigned">—</div>
-          <div class="stat-label">Lead Assigned</div>
-        </div>
-      </div>
-      <div class="stat-card amber">
-        <div class="stat-icon amber">⏳</div>
-        <div>
-          <div class="stat-value" id="u-unassigned">—</div>
-          <div class="stat-label">Belum Di-assign</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mini KPI -->
-    <div class="bar-chart-row">
-      <div class="bar-chart-card">
-        <div class="bar-chart-title">📊 Status Lead Saya</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px;">
-          <div class="mini-kpi">
-            <div class="mini-kpi-val" style="color:#2563eb" id="u-new">—</div>
-            <div class="mini-kpi-label">New</div>
-          </div>
-          <div class="mini-kpi">
-            <div class="mini-kpi-val" style="color:#f59e0b" id="u-contacted">—</div>
-            <div class="mini-kpi-label">Contacted</div>
-          </div>
-          <div class="mini-kpi">
-            <div class="mini-kpi-val" style="color:#10b981" id="u-qualified">—</div>
-            <div class="mini-kpi-label">Qualified</div>
-          </div>
+        <div class="topbar-right">
+          <div class="icon-btn" onclick="refreshDashboard()" title="Refresh">🔄</div>
+          <div class="icon-btn">🔔</div>
         </div>
       </div>
 
-      <div class="bar-chart-card">
-        <div class="bar-chart-title">ℹ️ Informasi Akses</div>
-        <div style="font-size:13px;color:var(--text-2);line-height:1.65;margin-top:4px;">
-          Dashboard ini menampilkan ringkasan metrik kampanye Anda. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.
+      <div class="content">
+        <!-- Stat Cards -->
+        <div class="stat-row">
+          <div class="stat-card blue">
+            <div class="stat-icon blue">👥</div>
+            <div>
+              <div class="stat-value" id="u-total">—</div>
+              <div class="stat-label">Total Leads</div>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon green">✅</div>
+            <div>
+              <div class="stat-value" id="u-assigned">—</div>
+              <div class="stat-label">Lead Assigned</div>
+            </div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-icon amber">⏳</div>
+            <div>
+              <div class="stat-value" id="u-unassigned">—</div>
+              <div class="stat-label">Belum Di-assign</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status & Info -->
+        <div class="bar-chart-row">
+          <div class="bar-chart-card">
+            <div class="bar-chart-title">📊 Status Lead Saya</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px;">
+              <div class="mini-kpi">
+                <div class="mini-kpi-val" style="color:#2563eb" id="u-new">—</div>
+                <div class="mini-kpi-label">New</div>
+              </div>
+              <div class="mini-kpi">
+                <div class="mini-kpi-val" style="color:#f59e0b" id="u-contacted">—</div>
+                <div class="mini-kpi-label">Contacted</div>
+              </div>
+              <div class="mini-kpi">
+                <div class="mini-kpi-val" style="color:#10b981" id="u-qualified">—</div>
+                <div class="mini-kpi-label">Qualified</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bar-chart-card">
+            <div class="bar-chart-title">ℹ️ Informasi Akses</div>
+            <div style="font-size:13px;color:var(--text-2);line-height:1.65;margin-top:4px;">
+              Dashboard ini menampilkan ringkasan metrik kampanye Anda. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+
+  </main>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<!-- Modal Tambah Campaign -->
+<div class="modal-overlay" id="modal-campaign">
+  <div class="modal-box">
+    <div class="modal-title">➕ Tambah Campaign Baru</div>
+    <div class="modal-field">
+      <label>Nama Campaign *</label>
+      <input type="text" id="inp-nama-camp" placeholder="Contoh: Ramadan Ads 2025">
+    </div>
+    <div class="modal-field">
+      <label>Sumber</label>
+      <input type="text" id="inp-source-camp" placeholder="Contoh: Instagram, TikTok">
+    </div>
+    <div class="modal-field">
+      <label>Biaya Produksi (Rp)</label>
+      <input type="number" id="inp-cost-camp" placeholder="Contoh: 5000000">
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Tanggal Mulai</label>
+        <input type="date" id="inp-start-camp">
+      </div>
+      <div class="modal-field">
+        <label>Tanggal Selesai</label>
+        <input type="date" id="inp-end-camp">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAddCampaign()">Batal</button>
+      <button class="btn-save" onclick="doAddCampaign()">Simpan</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── State ──
-let currentPage = 1;
-const perPage = 8;
-let currentStatus = 'all';
-let searchTimeout = null;
 let currentRole = 'sales';
-
-// ── Init: baca session dari server ──
-const SESSION_USER = {
-  id: "{{ request.session.user_id|default:'' }}",
-  nama: "{{ request.session.user_name|default:'' }}",
+const PIE_COLORS = ['#22c55e','#3b82f6','#f97316','#ec4899','#a855f7','#06b6d4','#f59e0b','#ef4444'];
+const FUNNEL_COLORS = {
+  'New': '#2563eb', 'Contacted': '#f59e0b', 'Qualified': '#10b981',
+  'Proposal': '#8b5cf6', 'Closed Won': '#059669', 'Closed Lost': '#ef4444',
 };
 
 // ────────────────────────────────────────────
@@ -446,34 +463,11 @@ function toast(msg, dur = 2500) {
   setTimeout(() => t.classList.remove('show'), dur);
 }
 
-function avatarColor(name) {
-  const colors = ['#059669','#7c3aed','#ea580c','#0284c7','#dc2626','#d97706','#0891b2','#6d28d9'];
-  let h = 0;
-  for (let c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
-  return colors[h % colors.length];
-}
-
-function initials(name) {
-  return name.trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
-}
-
-function sourceIcon(src) {
-  if (!src) return '❓';
-  const s = src.toLowerCase();
-  if (s.includes('instagram')) return '📸';
-  if (s.includes('tiktok'))    return '🎵';
-  if (s.includes('facebook'))  return '📘';
-  if (s.includes('twitter'))   return '🐦';
-  if (s.includes('form'))      return '📋';
-  if (s.includes('ads'))       return '🔴';
-  if (s.includes('website') || s.includes('web')) return '🌐';
-  return '📌';
-}
-
-function statusBadgeClass(status) {
-  if (!status) return 'new';
-  const s = status.toLowerCase().replace(/\s/g, '-');
-  return s; // matches CSS: .badge.new, .badge.contacted, etc.
+function getCookie(name) {
+  const val = `; ${document.cookie}`;
+  const parts = val.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return '';
 }
 
 // ────────────────────────────────────────────
@@ -483,58 +477,31 @@ async function fetchDashboard() {
   try {
     const res = await fetch('/api/dashboard/');
     return await res.json();
-  } catch (e) {
-    toast('Gagal memuat data dashboard');
-    return null;
-  }
-}
-
-async function fetchLeads(status, search, page) {
-  const params = new URLSearchParams({
-    status: status === 'all' ? '' : status,
-    search: search || '',
-    page,
-    per_page: perPage,
-  });
-  try {
-    const res = await fetch(`/api/distribusi/leads/?${params}`);
-    return await res.json();
-  } catch (e) {
-    toast('Gagal memuat data leads');
-    return null;
-  }
+  } catch (e) { toast('Gagal memuat data dashboard'); return null; }
 }
 
 async function fetchDistribusiStats() {
   try {
     const res = await fetch('/api/distribusi/stats/');
     return await res.json();
-  } catch (e) {
-    return null;
-  }
+  } catch (e) { return null; }
 }
 
 // ────────────────────────────────────────────
-//  PIE CHART (SVG dinamis)
+//  PIE CHARTS
 // ────────────────────────────────────────────
-const PIE_COLORS = ['#22c55e','#3b82f6','#f97316','#ec4899','#a855f7','#06b6d4','#f59e0b','#ef4444'];
-
-function buildPie(sourceCounts) {
-  // sourceCounts = [{source, total}, ...]
-  const total = sourceCounts.reduce((s, r) => s + r.total, 0);
+function buildPieChart(svgId, legendId, summaryId, items, labelKey) {
+  const total = items.reduce((s, r) => s + r.total, 0);
   if (!total) return;
 
-  const svg = document.getElementById('pie-svg');
-  const legend = document.getElementById('pie-legend');
+  const svg    = document.getElementById(svgId);
+  const legend = document.getElementById(legendId);
   const cx = 90, cy = 90, r = 72;
+  let html = '', legendHtml = '', startAngle = -Math.PI / 2;
 
-  let html = '';
-  let legendHtml = '';
-  let startAngle = -Math.PI / 2; // start top
-
-  sourceCounts.forEach((row, i) => {
-    const pct = row.total / total;
-    const angle = pct * 2 * Math.PI;
+  items.forEach((row, i) => {
+    const pct      = row.total / total;
+    const angle    = pct * 2 * Math.PI;
     const endAngle = startAngle + angle;
     const x1 = cx + r * Math.cos(startAngle);
     const y1 = cy + r * Math.sin(startAngle);
@@ -542,239 +509,135 @@ function buildPie(sourceCounts) {
     const y2 = cy + r * Math.sin(endAngle);
     const large = angle > Math.PI ? 1 : 0;
     const color = PIE_COLORS[i % PIE_COLORS.length];
+    const label = row[labelKey] || 'Lainnya';
+    const pctStr = Math.round(pct * 100) + '%';
 
     html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${color}"/>`;
 
-    // label inside slice
-    const midA = startAngle + angle / 2;
-    const lx = cx + (r * 0.6) * Math.cos(midA);
-    const ly = cy + (r * 0.6) * Math.sin(midA);
-    const pctStr = Math.round(pct * 100) + '%';
     if (pct > 0.05) {
-      html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${row.source || 'Lainnya'}</text>`;
-      html += `<text x="${lx}" y="${ly + 9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
+      const midA = startAngle + angle / 2;
+      const lx = cx + (r * 0.6) * Math.cos(midA);
+      const ly = cy + (r * 0.6) * Math.sin(midA);
+      html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${label}</text>`;
+      html += `<text x="${lx}" y="${ly+9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
     }
 
-    legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${row.source || 'Lainnya'} ${pctStr}</div>`;
+    legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${label} ${pctStr}</div>`;
     startAngle = endAngle;
   });
 
   svg.innerHTML = html;
   legend.innerHTML = legendHtml;
-  document.getElementById('pie-summary').textContent = `Total ${total} leads dari ${sourceCounts.length} sumber`;
+  document.getElementById(summaryId).textContent = `Total ${total} dari ${items.length} entri`;
 }
 
-function buildProduk(sourceCounts) {
-    const total = sourceCounts.reduce((s, r) => s + r.total, 0);
-    if (!total) return;
+// ────────────────────────────────────────────
+//  BAR CHARTS
+// ────────────────────────────────────────────
+function buildFunnelBars(statusCounts) {
+  const container = document.getElementById('funnel-bars');
+  const order = ['New','Contacted','Qualified','Proposal','Closed Won','Closed Lost'];
+  const max = Math.max(...order.map(s => statusCounts[s] || 0), 1);
 
-    const svg = document.getElementById('produk-svg');     // ← fix ID
-    const legend = document.getElementById('produk-legend'); // ← fix ID
-    const cx = 90, cy = 90, r = 72;
-
-    let html = '';
-    let legendHtml = '';
-    let startAngle = -Math.PI / 2;
-
-    sourceCounts.forEach((row, i) => {
-        const pct = row.total / total;
-        const angle = pct * 2 * Math.PI;
-        const endAngle = startAngle + angle;
-        const x1 = cx + r * Math.cos(startAngle);
-        const y1 = cy + r * Math.sin(startAngle);
-        const x2 = cx + r * Math.cos(endAngle);
-        const y2 = cy + r * Math.sin(endAngle);
-        const large = angle > Math.PI ? 1 : 0;
-        const color = PIE_COLORS[i % PIE_COLORS.length];
-
-        html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${color}"/>`;
-
-        const midA = startAngle + angle / 2;
-        const lx = cx + (r * 0.6) * Math.cos(midA);
-        const ly = cy + (r * 0.6) * Math.sin(midA);
-        const pctStr = Math.round(pct * 100) + '%';
-        if (pct > 0.05) {
-            html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${row.nama_camp || 'Lainnya'}</text>`;
-            html += `<text x="${lx}" y="${ly + 9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
-        }
-
-        legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${row.nama_camp || 'Lainnya'} — ${row.total} leads (${pctStr})</div>`;
-        startAngle = endAngle;
-    });
-
-    svg.innerHTML = html;
-    legend.innerHTML = legendHtml;
-    document.getElementById('produk-summary').textContent = 
-        `Total ${total} leads dari ${sourceCounts.length} campaign`;  // ← fix ID
+  container.innerHTML = order.map(stage => {
+    const count = statusCounts[stage] || 0;
+    const pct   = Math.round((count / max) * 100);
+    const color = FUNNEL_COLORS[stage] || '#94a3b8';
+    return `<div class="bar-item">
+      <div class="bar-label" title="${stage}">${stage}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      <div class="bar-count">${count}</div>
+    </div>`;
+  }).join('');
 }
 
+async function buildSalesBars() {
+  const container = document.getElementById('sales-bars');
+  try {
+    const res  = await fetch('/api/sales/');
+    const data = await res.json();
+    const sales = data.sales || [];
 
+    if (!sales.length) {
+      container.innerHTML = `<div style="font-size:12px;color:var(--text-3)">Belum ada data sales</div>`;
+      return;
+    }
 
+    const max = Math.max(...sales.map(s => s.lead_aktif || 0), 1);
+    const SALES_COLORS = ['#2563eb','#7c3aed','#059669','#dc2626','#ea580c','#0284c7'];
 
-
-async function refreshDashboard() {
-  toast('Memperbarui data...');
-  await loadAll();
+    container.innerHTML = sales.map((s, i) => {
+      const pct   = Math.round(((s.lead_aktif || 0) / max) * 100);
+      const color = SALES_COLORS[i % SALES_COLORS.length];
+      return `<div class="bar-item">
+        <div class="bar-label" title="${s.nama}">${s.nama}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+        <div class="bar-count">${s.lead_aktif || 0}</div>
+      </div>`;
+    }).join('');
+  } catch (_) {
+    container.innerHTML = `<div style="font-size:12px;color:var(--text-3)">Gagal memuat data sales</div>`;
+  }
 }
 
 // ────────────────────────────────────────────
 //  LOAD ALL DATA
 // ────────────────────────────────────────────
-
-    const FUNNEL_COLORS = {
-      'New':         '#2563eb',
-      'Contacted':   '#f59e0b',
-      'Qualified':   '#10b981',
-      'Proposal':    '#8b5cf6',
-      'Closed Won':  '#059669',
-      'Closed Lost': '#ef4444',
-    };
-
-    function buildFunnelBars(statusCounts) {
-      const container = document.getElementById('funnel-bars');
-      const order = ['New','Contacted','Qualified','Proposal','Closed Won','Closed Lost'];
-      const max = Math.max(...order.map(s => statusCounts[s] || 0), 1);
-
-      container.innerHTML = order.map(stage => {
-        const count = statusCounts[stage] || 0;
-        const pct   = Math.round((count / max) * 100);
-        const color = FUNNEL_COLORS[stage] || '#94a3b8';
-        return `
-          <div class="bar-item">
-            <div class="bar-label" title="${stage}">${stage}</div>
-            <div class="bar-track">
-              <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
-            </div>
-            <div class="bar-count">${count}</div>
-          </div>`;
-      }).join('');
-    }
-
-    async function buildSalesBars() {
-      const container = document.getElementById('sales-bars');
-      try {
-        const res  = await fetch('/api/sales/');
-        const data = await res.json();
-        const sales = data.sales || [];
-
-        if (!sales.length) {
-          container.innerHTML = `<div style="font-size:12px;color:var(--text-3)">Belum ada data sales</div>`;
-          return;
-        }
-
-        const max = Math.max(...sales.map(s => s.lead_aktif || 0), 1);
-        const SALES_COLORS = ['#2563eb','#7c3aed','#059669','#dc2626','#ea580c','#0284c7'];
-
-        container.innerHTML = sales.map((s, i) => {
-          const pct   = Math.round(((s.lead_aktif || 0) / max) * 100);
-          const color = SALES_COLORS[i % SALES_COLORS.length];
-          return `
-            <div class="bar-item">
-              <div class="bar-label" title="${s.nama}">${s.nama}</div>
-              <div class="bar-track">
-                <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
-              </div>
-              <div class="bar-count">${s.lead_aktif || 0}</div>
-            </div>`;
-        }).join('');
-      } catch (_) {
-        container.innerHTML = `<div style="font-size:12px;color:var(--text-3)">Gagal memuat data sales</div>`;
-      }
-    }
 async function loadAll() {
   const [dash, stats] = await Promise.all([fetchDashboard(), fetchDistribusiStats()]);
 
   if (dash) {
-    // Admin stat cards
+    // Admin cards
     document.getElementById('stat-total').textContent      = dash.total_leads ?? '—';
     document.getElementById('stat-conversion').textContent = (dash.conversion_rate != null) ? dash.conversion_rate + '%' : '—';
 
-    // Format cost per lead ke Rupiah singkat, e.g. "Rp 25K" atau "Rp 1,2M"
     if (dash.cost_per_lead != null) {
       const cpl = dash.cost_per_lead;
-      let label;
-      if (cpl >= 1_000_000) {
-        label = 'Rp ' + (cpl / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-      } else if (cpl >= 1_000) {
-        label = 'Rp ' + (cpl / 1_000).toFixed(0) + 'K';
-      } else {
-        label = 'Rp ' + cpl;
-      }
+      let label = cpl >= 1_000_000
+        ? 'Rp ' + (cpl / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M'
+        : cpl >= 1_000 ? 'Rp ' + (cpl / 1_000).toFixed(0) + 'K'
+        : 'Rp ' + cpl;
       document.getElementById('stat-cpl').textContent = label;
     } else {
       document.getElementById('stat-cpl').textContent = '—';
     }
 
-    // User dashboard
+    // User cards
     document.getElementById('u-total').textContent    = dash.total_leads ?? '—';
     document.getElementById('u-assigned').textContent = dash.assigned ?? '—';
 
-    // Pie chart from source_counts
-    if (dash.source_counts && dash.source_counts.length) {
-      buildPie(dash.source_counts.map(r => ({ source: r.source, total: r.total })));
+    // Pie charts
+    if (dash.source_counts?.length) {
+      buildPieChart('pie-svg', 'pie-legend', 'pie-summary',
+        dash.source_counts.map(r => ({ source: r.source, total: r.total })), 'source');
     }
-
-      // Produk terpopuler
-    // Campaign terpopuler
-    if (dash.campaign_counts && dash.campaign_counts.length) {
-      buildProduk(dash.campaign_counts.map(r => ({
-        nama_camp: r.id_camp__nama_camp || 'Tanpa Campaign',
-        total: r.total
-      })));
+    if (dash.campaign_counts?.length) {
+      buildPieChart('produk-svg', 'produk-legend', 'produk-summary',
+        dash.campaign_counts.map(r => ({
+          nama_camp: r.id_camp__nama_camp || 'Tanpa Campaign',
+          total: r.total
+        })), 'nama_camp');
     }
-
   }
 
   if (stats) {
     const sc = stats.status_counts || {};
-    document.getElementById('u-new').textContent       = sc['New'] || 0;
-    document.getElementById('u-contacted').textContent = sc['Contacted'] || 0;
-    document.getElementById('u-qualified').textContent = sc['Qualified'] || 0;
+    document.getElementById('u-new').textContent        = sc['New'] || 0;
+    document.getElementById('u-contacted').textContent  = sc['Contacted'] || 0;
+    document.getElementById('u-qualified').textContent  = sc['Qualified'] || 0;
     document.getElementById('u-unassigned').textContent = stats.pending || 0;
-
-    // Funnel bar chart
     buildFunnelBars(sc);
   }
 
-  // Load tabel campaign (admin only)
-  if (currentRole === 'admin') loadCampaigns();
-
-  // Performa sales bar chart
-  await buildSalesBars();
-}
-
-// ────────────────────────────────────────────
-//  INIT: deteksi role dari session Django
-// ────────────────────────────────────────────
-function initApp() {
-  const userId   = "{{ request.session.user_id|default:'' }}";
-  const userName = "{{ request.session.user_name|default:'' }}";
-  const userRole = "{{ request.session.user_role|default:'' }}";
-
-  if (!userId) {
-    window.location.href = "{% url 'login' %}";
-    return;
-  }
-
-  currentRole = userRole || 'admin';
-
-  document.getElementById('sb-username').textContent = userName || 'User';
-  document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
-
-  // ✅ TAMBAHKAN INI — tampilkan dashboard sesuai role
   if (currentRole === 'admin') {
-    document.getElementById('dash-admin').style.cssText = 'display:flex !important;flex-direction:column;flex:1;width:100%;';
-    document.getElementById('dash-user').style.cssText = 'display:none !important;';
-  } else {
-    document.getElementById('dash-user').style.cssText = 'display:flex !important;flex-direction:column;flex:1;width:100%;';
-    document.getElementById('dash-admin').style.cssText = 'display:none !important;';
+    loadCampaigns();
+    await buildSalesBars();
   }
-
-  loadAll();
 }
 
-function doLogout() {
-  window.location.href = "{% url 'login' %}";
+async function refreshDashboard() {
+  toast('Memperbarui data...');
+  await loadAll();
 }
 
 // ────────────────────────────────────────────
@@ -798,28 +661,22 @@ function renderCampaignTable(campaigns) {
     return;
   }
   tbody.innerHTML = campaigns.map(c => {
-    const cost = c.production_cost
-      ? 'Rp ' + Number(c.production_cost).toLocaleString('id-ID')
-      : '—';
-    return `
-      <tr>
-        <td style="font-weight:600;color:var(--text)">${c.nama_camp}</td>
-        <td>${c.source || '—'}</td>
-        <td style="font-family:'DM Mono',monospace">${cost}</td>
-        <td>${c.start_date || '—'}</td>
-        <td>${c.end_date   || '—'}</td>
-        <td style="font-weight:700;color:var(--accent);font-family:'DM Mono',monospace">${c.total_leads}</td>
-        <td><button class="btn-del-campaign" onclick="deleteCampaign('${c.id_campaign}','${c.nama_camp}')" title="Hapus">🗑️</button></td>
-      </tr>`;
+    const cost = c.production_cost ? 'Rp ' + Number(c.production_cost).toLocaleString('id-ID') : '—';
+    return `<tr>
+      <td style="font-weight:600;color:var(--text)">${c.nama_camp}</td>
+      <td>${c.source || '—'}</td>
+      <td style="font-family:'DM Mono',monospace">${cost}</td>
+      <td>${c.start_date || '—'}</td>
+      <td>${c.end_date   || '—'}</td>
+      <td style="font-weight:700;color:var(--accent);font-family:'DM Mono',monospace">${c.total_leads}</td>
+      <td><button class="btn-del-campaign" onclick="deleteCampaign('${c.id_campaign}','${c.nama_camp}')" title="Hapus">🗑️</button></td>
+    </tr>`;
   }).join('');
 }
 
 function openAddCampaign() {
-  document.getElementById('inp-nama-camp').value  = '';
-  document.getElementById('inp-source-camp').value = '';
-  document.getElementById('inp-cost-camp').value  = '';
-  document.getElementById('inp-start-camp').value = '';
-  document.getElementById('inp-end-camp').value   = '';
+  ['inp-nama-camp','inp-source-camp','inp-cost-camp','inp-start-camp','inp-end-camp']
+    .forEach(id => document.getElementById(id).value = '');
   document.getElementById('modal-campaign').classList.add('show');
 }
 
@@ -827,101 +684,87 @@ function closeAddCampaign() {
   document.getElementById('modal-campaign').classList.remove('show');
 }
 
-    async function doAddCampaign() {
-      const nama = document.getElementById('inp-nama-camp').value.trim();
-      if (!nama) { toast('Nama campaign wajib diisi'); return; }
+async function doAddCampaign() {
+  const nama = document.getElementById('inp-nama-camp').value.trim();
+  if (!nama) { toast('Nama campaign wajib diisi'); return; }
 
-      const payload = {
-        nama_camp:       nama,
-        source:          document.getElementById('inp-source-camp').value.trim(),
-        production_cost: document.getElementById('inp-cost-camp').value || null,
-        start_date:      document.getElementById('inp-start-camp').value || null,
-        end_date:        document.getElementById('inp-end-camp').value   || null,
-      };
+  const payload = {
+    nama_camp:       nama,
+    source:          document.getElementById('inp-source-camp').value.trim(),
+    production_cost: document.getElementById('inp-cost-camp').value || null,
+    start_date:      document.getElementById('inp-start-camp').value || null,
+    end_date:        document.getElementById('inp-end-camp').value   || null,
+  };
 
-      try {
-        const res = await fetch('/api/campaigns/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
-          body: JSON.stringify(payload),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          toast('✅ Campaign berhasil ditambahkan!');
-          closeAddCampaign();
-          loadCampaigns();
-          loadAll(); // refresh pie chart
-        } else {
-          toast(data.error || 'Gagal menambahkan campaign');
-        }
-      } catch (_) {
-        toast('Error koneksi ke server');
-      }
+  try {
+    const res = await fetch('/api/campaigns/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      toast('✅ Campaign berhasil ditambahkan!');
+      closeAddCampaign();
+      loadCampaigns();
+      loadAll();
+    } else {
+      toast(data.error || 'Gagal menambahkan campaign');
     }
+  } catch (_) { toast('Error koneksi ke server'); }
+}
 
-    async function deleteCampaign(id, nama) {
-      if (!confirm(`Hapus campaign "${nama}"? Data leads yang terhubung tidak ikut terhapus.`)) return;
-      try {
-        const res = await fetch(`/api/campaigns/${id}/`, {
-          method: 'DELETE',
-          headers: { 'X-CSRFToken': getCookie('csrftoken') },
-        });
-        if (res.ok) {
-          toast('🗑️ Campaign berhasil dihapus');
-          loadCampaigns();
-          loadAll();
-        } else {
-          toast('Gagal menghapus campaign');
-        }
-      } catch (_) {
-        toast('Error koneksi ke server');
-      }
+async function deleteCampaign(id, nama) {
+  if (!confirm(`Hapus campaign "${nama}"? Data leads yang terhubung tidak ikut terhapus.`)) return;
+  try {
+    const res = await fetch(`/api/campaigns/${id}/`, {
+      method: 'DELETE',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    });
+    if (res.ok) {
+      toast('🗑️ Campaign berhasil dihapus');
+      loadCampaigns();
+      loadAll();
+    } else {
+      toast('Gagal menghapus campaign');
     }
+  } catch (_) { toast('Error koneksi ke server'); }
+}
 
-    function getCookie(name) {
-      const val = `; ${document.cookie}`;
-      const parts = val.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-      return '';
-    }
+// ────────────────────────────────────────────
+//  INIT
+// ────────────────────────────────────────────
+function initApp() {
+  const userId   = "{{ request.session.user_id|default:'' }}";
+  const userName = "{{ request.session.user_name|default:'' }}";
+  const userRole = "{{ request.session.user_role|default:'' }}";
 
+  if (!userId) {
+    window.location.href = "{% url 'login' %}";
+    return;
+  }
 
-// ── Run ──
+  currentRole = userRole || 'admin';
+
+  document.getElementById('sb-username').textContent  = userName || 'User';
+  document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
+
+  if (currentRole === 'admin') {
+    document.getElementById('dash-admin').style.display = 'flex';
+    document.getElementById('dash-user').style.display  = 'none';
+  } else {
+    document.getElementById('dash-user').style.display  = 'flex';
+    document.getElementById('dash-admin').style.display = 'none';
+  }
+
+  loadAll();
+}
+
+function doLogout() {
+  window.location.href = "{% url 'login' %}";
+}
+
 document.addEventListener('DOMContentLoaded', initApp);
 </script>
-
-    <!-- Modal Tambah Campaign -->
-    <div class="modal-overlay" id="modal-campaign">
-      <div class="modal-box">
-        <div class="modal-title">➕ Tambah Campaign Baru</div>
-        <div class="modal-field">
-          <label>Nama Campaign *</label>
-          <input type="text" id="inp-nama-camp" placeholder="Contoh: Ramadan Ads 2025">
-        </div>
-        <div class="modal-field">
-          <label>Sumber</label>
-          <input type="text" id="inp-source-camp" placeholder="Contoh: Instagram, TikTok">
-        </div>
-        <div class="modal-field">
-          <label>Biaya Produksi (Rp)</label>
-          <input type="number" id="inp-cost-camp" placeholder="Contoh: 5000000">
-        </div>
-        <div class="modal-row">
-          <div class="modal-field">
-            <label>Tanggal Mulai</label>
-            <input type="date" id="inp-start-camp">
-          </div>
-          <div class="modal-field">
-            <label>Tanggal Selesai</label>
-            <input type="date" id="inp-end-camp">
-          </div>
-        </div>
-        <div class="modal-actions">
-          <button class="btn-cancel" onclick="closeAddCampaign()">Batal</button>
-          <button class="btn-save" onclick="doAddCampaign()">Simpan</button>
-        </div>
-      </div>
-    </div>
-
 </body>
 </html>
