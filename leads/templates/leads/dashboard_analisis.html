@@ -8,26 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f0f4f8;
-  --sidebar-bg: #ffffff;
-  --card: #ffffff;
-  --border: #e2e8f0;
-  --text: #1a202c;
-  --text-2: #64748b;
-  --text-3: #94a3b8;
-  --accent: #2563eb;
-  --accent-light: #eff6ff;
-  --green: #10b981;
-  --green-light: #d1fae5;
-  --yellow: #f59e0b;
-  --yellow-light: #fef3c7;
-  --red: #ef4444;
-  --red-light: #fee2e2;
-  --navy: #0f1f3d;
-  --radius: 12px;
-  --radius-sm: 7px;
-  --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 24px rgba(0,0,0,0.10);
+--bg: #f0f4f8;
+--sidebar-bg: #ffffff;
+--card: #ffffff;
+--border: #e2e8f0;
+--text: #1a202c;
+--text-2: #64748b;
+--text-3: #94a3b8;
+--accent: #2563eb;
+--accent-light: #eff6ff;
+--green: #10b981;
+--green-light: #d1fae5;
+--yellow: #f59e0b;
+--yellow-light: #fef3c7;
+--red: #ef4444;
+--red-light: #fee2e2;
+--navy: #0f1f3d;
+--radius: 12px;
+--radius-sm: 7px;
+--shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
+--shadow-md: 0 4px 24px rgba(0,0,0,0.10);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -153,6 +153,7 @@ td{padding:11px 16px;vertical-align:middle;}
 
 /* ══ USER DASHBOARD ══ */
 .user-content{padding:20px 26px;flex:1;display:flex;flex-direction:column;gap:18px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:680px;margin:0 auto;width:100%;}
 .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;width:100%;}
 .kpi-card{border-radius:var(--radius);padding:28px 26px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-md);transition:all .2s;cursor:default;}
 .kpi-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.12);}
@@ -163,6 +164,7 @@ td{padding:11px 16px;vertical-align:middle;}
 .kpi-trend-icon{font-size:20px;}
 .kpi-value{font-size:42px;font-weight:800;color:#1a202c;font-family:'DM Mono',monospace;line-height:1;}
 .kpi-footer{display:flex;align-items:center;gap:7px;}
+.kpi-extra-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:680px;margin:0 auto;width:100%;}
 .kpi-extra-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;}
 .mini-kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);text-align:center;}
 .mini-kpi-val{font-size:20px;font-weight:800;color:var(--text);font-family:'DM Mono',monospace;}
@@ -187,223 +189,224 @@ td{padding:11px 16px;vertical-align:middle;}
 <!-- ═══ APP SHELL ═══ -->
 <div id="app-shell" style="width:100%;display:flex;flex-direction:row;">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sb-profile">
-      <div class="sb-avatar">👤</div>
-      <div>
-        <div class="sb-name" id="sb-username">LOADING...</div>
-        <div class="sb-role" id="sb-role-text">—</div>
-      </div>
-    </div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<div class="sb-profile">
+<div class="sb-avatar">👤</div>
+<div>
+<div class="sb-name" id="sb-username">LOADING...</div>
+<div class="sb-role" id="sb-role-text">—</div>
+</div>
+</div>
 
-    <a class="nav-item" href="{% url 'distribusi_lead' %}">
-      <span class="nav-icon">📋</span> Distribusi Lead
-    </a>
-    <a class="nav-item" href="{% url 'update_leads' %}">
-      <span class="nav-icon">📅</span> Update dan Segmentasi
-    </a>
-    <a class="nav-item active" href="{% url 'dashboard_analisis' %}">
-      <span class="nav-icon">🖥️</span> Analisis Dashboard
-    </a>
+<a class="nav-item" href="{% url 'distribusi_lead' %}">
+<span class="nav-icon">📋</span> Distribusi Lead
+</a>
+<a class="nav-item" href="{% url 'update_leads' %}">
+<span class="nav-icon">📅</span> Update dan Segmentasi
+</a>
+<a class="nav-item active" href="{% url 'dashboard_analisis' %}">
+<span class="nav-icon">🖥️</span> Analisis Dashboard
+</a>
 
-    <div class="sb-bottom">
-      <div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout</div>
-    </div>
-  </aside>
+<div class="sb-bottom">
+<div class="logout-btn" onclick="doLogout()"><span>🚪</span>Logout</div>
+</div>
+</aside>
 
-  <!-- MAIN -->
-  <main class="main" id="main-area">
+<!-- MAIN -->
+<main class="main" id="main-area">
 
-    <!-- ════ ADMIN DASHBOARD ════ -->
-    <div id="dash-admin" style="display:none;flex-direction:column;flex:1;">
-      <div class="role-bar admin-bar">🛡️ Mode Admin — Dashboard detail lead & analisis penuh</div>
-      <div class="topbar">
-        <div class="topbar-left">
-          <span class="topbar-title">Analisis Dashboard</span>
-          <span class="badge-admin">Admin Only</span>
-        </div>
-        <div class="topbar-right">
-          <div class="icon-btn" onclick="refreshDashboard()" title="Refresh data">🔄</div>
-          <div class="icon-btn">🔔</div>
-        </div>
-      </div>
+<!-- ════ ADMIN DASHBOARD ════ -->
+<div id="dash-admin" style="display:none;flex-direction:column;flex:1;">
+<div class="role-bar admin-bar">🛡️ Mode Admin — Dashboard detail lead & analisis penuh</div>
+<div class="topbar">
+<div class="topbar-left">
+<span class="topbar-title">Analisis Dashboard</span>
+<span class="badge-admin">Admin Only</span>
+</div>
+<div class="topbar-right">
+<div class="icon-btn" onclick="refreshDashboard()" title="Refresh data">🔄</div>
+<div class="icon-btn">🔔</div>
+</div>
+</div>
 
-      <div class="content">
-        <!-- Stats -->
-        <div class="stat-row">
-          <div class="stat-card blue">
-            <div class="stat-icon blue">👥</div>
-            <div>
-              <div class="stat-value" id="stat-total">—</div>
-              <div class="stat-label">Total Leads</div>
-            </div>
-          </div>
-          <div class="stat-card green">
-            <div class="stat-icon green">✅</div>
-            <div>
-              <div class="stat-value" id="stat-assigned">—</div>
-              <div class="stat-label">Lead Assigned</div>
-            </div>
-          </div>
-          <div class="stat-card amber">
-            <div class="stat-icon amber">⏳</div>
-            <div>
-              <div class="stat-value" id="stat-unassigned">—</div>
-              <div class="stat-label">Lead Belum Assign</div>
-            </div>
-          </div>
-        </div>
+<div class="content">
+<!-- Stats -->
+<div class="stat-row">
+<div class="stat-card blue">
+<div class="stat-icon blue">👥</div>
+<div>
+<div class="stat-value" id="stat-total">—</div>
+<div class="stat-label">Total Leads</div>
+</div>
+</div>
+<div class="stat-card green">
+<div class="stat-icon green">✅</div>
+<div>
+<div class="stat-value" id="stat-assigned">—</div>
+<div class="stat-label">Lead Assigned</div>
+</div>
+</div>
+<div class="stat-card amber">
+<div class="stat-icon amber">⏳</div>
+<div>
+<div class="stat-value" id="stat-unassigned">—</div>
+<div class="stat-label">Lead Belum Assign</div>
+</div>
+</div>
+</div>
 
-        <!-- Middle Row -->
-        <div class="middle-row">
-          <!-- Dynamic Pie Chart -->
-          <div class="chart-card">
-            <div class="chart-card-title">Lead per Sumber</div>
-            <div class="chart-legend" id="pie-legend">
-              <span style="font-size:12px;color:var(--text-3)">Memuat data...</span>
-            </div>
-            <div class="pie-wrap">
-              <svg class="pie-svg" id="pie-svg" viewBox="0 0 180 180">
-                <circle cx="90" cy="90" r="60" fill="#e2e8f0"/>
-                <text x="90" y="95" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="DM Sans">Memuat...</text>
-              </svg>
-            </div>
-            <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="pie-summary">—</div>
-          </div>
+<!-- Middle Row -->
+<div class="middle-row">
+<!-- Dynamic Pie Chart -->
+<div class="chart-card">
+<div class="chart-card-title">Lead per Sumber</div>
+<div class="chart-legend" id="pie-legend">
+<span style="font-size:12px;color:var(--text-3)">Memuat data...</span>
+</div>
+<div class="pie-wrap">
+<svg class="pie-svg" id="pie-svg" viewBox="0 0 180 180">
+<circle cx="90" cy="90" r="60" fill="#e2e8f0"/>
+<text x="90" y="95" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="DM Sans">Memuat...</text>
+</svg>
+</div>
+<div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-style:italic;" id="pie-summary">—</div>
+</div>
 
-          <!-- Info Card -->
-          <div class="info-card">
-            <div class="info-tag">✦ Tentang Sistem</div>
-            <div class="info-title">what is LEADFLOW?</div>
-            <div class="info-body">
-              Sistem Manajemen Lead dan Funnel Digital Marketing membantu brand atau tim marketing dalam memantau perjalanan calon pelanggan dari tahap awal hingga konversi. Dengan sistem ini, data lead dapat dikelola secara terstruktur, sehingga memudahkan analisis perilaku pelanggan dan membantu pengambilan keputusan strategi pemasaran yang lebih efektif.
-            </div>
-          </div>
-        </div>
+<!-- Info Card -->
+<div class="info-card">
+<div class="info-tag">✦ Tentang Sistem</div>
+<div class="info-title">what is LEADFLOW?</div>
+<div class="info-body">
+Sistem Manajemen Lead dan Funnel Digital Marketing membantu brand atau tim marketing dalam memantau perjalanan calon pelanggan dari tahap awal hingga konversi. Dengan sistem ini, data lead dapat dikelola secara terstruktur, sehingga memudahkan analisis perilaku pelanggan dan membantu pengambilan keputusan strategi pemasaran yang lebih efektif.
+</div>
+</div>
+</div>
 
-        <!-- All Leads Table -->
-        <div class="table-section">
-          <div class="table-head-bar">
-            <div>
-              <h3>All Leads</h3>
-              <p id="table-subtitle">Sorted by latest activity</p>
-            </div>
-            <div class="table-head-right">
-              <div class="search-mini">🔍 <input type="text" id="search-input" placeholder="Cari nama / No. HP.." oninput="onSearch()"></div>
-            </div>
-          </div>
+<!-- All Leads Table -->
+<div class="table-section">
+<div class="table-head-bar">
+<div>
+<h3>All Leads</h3>
+<p id="table-subtitle">Sorted by latest activity</p>
+</div>
+<div class="table-head-right">
+<div class="search-mini">🔍 <input type="text" id="search-input" placeholder="Cari nama / No. HP.." oninput="onSearch()"></div>
+</div>
+</div>
 
-          <!-- Status Tabs -->
-          <div class="tabs" id="status-tabs">
-            <div class="tab active" data-status="all" onclick="switchTab(this)">
-              All <span class="tab-ct" id="tab-ct-all">—</span>
-            </div>
-            <div class="tab" data-status="New" onclick="switchTab(this)">
-              New <span class="tab-ct" id="tab-ct-New">—</span>
-            </div>
-            <div class="tab" data-status="Contacted" onclick="switchTab(this)">
-              Contacted <span class="tab-ct" id="tab-ct-Contacted">—</span>
-            </div>
-            <div class="tab" data-status="Qualified" onclick="switchTab(this)">
-              Qualified <span class="tab-ct" id="tab-ct-Qualified">—</span>
-            </div>
-            <div class="tab" data-status="Proposal" onclick="switchTab(this)">
-              Proposal <span class="tab-ct" id="tab-ct-Proposal">—</span>
-            </div>
-            <div class="tab" data-status="Closed Won" onclick="switchTab(this)">
-              Closed Won <span class="tab-ct" id="tab-ct-Closed Won">—</span>
-            </div>
-            <div class="tab" data-status="Closed Lost" onclick="switchTab(this)">
-              Closed Lost <span class="tab-ct" id="tab-ct-Closed Lost">—</span>
-            </div>
-          </div>
+<!-- Status Tabs -->
+<div class="tabs" id="status-tabs">
+<div class="tab active" data-status="all" onclick="switchTab(this)">
+All <span class="tab-ct" id="tab-ct-all">—</span>
+</div>
+<div class="tab" data-status="New" onclick="switchTab(this)">
+New <span class="tab-ct" id="tab-ct-New">—</span>
+</div>
+<div class="tab" data-status="Contacted" onclick="switchTab(this)">
+Contacted <span class="tab-ct" id="tab-ct-Contacted">—</span>
+</div>
+<div class="tab" data-status="Qualified" onclick="switchTab(this)">
+Qualified <span class="tab-ct" id="tab-ct-Qualified">—</span>
+</div>
+<div class="tab" data-status="Proposal" onclick="switchTab(this)">
+Proposal <span class="tab-ct" id="tab-ct-Proposal">—</span>
+</div>
+<div class="tab" data-status="Closed Won" onclick="switchTab(this)">
+Closed Won <span class="tab-ct" id="tab-ct-Closed Won">—</span>
+</div>
+<div class="tab" data-status="Closed Lost" onclick="switchTab(this)">
+Closed Lost <span class="tab-ct" id="tab-ct-Closed Lost">—</span>
+</div>
+</div>
 
-          <table>
-            <thead>
-              <tr>
-                <th style="width:36px"><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th>
-                <th>Nama</th>
-                <th>Status</th>
-                <th>Source</th>
-                <th>Assigned</th>
-                <th>No. WA</th>
-              </tr>
-            </thead>
-            <tbody id="leads-tbody">
-              <tr class="loading-row">
-                <td colspan="6"><span class="spinner"></span> Memuat data lead...</td>
-              </tr>
-            </tbody>
-          </table>
+<table>
+<thead>
+<tr>
+<th style="width:36px"><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th>
+<th>Nama</th>
+<th>Status</th>
+<th>Source</th>
+<th>Assigned</th>
+<th>No. WA</th>
+</tr>
+</thead>
+<tbody id="leads-tbody">
+<tr class="loading-row">
+<td colspan="6"><span class="spinner"></span> Memuat data lead...</td>
+</tr>
+</tbody>
+</table>
 
-          <div class="pagination">
-            <span class="page-info" id="page-info">—</span>
-            <div class="page-btns" id="page-btns"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="pagination">
+<span class="page-info" id="page-info">—</span>
+<div class="page-btns" id="page-btns"></div>
+</div>
+</div>
+</div>
+</div>
 
-    <!-- ════ USER DASHBOARD ════ -->
-    <div id="dash-user" style="display:none;flex-direction:column;flex:1;">
-      <div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
-      <div class="topbar">
-        <div class="topbar-left">
-          <span class="topbar-title">Dashboard Ringkas</span>
-          <span class="badge-user">Sales</span>
-        </div>
-        <div class="topbar-right">
-          <div class="icon-btn" onclick="refreshDashboard()" title="Refresh">🔄</div>
-          <div class="icon-btn">🔔</div>
-        </div>
-      </div>
+<!-- ════ USER DASHBOARD ════ -->
+<div id="dash-user" style="display:none;flex-direction:column;flex:1;">
+<div class="role-bar">👤 Mode Sales/User — Dashboard ringkas Anda</div>
+<div class="topbar">
+<div class="topbar-left">
+<span class="topbar-title">Dashboard Ringkas</span>
+<span class="badge-user">Sales</span>
+</div>
+<div class="topbar-right">
+<div class="icon-btn" onclick="refreshDashboard()" title="Refresh">🔄</div>
+<div class="icon-btn">🔔</div>
+</div>
+</div>
 
-      <div class="user-content">
-        <div class="kpi-grid">
-          <div class="kpi-card pink">
-            <div class="kpi-header">
-              <div class="kpi-title">Total Leads</div>
-              <div class="kpi-trend-icon">📈</div>
-            </div>
-            <div class="kpi-value" id="u-total">—</div>
-          </div>
-          <div class="kpi-card lavender">
-            <div class="kpi-header">
-              <div class="kpi-title">Lead Assigned</div>
-              <div class="kpi-trend-icon">📊</div>
-            </div>
-            <div class="kpi-value" id="u-assigned">—</div>
-          </div>
-        </div>
+<div class="user-content">
+<div class="kpi-grid">
+<div class="kpi-card pink">
+<div class="kpi-header">
+<div class="kpi-title">Total Leads</div>
+<div class="kpi-trend-icon">📈</div>
+</div>
+<div class="kpi-value" id="u-total">—</div>
+</div>
+<div class="kpi-card lavender">
+<div class="kpi-header">
+<div class="kpi-title">Lead Assigned</div>
+<div class="kpi-trend-icon">📊</div>
+</div>
+<div class="kpi-value" id="u-assigned">—</div>
+</div>
+</div>
 
-        <div class="kpi-extra-cards">
-          <div class="mini-kpi">
-            <div class="mini-kpi-val" style="color:#2563eb" id="u-new">—</div>
-            <div class="mini-kpi-label">New</div>
-          </div>
-          <div class="mini-kpi">
-            <div class="mini-kpi-val" style="color:#f59e0b" id="u-contacted">—</div>
-            <div class="mini-kpi-label">Contacted</div>
-          </div>
-          <div class="mini-kpi">
-            <div class="mini-kpi-val" style="color:#10b981" id="u-qualified">—</div>
-            <div class="mini-kpi-label">Qualified</div>
-          </div>
-          <div class="mini-kpi">
-            <div class="mini-kpi-val" style="color:#ef4444" id="u-unassigned">—</div>
-            <div class="mini-kpi-label">Belum Assign</div>
-          </div>
-        </div>
+<div class="kpi-extra-cards">
+<div class="mini-kpi">
+<div class="mini-kpi-val" style="color:#2563eb" id="u-new">—</div>
+<div class="mini-kpi-label">New</div>
+</div>
+<div class="mini-kpi">
+<div class="mini-kpi-val" style="color:#f59e0b" id="u-contacted">—</div>
+<div class="mini-kpi-label">Contacted</div>
+</div>
+<div class="mini-kpi">
+<div class="mini-kpi-val" style="color:#10b981" id="u-qualified">—</div>
+<div class="mini-kpi-label">Qualified</div>
+</div>
+<div class="mini-kpi">
+<div class="mini-kpi-val" style="color:#ef4444" id="u-unassigned">—</div>
+<div class="mini-kpi-label">Belum Assign</div>
+</div>
+</div>
 
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);width:100%;">
-          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">ℹ️ Informasi Akses</div>
-          <div style="font-size:13px;color:var(--text-2);line-height:1.65;">Dashboard ini menampilkan ringkasan metrik kampanye. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.</div>
-        </div>
-      </div>
-    </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);max-width:680px;margin:0 auto;width:100%;">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);width:100%;">
+<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">ℹ️ Informasi Akses</div>
+<div style="font-size:13px;color:var(--text-2);line-height:1.65;">Dashboard ini menampilkan ringkasan metrik kampanye. Untuk detail lead, assignment, dan segmentasi lengkap, silahkan hubungi admin Anda.</div>
+</div>
+</div>
+</div>
 
-  </main>
+</main>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -418,86 +421,86 @@ let currentRole = 'sales';
 
 // ── Init: baca session dari server ──
 const SESSION_USER = {
-  id: "{{ request.session.user_id|default:'' }}",
-  nama: "{{ request.session.user_name|default:'' }}",
+id: "{{ request.session.user_id|default:'' }}",
+nama: "{{ request.session.user_name|default:'' }}",
 };
 
 // ────────────────────────────────────────────
 //  HELPERS
 // ────────────────────────────────────────────
 function toast(msg, dur = 2500) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), dur);
+const t = document.getElementById('toast');
+t.textContent = msg;
+t.classList.add('show');
+setTimeout(() => t.classList.remove('show'), dur);
 }
 
 function avatarColor(name) {
-  const colors = ['#059669','#7c3aed','#ea580c','#0284c7','#dc2626','#d97706','#0891b2','#6d28d9'];
-  let h = 0;
-  for (let c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
-  return colors[h % colors.length];
+const colors = ['#059669','#7c3aed','#ea580c','#0284c7','#dc2626','#d97706','#0891b2','#6d28d9'];
+let h = 0;
+for (let c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
+return colors[h % colors.length];
 }
 
 function initials(name) {
-  return name.trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+return name.trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
 }
 
 function sourceIcon(src) {
-  if (!src) return '❓';
-  const s = src.toLowerCase();
-  if (s.includes('instagram')) return '📸';
-  if (s.includes('tiktok'))    return '🎵';
-  if (s.includes('facebook'))  return '📘';
-  if (s.includes('twitter'))   return '🐦';
-  if (s.includes('form'))      return '📋';
-  if (s.includes('ads'))       return '🔴';
-  if (s.includes('website') || s.includes('web')) return '🌐';
-  return '📌';
+if (!src) return '❓';
+const s = src.toLowerCase();
+if (s.includes('instagram')) return '📸';
+if (s.includes('tiktok'))    return '🎵';
+if (s.includes('facebook'))  return '📘';
+if (s.includes('twitter'))   return '🐦';
+if (s.includes('form'))      return '📋';
+if (s.includes('ads'))       return '🔴';
+if (s.includes('website') || s.includes('web')) return '🌐';
+return '📌';
 }
 
 function statusBadgeClass(status) {
-  if (!status) return 'new';
-  const s = status.toLowerCase().replace(/\s/g, '-');
-  return s; // matches CSS: .badge.new, .badge.contacted, etc.
+if (!status) return 'new';
+const s = status.toLowerCase().replace(/\s/g, '-');
+return s; // matches CSS: .badge.new, .badge.contacted, etc.
 }
 
 // ────────────────────────────────────────────
 //  API CALLS
 // ────────────────────────────────────────────
 async function fetchDashboard() {
-  try {
-    const res = await fetch('/api/dashboard/');
-    return await res.json();
-  } catch (e) {
-    toast('Gagal memuat data dashboard');
-    return null;
-  }
+try {
+const res = await fetch('/api/dashboard/');
+return await res.json();
+} catch (e) {
+toast('Gagal memuat data dashboard');
+return null;
+}
 }
 
 async function fetchLeads(status, search, page) {
-  const params = new URLSearchParams({
-    status: status === 'all' ? '' : status,
-    search: search || '',
-    page,
-    per_page: perPage,
-  });
-  try {
-    const res = await fetch(`/api/distribusi/leads/?${params}`);
-    return await res.json();
-  } catch (e) {
-    toast('Gagal memuat data leads');
-    return null;
-  }
+const params = new URLSearchParams({
+status: status === 'all' ? '' : status,
+search: search || '',
+page,
+per_page: perPage,
+});
+try {
+const res = await fetch(`/api/distribusi/leads/?${params}`);
+return await res.json();
+} catch (e) {
+toast('Gagal memuat data leads');
+return null;
+}
 }
 
 async function fetchDistribusiStats() {
-  try {
-    const res = await fetch('/api/distribusi/stats/');
-    return await res.json();
-  } catch (e) {
-    return null;
-  }
+try {
+const res = await fetch('/api/distribusi/stats/');
+return await res.json();
+} catch (e) {
+return null;
+}
 }
 
 // ────────────────────────────────────────────
@@ -506,259 +509,258 @@ async function fetchDistribusiStats() {
 const PIE_COLORS = ['#22c55e','#3b82f6','#f97316','#ec4899','#a855f7','#06b6d4','#f59e0b','#ef4444'];
 
 function buildPie(sourceCounts) {
-  // sourceCounts = [{source, total}, ...]
-  const total = sourceCounts.reduce((s, r) => s + r.total, 0);
-  if (!total) return;
+// sourceCounts = [{source, total}, ...]
+const total = sourceCounts.reduce((s, r) => s + r.total, 0);
+if (!total) return;
 
-  const svg = document.getElementById('pie-svg');
-  const legend = document.getElementById('pie-legend');
-  const cx = 90, cy = 90, r = 72;
+const svg = document.getElementById('pie-svg');
+const legend = document.getElementById('pie-legend');
+const cx = 90, cy = 90, r = 72;
 
-  let html = '';
-  let legendHtml = '';
-  let startAngle = -Math.PI / 2; // start top
+let html = '';
+let legendHtml = '';
+let startAngle = -Math.PI / 2; // start top
 
-  sourceCounts.forEach((row, i) => {
-    const pct = row.total / total;
-    const angle = pct * 2 * Math.PI;
-    const endAngle = startAngle + angle;
-    const x1 = cx + r * Math.cos(startAngle);
-    const y1 = cy + r * Math.sin(startAngle);
-    const x2 = cx + r * Math.cos(endAngle);
-    const y2 = cy + r * Math.sin(endAngle);
-    const large = angle > Math.PI ? 1 : 0;
-    const color = PIE_COLORS[i % PIE_COLORS.length];
+sourceCounts.forEach((row, i) => {
+const pct = row.total / total;
+const angle = pct * 2 * Math.PI;
+const endAngle = startAngle + angle;
+const x1 = cx + r * Math.cos(startAngle);
+const y1 = cy + r * Math.sin(startAngle);
+const x2 = cx + r * Math.cos(endAngle);
+const y2 = cy + r * Math.sin(endAngle);
+const large = angle > Math.PI ? 1 : 0;
+const color = PIE_COLORS[i % PIE_COLORS.length];
 
-    html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${color}"/>`;
+html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${color}"/>`;
 
-    // label inside slice
-    const midA = startAngle + angle / 2;
-    const lx = cx + (r * 0.6) * Math.cos(midA);
-    const ly = cy + (r * 0.6) * Math.sin(midA);
-    const pctStr = Math.round(pct * 100) + '%';
-    if (pct > 0.05) {
-      html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${row.source || 'Lainnya'}</text>`;
-      html += `<text x="${lx}" y="${ly + 9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
-    }
+// label inside slice
+const midA = startAngle + angle / 2;
+const lx = cx + (r * 0.6) * Math.cos(midA);
+const ly = cy + (r * 0.6) * Math.sin(midA);
+const pctStr = Math.round(pct * 100) + '%';
+if (pct > 0.05) {
+html += `<text x="${lx}" y="${ly}" fill="white" font-size="8.5" font-family="DM Sans" font-weight="700" text-anchor="middle" dominant-baseline="middle">${row.source || 'Lainnya'}</text>`;
+html += `<text x="${lx}" y="${ly + 9}" fill="rgba(255,255,255,0.85)" font-size="7.5" font-family="DM Mono" text-anchor="middle">${pctStr}</text>`;
+}
 
-    legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${row.source || 'Lainnya'} ${pctStr}</div>`;
-    startAngle = endAngle;
-  });
+legendHtml += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div>${row.source || 'Lainnya'} ${pctStr}</div>`;
+startAngle = endAngle;
+});
 
-  svg.innerHTML = html;
-  legend.innerHTML = legendHtml;
-  document.getElementById('pie-summary').textContent = `Total ${total} leads dari ${sourceCounts.length} sumber`;
+svg.innerHTML = html;
+legend.innerHTML = legendHtml;
+document.getElementById('pie-summary').textContent = `Total ${total} leads dari ${sourceCounts.length} sumber`;
 }
 
 // ────────────────────────────────────────────
 //  RENDER LEADS TABLE
 // ────────────────────────────────────────────
 function renderLeads(data) {
-  const tbody = document.getElementById('leads-tbody');
-  if (!data || !data.leads || data.leads.length === 0) {
-    tbody.innerHTML = `<tr class="loading-row"><td colspan="6">Tidak ada data lead ditemukan.</td></tr>`;
-    document.getElementById('page-info').textContent = '0 leads';
-    document.getElementById('page-btns').innerHTML = '';
-    return;
-  }
+const tbody = document.getElementById('leads-tbody');
+if (!data || !data.leads || data.leads.length === 0) {
+tbody.innerHTML = `<tr class="loading-row"><td colspan="6">Tidak ada data lead ditemukan.</td></tr>`;
+document.getElementById('page-info').textContent = '0 leads';
+document.getElementById('page-btns').innerHTML = '';
+return;
+}
 
-  const rows = data.leads.map(lead => {
-    const color = avatarColor(lead.nama || '');
-    const init  = initials(lead.nama || '?');
-    const badgeC = statusBadgeClass(lead.status);
-    const icon  = sourceIcon(lead.source);
-    const assignedHtml = lead.assigned_to
-      ? `<span class="assign-text">${lead.assigned_to}</span>`
-      : `<span class="assign-empty">Unassigned</span>`;
+const rows = data.leads.map(lead => {
+const color = avatarColor(lead.nama || '');
+const init  = initials(lead.nama || '?');
+const badgeC = statusBadgeClass(lead.status);
+const icon  = sourceIcon(lead.source);
+const assignedHtml = lead.assigned_to
+? `<span class="assign-text">${lead.assigned_to}</span>`
+: `<span class="assign-empty">Unassigned</span>`;
 
-    return `
-      <tr>
-        <td><input type="checkbox" class="row-check" data-id="${lead.id_lead}"></td>
-        <td>
-          <div class="lead-cell">
-            <div class="lead-av" style="background:${color}">${init}</div>
-            <div>
-              <div class="lead-name">${lead.nama}</div>
-              <div class="lead-phone">${lead.email || '—'}</div>
-            </div>
-          </div>
-        </td>
-        <td><span class="badge ${badgeC}"><span class="badge-dot"></span>${lead.status || 'New'}</span></td>
-        <td><div class="src-cell">${icon} ${lead.source || '—'}</div></td>
-        <td>${assignedHtml}</td>
-        <td><span class="date-text">${lead.no_whatsapp || '—'}</span></td>
-      </tr>`;
-  }).join('');
+return `
+     <tr>
+       <td><input type="checkbox" class="row-check" data-id="${lead.id_lead}"></td>
+       <td>
+         <div class="lead-cell">
+           <div class="lead-av" style="background:${color}">${init}</div>
+           <div>
+             <div class="lead-name">${lead.nama}</div>
+             <div class="lead-phone">${lead.email || '—'}</div>
+           </div>
+         </div>
+       </td>
+       <td><span class="badge ${badgeC}"><span class="badge-dot"></span>${lead.status || 'New'}</span></td>
+       <td><div class="src-cell">${icon} ${lead.source || '—'}</div></td>
+       <td>${assignedHtml}</td>
+       <td><span class="date-text">${lead.no_whatsapp || '—'}</span></td>
+     </tr>`;
+}).join('');
 
-  tbody.innerHTML = rows;
+tbody.innerHTML = rows;
 
-  // Pagination
-  const start = (data.page - 1) * data.per_page + 1;
-  const end   = Math.min(data.page * data.per_page, data.total);
-  document.getElementById('page-info').textContent = `Showing ${start}–${end} of ${data.total}`;
-  renderPagination(data.page, data.pages);
+// Pagination
+const start = (data.page - 1) * data.per_page + 1;
+const end   = Math.min(data.page * data.per_page, data.total);
+document.getElementById('page-info').textContent = `Showing ${start}–${end} of ${data.total}`;
+renderPagination(data.page, data.pages);
 }
 
 function renderPagination(current, total) {
-  const container = document.getElementById('page-btns');
-  if (total <= 1) { container.innerHTML = ''; return; }
+const container = document.getElementById('page-btns');
+if (total <= 1) { container.innerHTML = ''; return; }
 
-  let html = '';
-  if (current > 1) html += `<div class="page-btn prev" onclick="goPage(${current-1})">← Prev</div>`;
+let html = '';
+if (current > 1) html += `<div class="page-btn prev" onclick="goPage(${current-1})">← Prev</div>`;
 
-  const pages = [];
-  pages.push(1);
-  if (current > 3) pages.push('...');
-  for (let i = Math.max(2, current-1); i <= Math.min(total-1, current+1); i++) pages.push(i);
-  if (current < total - 2) pages.push('...');
-  if (total > 1) pages.push(total);
+const pages = [];
+pages.push(1);
+if (current > 3) pages.push('...');
+for (let i = Math.max(2, current-1); i <= Math.min(total-1, current+1); i++) pages.push(i);
+if (current < total - 2) pages.push('...');
+if (total > 1) pages.push(total);
 
-  pages.forEach(p => {
-    if (p === '...') {
-      html += `<div class="page-btn" style="border:none;background:transparent;color:var(--text-3)">...</div>`;
-    } else {
-      html += `<div class="page-btn ${p === current ? 'active' : ''}" onclick="goPage(${p})">${p}</div>`;
-    }
-  });
+pages.forEach(p => {
+if (p === '...') {
+html += `<div class="page-btn" style="border:none;background:transparent;color:var(--text-3)">...</div>`;
+} else {
+html += `<div class="page-btn ${p === current ? 'active' : ''}" onclick="goPage(${p})">${p}</div>`;
+}
+});
 
-  if (current < total) html += `<div class="page-btn next" onclick="goPage(${current+1})">Next →</div>`;
-  container.innerHTML = html;
+if (current < total) html += `<div class="page-btn next" onclick="goPage(${current+1})">Next →</div>`;
+container.innerHTML = html;
 }
 
 // ────────────────────────────────────────────
 //  POPULATE TAB COUNTS
 // ────────────────────────────────────────────
 function updateTabCounts(stats) {
-  const sc = stats.status_counts || {};
-  const total = stats.total_leads || 0;
+const sc = stats.status_counts || {};
+const total = stats.total_leads || 0;
 
-  document.getElementById('tab-ct-all').textContent = total;
+document.getElementById('tab-ct-all').textContent = total;
 
-  const statuses = ['New','Contacted','Qualified','Proposal','Closed Won','Closed Lost'];
-  statuses.forEach(s => {
-    const el = document.getElementById(`tab-ct-${s}`);
-    if (el) el.textContent = sc[s] || 0;
-  });
+const statuses = ['New','Contacted','Qualified','Proposal','Closed Won','Closed Lost'];
+statuses.forEach(s => {
+const el = document.getElementById(`tab-ct-${s}`);
+if (el) el.textContent = sc[s] || 0;
+});
 }
 
 // ────────────────────────────────────────────
 //  EVENTS
 // ────────────────────────────────────────────
 function switchTab(el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  currentStatus = el.dataset.status;
-  currentPage = 1;
-  loadLeads();
+document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+el.classList.add('active');
+currentStatus = el.dataset.status;
+currentPage = 1;
+loadLeads();
 }
 
 function goPage(p) {
-  currentPage = p;
-  loadLeads();
+currentPage = p;
+loadLeads();
 }
 
 function onSearch() {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    currentPage = 1;
-    loadLeads();
-  }, 400);
+clearTimeout(searchTimeout);
+searchTimeout = setTimeout(() => {
+currentPage = 1;
+loadLeads();
+}, 400);
 }
 
 function toggleAll(master) {
-  document.querySelectorAll('.row-check').forEach(c => c.checked = master.checked);
+document.querySelectorAll('.row-check').forEach(c => c.checked = master.checked);
 }
 
 async function loadLeads() {
-  const search = document.getElementById('search-input').value;
-  document.getElementById('leads-tbody').innerHTML =
-    `<tr class="loading-row"><td colspan="6"><span class="spinner"></span> Memuat...</td></tr>`;
-  const data = await fetchLeads(currentStatus, search, currentPage);
-  if (data) renderLeads(data);
+const search = document.getElementById('search-input').value;
+document.getElementById('leads-tbody').innerHTML =
+`<tr class="loading-row"><td colspan="6"><span class="spinner"></span> Memuat...</td></tr>`;
+const data = await fetchLeads(currentStatus, search, currentPage);
+if (data) renderLeads(data);
 }
 
 async function refreshDashboard() {
-  toast('Memperbarui data...');
-  await loadAll();
+toast('Memperbarui data...');
+await loadAll();
 }
 
 // ────────────────────────────────────────────
 //  LOAD ALL DATA
 // ────────────────────────────────────────────
 async function loadAll() {
-  const [dash, stats] = await Promise.all([fetchDashboard(), fetchDistribusiStats()]);
+const [dash, stats] = await Promise.all([fetchDashboard(), fetchDistribusiStats()]);
 
-  if (dash) {
-    // Admin stat cards
-    document.getElementById('stat-total').textContent     = dash.total_leads ?? '—';
-    document.getElementById('stat-assigned').textContent  = dash.assigned ?? '—';
-    document.getElementById('stat-unassigned').textContent = dash.unassigned ?? '—';
+if (dash) {
+// Admin stat cards
+document.getElementById('stat-total').textContent     = dash.total_leads ?? '—';
+document.getElementById('stat-assigned').textContent  = dash.assigned ?? '—';
+document.getElementById('stat-unassigned').textContent = dash.unassigned ?? '—';
 
-    // User dashboard
-    document.getElementById('u-total').textContent    = dash.total_leads ?? '—';
-    document.getElementById('u-assigned').textContent = dash.assigned ?? '—';
+// User dashboard
+document.getElementById('u-total').textContent    = dash.total_leads ?? '—';
+document.getElementById('u-assigned').textContent = dash.assigned ?? '—';
 
-    // Pie chart from source_counts
-    if (dash.source_counts && dash.source_counts.length) {
-      buildPie(dash.source_counts.map(r => ({ source: r.source, total: r.total })));
-    }
-  }
+// Pie chart from source_counts
+if (dash.source_counts && dash.source_counts.length) {
+buildPie(dash.source_counts.map(r => ({ source: r.source, total: r.total })));
+}
+}
 
-  if (stats) {
-    updateTabCounts(stats);
-    // User mini KPIs
-    const sc = stats.status_counts || {};
-    document.getElementById('u-new').textContent       = sc['New'] || 0;
-    document.getElementById('u-contacted').textContent = sc['Contacted'] || 0;
-    document.getElementById('u-qualified').textContent = sc['Qualified'] || 0;
-    document.getElementById('u-unassigned').textContent = stats.pending || 0;
-  }
+if (stats) {
+updateTabCounts(stats);
+// User mini KPIs
+const sc = stats.status_counts || {};
+document.getElementById('u-new').textContent       = sc['New'] || 0;
+document.getElementById('u-contacted').textContent = sc['Contacted'] || 0;
+document.getElementById('u-qualified').textContent = sc['Qualified'] || 0;
+document.getElementById('u-unassigned').textContent = stats.pending || 0;
+}
 
-  // Load leads table (admin only)
-  if (currentRole === 'admin') {
-    await loadLeads();
-  }
+// Load leads table (admin only)
+if (currentRole === 'admin') {
+await loadLeads();
+}
 }
 
 // ────────────────────────────────────────────
 //  INIT: deteksi role dari session Django
 // ────────────────────────────────────────────
 function initApp() {
-  // Ambil dari session yang dirender oleh Django template
-  const userId   = "{{ request.session.user_id|default:'' }}";
-  const userName = "{{ request.session.user_name|default:'' }}";
-  const userRole = "{{ request.session.user_role|default:'' }}";  // tambahkan ini di views.py jika belum
+// Ambil dari session yang dirender oleh Django template
+const userId   = "{{ request.session.user_id|default:'' }}";
+const userName = "{{ request.session.user_name|default:'' }}";
+const userRole = "{{ request.session.user_role|default:'' }}";  // tambahkan ini di views.py jika belum
 
-  if (!userId) {
-    // Belum login → redirect ke halaman login
-    window.location.href = "{% url 'login' %}";
-    return;
-  }
+if (!userId) {
+// Belum login → redirect ke halaman login
+window.location.href = "{% url 'login' %}";
+return;
+}
 
-  currentRole = userRole || 'admin'; // fallback admin jika role belum disimpan di session
+currentRole = userRole || 'admin'; // fallback admin jika role belum disimpan di session
 
-  // Update sidebar profile
-  document.getElementById('sb-username').textContent = userName || 'User';
-  document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
+// Update sidebar profile
+document.getElementById('sb-username').textContent = userName || 'User';
+document.getElementById('sb-role-text').textContent = currentRole.toUpperCase();
 
-  // Tampilkan dashboard sesuai role
-  if (currentRole === 'admin') {
-    document.getElementById('dash-admin').style.display = 'flex';
-    document.getElementById('dash-user').style.display  = 'none';
-  } else {
-    document.getElementById('dash-admin').style.display = 'none';
-    document.getElementById('dash-user').style.display  = 'flex';
-  }
+// Tampilkan dashboard sesuai role
+if (currentRole === 'admin') {
+document.getElementById('dash-admin').style.display = 'flex';
+document.getElementById('dash-user').style.display  = 'none';
+} else {
+document.getElementById('dash-admin').style.display = 'none';
+document.getElementById('dash-user').style.display  = 'flex';
+}
 
-  loadAll();
+loadAll();
 }
 
 function doLogout() {
-  window.location.href = "{% url 'login' %}";
+window.location.href = "{% url 'login' %}";
 }
 
 // ── Run ──
 document.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
-</html>
